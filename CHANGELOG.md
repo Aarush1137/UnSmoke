@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.0] - 2026-08-22
+### Added
+- **Final Features**: Completed the full suite of UI screens:
+  - **Daily Check-in**: Emoji-based mood tracking and craving slider.
+  - **Insights**: Top trigger, high-risk time, and best coping tool analysis.
+  - **Journal**: Track feelings and write daily entries.
+  - **My Plan**: Reorderable list of personalized coping strategies.
+  - **Achievements & Profile**: Badge grid and detailed lifetime stats.
+
 ## [0.6.0] - 2026-08-22
 ### Added
 - **NRT Tracker**: Dashboard showing daily logs, total expenditure vs savings, and a plan completion donut ring.
