@@ -1,68 +1,79 @@
-# UnSmoke
+# UnSmoke 🚭
 
-UnSmoke is an offline-first Android companion for quitting smoking. It helps people get through cravings, understand patterns, track nicotine-replacement therapy (NRT), and keep a compassionate record of progress.
+UnSmoke is an evidence-based, gamified Android application designed to help users quit smoking through psychological support, Cognitive Behavioral Therapy (CBT) techniques, and clinical Nicotine Replacement Therapy (NRT) tapering protocols.
 
-> UnSmoke supports a quit journey; it does not provide medical advice or personalised NRT dosing. Consult a qualified healthcare professional for clinical guidance.
+## 🚀 Features
 
-## What it includes
+- **The 4 D's Protocol & Urge Surfing**: Immediate, actionable coping strategies during peak cravings, accompanied by a visual wave animation mimicking the physiological curve of a craving.
+- **NRT 12-Week Tapering Engine**: A clinically-backed tracking engine providing progressive step-down instructions for NRT products (like gums and patches).
+- **Health Recovery Timeline**: A visual roadmap unlocking physiological milestones (from 20 minutes to 1 year) as your body heals.
+- **Lung Capacity Tracker**: A weekly check-in tool and baseline tracker to visualize respiratory improvement over time.
+- **Milestone Badges**: Gamified achievement system rewarding craving resistance and streak consistency.
+- **Cost Savings Calculator**: Tracks both gross money saved by not smoking and net savings after deducting NRT expenditures.
 
-- Guided craving support with intensity and trigger logging, breathing exercises, a ten-minute timer, and a no-shame lapse-recovery flow.
-- A smoke-free dashboard for elapsed time, cigarettes avoided, estimated savings, cravings, and milestones.
-- NRT product and usage tracking, including expenditure against cigarette savings.
-- Daily check-ins, a private journal, personal insights, a quit plan, achievements, and a profile with a support contact.
-- Home-screen widgets: a streak counter, full dashboard, and one-tap craving launcher.
-- On-device privacy: Room and DataStore storage, no account or cloud sync, optional Android biometric app lock, and local data export.
+## 📸 Screenshots
 
-## Technology
+<div style="display: flex; flex-direction: row; gap: 10px;">
+    <img src="docs/screenshots/home.png" alt="Home Screen" width="250"/>
+    <img src="docs/screenshots/timer.png" alt="Craving Timer" width="250"/>
+    <img src="docs/screenshots/progress.png" alt="Progress Tracker" width="250"/>
+</div>
+*(Note: Create a docs/screenshots folder and place home.png, 	imer.png, and progress.png inside to populate this section).*
 
-| Area | Implementation |
-| --- | --- |
-| Platform | Native Android, min SDK 26, target/compile SDK 36 |
-| Language and UI | Kotlin, Jetpack Compose, Material 3 |
-| App architecture | MVVM, Hilt, Navigation Compose, Coroutines and Flow |
-| Local data | Room and DataStore Preferences |
-| Background/UI extras | WorkManager, Glance widgets, Vico charts, Lottie, BiometricPrompt |
+## 🛠 Tech Stack & Architecture
 
-## Run locally
+UnSmoke is built entirely with modern Android development standards:
 
-1. Open the project in Android Studio with Android SDK Platform 36 installed.
-2. Use a JDK compatible with the Gradle/Android Studio setup (the project compiles Java source compatibility level 17).
-3. Connect an emulator or Android device, then run:
+- **Language**: [Kotlin](https://kotlinlang.org/) (2.0.21)
+- **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose) & Material 3
+- **Architecture**: MVVM (Model-View-ViewModel) with Clean Architecture principles
+- **Dependency Injection**: [Hilt](https://dagger.dev/hilt/) (2.51.1)
+- **Local Storage**: 
+  - [Room Database](https://developer.android.com/training/data-storage/room) for structured NRT & craving logs
+  - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) for user preferences and state
+- **Coroutines & Flow**: For asynchronous, reactive programming and state management
+- **Build System**: Gradle 8.14 (Kotlin DSL) & Version Catalogs (libs.versions.toml)
 
-```powershell
-.\gradlew.bat :app:assembleDebug
-.\gradlew.bat :app:installDebug
-```
+## 🏗 Project Structure
 
-The APK is written to `app\build\outputs\apk\debug\app-debug.apk`.
-
-## Verification
-
-The current working tree builds successfully with:
-
-```powershell
-.\gradlew.bat :app:assembleDebug
-```
-
-Before a release, also run unit and instrumented tests once they are added, and manually check onboarding, the full craving flow, NRT logging, biometric unlock, widgets, and the reset/export paths.
-
-## Project layout
-
-```text
+`	ext
 app/src/main/kotlin/com/unsmoke/app/
-├── core/          # Room, DataStore, domain calculations, design system
-├── feature/       # Onboarding, home, craving, NRT, journal, settings, etc.
-├── navigation/    # Compose navigation graph and screen routes
-└── widget/        # Glance home-screen widgets
-```
+├── core/                  # Core infrastructure and shared components
+│   ├── data/              # Room DB, DataStore, Repositories, Entities
+│   ├── domain/            # CalculationEngine, NRTTaperingEngine, Achievements
+│   ├── designsystem/      # Theme, Typography, Colors, Shared Composables
+├── feature/               # Feature modules (MVVM structure)
+│   ├── home/              # Dashboard and savings overview
+│   ├── onboarding/        # First-time user setup & baseline capture
+│   ├── progress/          # Streak tracking, badges, and lung capacity
+│   ├── cravings/          # Urge surfing and timer mechanics
+│   ├── settings/          # User preferences
+├── UnSmokeApplication.kt  # Hilt Application Class
+└── MainActivity.kt        # Entry Point
+`
 
-Design reference images live under [`assets/`](assets/). The product implementation plan and build checklist are in [`ai_artifacts/`](ai_artifacts/).
+## 💻 How to Setup and Run Locally
 
-## Current limitations
+### Prerequisites
+- **Android Studio**: Koala / Jellyfish (or newer) recommended.
+- **Java Development Kit (JDK)**: **Java 21** is strictly required to compile this project.
 
-- The `AMOLED` preference uses the shared dark scheme for now rather than a distinct pure-black palette.
-- The app has no committed automated test suite yet.
+### Installation Steps
+1. **Clone the repository**:
+   `ash
+   git clone https://github.com/Aarush1137/UnSmoke.git
+   `
+2. **Open the Project**:
+   Launch Android Studio and select File > Open, then navigate to the cloned UnSmoke directory.
+3. **Configure Gradle JDK**:
+   - Go to File > Settings (or Android Studio > Settings on macOS).
+   - Navigate to Build, Execution, Deployment > Build Tools > Gradle.
+   - Ensure the **Gradle JDK** is set to a JDK 21 installation (e.g., Embedded JDK or local corretto-21).
+4. **Sync and Build**:
+   Click the **Sync Project with Gradle Files** button. Once synced, select the pp configuration and click **Run** (Shift + F10) to deploy to an emulator or physical device.
 
-## License
+## 🤝 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-MIT License — Aarush Jain, 2026.
+## 📄 License
+[MIT](https://choosealicense.com/licenses/mit/)
