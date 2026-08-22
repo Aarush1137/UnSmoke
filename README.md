@@ -37,6 +37,8 @@ The foundational logic, database, and UI are built. The following fixes are pend
 *   Enforcing the Onboarding flow on first launch.
 *   Fixing navigation back-stack issues on sub-screens.
 *   Enforcing strict Dark Mode matching the design system.
+*   Missing launcher app icon (currently showing default Android logo).
 
 ## 📄 License
 MIT License - Aarush Jain 2026
+
