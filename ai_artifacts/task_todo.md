@@ -107,6 +107,7 @@ Last reconciled: 2026-08-22. Check an item only after it is implemented and veri
 ## Phase 15 — Quality, release, and testing
 
 - [x] `:app:assembleDebug` succeeds on the current working tree.
+- [x] Publish a clearly labelled debug testing APK to GitHub Releases.
 - [ ] Add unit tests for calculations, repositories, view models, and the coach engine.
 - [ ] Add Compose/UI tests for onboarding, core navigation, craving completion, and settings/reset.
 - [ ] Run lint, instrumented tests, and manual release checklist on an Android 8+ device.

@@ -25,6 +25,13 @@ This is the working record for Codex sessions. Update it whenever a stable check
 8. **Roadmap integrity** — replaced the all-complete task list with a verified backlog, including a detailed Profile/Settings feature plan and remaining work in every phase.
 9. **Launcher identity** — replaced Android's default launcher icon with an adaptive vector icon matching UnSmoke's dark, mint, and leaf motif.
 
+### Published testing artifacts
+
+- `v0.1.0-dev`: initial debug testing preview from the Profile/Settings stabilization checkpoint.
+- `v0.1.0-dev.1`: debug testing preview from commit `d1a8bea`, including the adaptive launcher icon. GitHub reports SHA-256 `da6df28de81f6b0f637b86938a75782fb9c330cbf4a05c64cb26879c359210b7` for its APK asset.
+
+These are debug-signed development artifacts. A production release still requires a release signing configuration, test coverage, and a release checklist.
+
 ### Verification performed
 
 ```powershell
