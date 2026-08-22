@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- A calm U-shaped path represents the UnSmoke journey. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M32,28L32,56C32,80 76,80 76,56L76,39"
+        android:strokeColor="#8FDCD0"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="9" />
+    <!-- The leaf accent signifies recovery and fresh air. -->
+    <path
+        android:fillColor="#55D8C6"
+        android:pathData="M76,38C88,38 93,28 88,19C78,19 73,27 76,38Z" />
+</vector>

@@ -60,7 +60,6 @@ Design reference images live under [`assets/`](assets/). The product implementat
 
 ## Current limitations
 
-- The launcher currently uses Android's default application icon; branded launcher assets still need to be supplied.
 - The `AMOLED` preference uses the shared dark scheme for now rather than a distinct pure-black palette.
 - The app has no committed automated test suite yet.
 

@@ -23,6 +23,7 @@ This is the working record for Codex sessions. Update it whenever a stable check
 6. **Safer reset** — reset now clears both Room and DataStore, then starts onboarding again. Widget cache and scheduled-work cleanup remain tracked as follow-up work.
 7. **README** — replaced the stale readme with an accurate product overview, technology table, local build steps, current limitations, and links to project assets/artifacts.
 8. **Roadmap integrity** — replaced the all-complete task list with a verified backlog, including a detailed Profile/Settings feature plan and remaining work in every phase.
+9. **Launcher identity** — replaced Android's default launcher icon with an adaptive vector icon matching UnSmoke's dark, mint, and leaf motif.
 
 ### Verification performed
 

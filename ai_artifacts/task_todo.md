@@ -5,7 +5,7 @@ Last reconciled: 2026-08-22. Check an item only after it is implemented and veri
 ## Phase 1 — Foundation
 
 - [x] Android/Compose/Hilt/Room project builds as a debug APK.
-- [ ] Add a branded adaptive launcher icon and remove Android's default icon.
+- [x] Add a branded adaptive launcher icon and remove Android's default icon.
 - [ ] Add a dedicated AMOLED colour scheme and apply theme preference across every screen.
 - [ ] Add a release build/signing configuration and versioning policy.
 
