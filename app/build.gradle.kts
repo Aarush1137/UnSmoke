@@ -31,10 +31,13 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures { compose = true }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     room { schemaDirectory("$projectDir/schemas") }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
 dependencies {
