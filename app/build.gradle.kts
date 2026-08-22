@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.room)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -30,6 +31,9 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures { compose = true }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     room { schemaDirectory("$projectDir/schemas") }
 }
 
