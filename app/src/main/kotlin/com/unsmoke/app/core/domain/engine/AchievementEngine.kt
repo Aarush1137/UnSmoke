@@ -57,3 +57,5 @@ object AchievementEngine {
             if (badge.tier == BadgeTier.PLATINUM && !unlocked) BadgeState.SECRET else BadgeState.LOCKED
         }
     }
+
+}
