@@ -1,8 +1,12 @@
-﻿package com.unsmoke.app.feature.home
+package com.unsmoke.app.feature.home
+
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
+import com.unsmoke.app.core.domain.repository.NRTRepository
 import com.unsmoke.app.core.domain.engine.CalculationEngine
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +32,7 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val nrtRepo: NRTRepository,
     private val quitAttemptRepo: QuitAttemptRepository,
     private val dataStore: UserPreferencesDataStore
 ) : ViewModel() {
@@ -36,37 +41,44 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            combine(
-                quitAttemptRepo.getActiveAttempt(),
-                dataStore.userName,
-                dataStore.currencySymbol
-            ) { attempt, name, currency ->
-                if (attempt != null) {
-                    val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
-                    val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay)
-                    val saved = CalculationEngine.grossMoneySaved(avoided, attempt.pricePerCigarette)
-                    
-                    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
-                    val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
-
-                    _uiState.update { 
-                        it.copy(
-                            userName = name ?: "User",
-                            currencySymbol = currency ?: "$",
-                            smokeFreeDays = days,
-                            netMoneySaved = saved,
-                            quitDateDisplay = dateStr
-                        ) 
+            quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
+                if (attempt == null) {
+                    combine(dataStore.userName, dataStore.currencySymbol) { name, currency ->
+                        HomeUiState(userName = name, currencySymbol = currency ?: "$")
                     }
                 } else {
-                    _uiState.update { 
-                        it.copy(
-                            userName = name ?: "User",
+                    combine(
+                        nrtRepo.getUsage(attempt.id),
+                        nrtRepo.getProducts(),
+                        dataStore.userName,
+                        dataStore.currencySymbol
+                    ) { usages, products, name, currency ->
+                        val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
+                        val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay)
+                        val grossSaved = CalculationEngine.grossMoneySaved(avoided, attempt.pricePerCigarette)
+                        
+                        val nrtCost = usages.sumOf { usage ->
+                            val product = products.find { it.id == usage.productId }
+                            if (product != null) (usage.quantity * product.pricePerUnit) else 0.0
+                        }
+                        
+                        val saved = CalculationEngine.netMoneySaved(grossSaved, nrtCost)
+                        
+                        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
+                        val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
+                        
+                        HomeUiState(
+                            userName = name,
+                            smokeFreeDays = days,
+                            quitDateDisplay = dateStr,
+                            netMoneySaved = saved,
                             currencySymbol = currency ?: "$"
-                        ) 
+                        )
                     }
                 }
-            }.collect {}
+            }.collect { state ->
+                _uiState.value = state
+            }
         }
     }
 }

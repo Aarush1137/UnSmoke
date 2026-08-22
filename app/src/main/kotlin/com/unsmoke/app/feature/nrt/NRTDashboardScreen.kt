@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.nrt
+package com.unsmoke.app.feature.nrt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import com.unsmoke.app.core.designsystem.AppColors
 import androidx.compose.runtime.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -72,6 +73,30 @@ fun NRTDashboardScreen(
             }
 
             Spacer(Modifier.height(32.dp))
+            if (state.recommendation != null) {
+                Spacer(Modifier.height(32.dp))
+                Text("Clinical Plan", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Spacer(Modifier.height(16.dp))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Medication, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Spacer(Modifier.width(8.dp))
+                            Text("Week ${state.recommendation?.weekNumber}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                        }
+                        Spacer(Modifier.height(16.dp))
+                        Text("Dose: ${state.recommendation?.dosage}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                        Text("Frequency: ${state.recommendation?.frequency}", color = MaterialTheme.colorScheme.onTertiaryContainer)
+                        Spacer(Modifier.height(8.dp))
+                        Text(state.recommendation?.instructions ?: "", fontSize = 14.sp, color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f))
+                    }
+                }
+            }
+
             Text("Today's log", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(16.dp))
             
