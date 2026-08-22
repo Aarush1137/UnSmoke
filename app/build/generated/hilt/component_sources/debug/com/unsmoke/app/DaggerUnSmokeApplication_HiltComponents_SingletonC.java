@@ -413,15 +413,18 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
+      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
+
       static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
 
       static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
 
+      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
+
       static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
 
-      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
-
-      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
+      @KeepFieldType
+      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
 
       @KeepFieldType
       OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
@@ -430,13 +433,10 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
 
       @KeepFieldType
-      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
-
-      @KeepFieldType
-      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
-
-      @KeepFieldType
       CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
     }
   }
 
@@ -489,30 +489,30 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
-
       static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
-
-      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
 
       static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
 
+      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
+
       static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
 
-      @KeepFieldType
-      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
 
       @KeepFieldType
       CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
 
       @KeepFieldType
-      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
       NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
 
       @KeepFieldType
+      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
+
+      @KeepFieldType
       HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
+
+      @KeepFieldType
+      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -543,7 +543,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
           return (T) new HomeViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get());
 
           case 2: // com.unsmoke.app.feature.nrt.NRTViewModel 
-          return (T) new NRTViewModel();
+          return (T) new NRTViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get());
 
           case 3: // com.unsmoke.app.feature.onboarding.OnboardingViewModel 
           return (T) new OnboardingViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get(), singletonCImpl.provideUserPreferencesDataStoreProvider.get());

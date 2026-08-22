@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.progress
+﻿package com.unsmoke.app.feature.progress
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -25,10 +25,10 @@ fun ProgressScreen(
 
             // Tab selector stub
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                FilterChip(selected = true, onClick = {}, label = { Text("7 Days") })
-                FilterChip(selected = false, onClick = {}, label = { Text("30 Days") })
-                FilterChip(selected = false, onClick = {}, label = { Text("3 Months") })
-                FilterChip(selected = false, onClick = {}, label = { Text("1 Year") })
+                FilterChip(selected = state.timeFilter == "7 Days", onClick = { viewModel.setTimeFilter("7 Days") }, label = { Text("7 Days") })
+                FilterChip(selected = state.timeFilter == "30 Days", onClick = { viewModel.setTimeFilter("30 Days") }, label = { Text("30 Days") })
+                FilterChip(selected = state.timeFilter == "3 Months", onClick = { viewModel.setTimeFilter("3 Months") }, label = { Text("3 Months") })
+                FilterChip(selected = state.timeFilter == "1 Year", onClick = { viewModel.setTimeFilter("1 Year") }, label = { Text("1 Year") })
             }
 
             Spacer(Modifier.height(32.dp))

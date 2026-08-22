@@ -14,6 +14,10 @@ import com.unsmoke.app.feature.nrt.NRTDashboardScreen
 import com.unsmoke.app.feature.progress.ProgressScreen
 import com.unsmoke.app.feature.checkin.CheckInScreen
 import com.unsmoke.app.feature.profile.ProfileScreen
+import com.unsmoke.app.feature.plan.PlanScreen
+import com.unsmoke.app.feature.achievements.AchievementsScreen
+import com.unsmoke.app.feature.insights.InsightsScreen
+import com.unsmoke.app.feature.settings.SettingsScreen
 
 @Composable
 fun AppNavGraph(
@@ -66,14 +70,18 @@ fun AppNavGraph(
         composable(route = Screen.NRT.route) {
             NRTDashboardScreen(onBack = { navController.popBackStack() })
         }
+        composable(route = Screen.Insights.route) { InsightsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Progress.route) {
-            ProgressScreen(onInsightsClick = {}, onBack = { navController.popBackStack() })
+            ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onBack = { navController.popBackStack() })
         }
         composable(route = Screen.CheckIn.route) {
             CheckInScreen(onComplete = { navController.popBackStack() })
         }
+        composable(route = Screen.Plan.route) { PlanScreen(onBack = { navController.popBackStack() }) }
+        composable(route = Screen.Achievements.route) { AchievementsScreen(onBack = { navController.popBackStack() }) }
+        composable(route = Screen.Settings.route) { SettingsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Profile.route) {
-            ProfileScreen(onPlanClick = {}, onAchievementsClick = {}, 
+            ProfileScreen(onPlanClick = { navController.navigate(Screen.Plan.route) }, onAchievementsClick = { navController.navigate(Screen.Achievements.route) }, 
                 onBack = { navController.popBackStack() },
                 onSettingsClick = { navController.navigate(Screen.Settings.route) }
             )

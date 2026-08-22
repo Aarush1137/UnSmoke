@@ -1,10 +1,12 @@
 package com.unsmoke.app.feature.nrt;
 
+import com.unsmoke.app.core.domain.repository.QuitAttemptRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
+import javax.inject.Provider;
 
 @ScopeMetadata
 @QualifierMetadata
@@ -21,20 +23,23 @@ import javax.annotation.processing.Generated;
     "cast"
 })
 public final class NRTViewModel_Factory implements Factory<NRTViewModel> {
+  private final Provider<QuitAttemptRepository> quitAttemptRepoProvider;
+
+  public NRTViewModel_Factory(Provider<QuitAttemptRepository> quitAttemptRepoProvider) {
+    this.quitAttemptRepoProvider = quitAttemptRepoProvider;
+  }
+
   @Override
   public NRTViewModel get() {
-    return newInstance();
+    return newInstance(quitAttemptRepoProvider.get());
   }
 
-  public static NRTViewModel_Factory create() {
-    return InstanceHolder.INSTANCE;
+  public static NRTViewModel_Factory create(
+      Provider<QuitAttemptRepository> quitAttemptRepoProvider) {
+    return new NRTViewModel_Factory(quitAttemptRepoProvider);
   }
 
-  public static NRTViewModel newInstance() {
-    return new NRTViewModel();
-  }
-
-  private static final class InstanceHolder {
-    private static final NRTViewModel_Factory INSTANCE = new NRTViewModel_Factory();
+  public static NRTViewModel newInstance(QuitAttemptRepository quitAttemptRepo) {
+    return new NRTViewModel(quitAttemptRepo);
   }
 }

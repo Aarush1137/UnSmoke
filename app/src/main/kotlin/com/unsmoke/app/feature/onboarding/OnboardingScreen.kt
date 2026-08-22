@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
@@ -53,7 +57,12 @@ fun OnboardingScreen(
                         onPriceChange = viewModel::updatePackPrice,
                         onNext = { viewModel.updateStep(2) }
                     )
-                    2 -> ProfileStep(
+                    2 -> QuitDateStep(
+                        currentDate = state.quitDate,
+                        onDateChange = viewModel::updateQuitDate,
+                        onNext = { viewModel.updateStep(3) }
+                    )
+                    3 -> ProfileStep(
                         name = state.userName,
                         onNameChange = viewModel::updateUserName,
                         onFinish = { viewModel.completeOnboarding() }
@@ -105,7 +114,7 @@ private fun BaselineStep(
         OutlinedTextField(
             value = packPrice,
             onValueChange = onPriceChange,
-            label = { Text("Price per pack (₹)") },
+            label = { Text("Price per pack") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -116,6 +125,77 @@ private fun BaselineStep(
             enabled = cigsPerDay.isNotBlank() && packPrice.isNotBlank()
         ) {
             Text("NEXT")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuitDateStep(
+    currentDate: LocalDate,
+    onDateChange: (LocalDate) -> Unit,
+    onNext: () -> Unit
+) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
+
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+        Text("When did you stop smoking?", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        OutlinedButton(
+            onClick = { onDateChange(LocalDate.now()) },
+            modifier = Modifier.fillMaxWidth().height(56.dp)
+        ) {
+            Text("Today", fontSize = 16.sp)
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedButton(
+            onClick = { onDateChange(LocalDate.now().minusDays(1)) },
+            modifier = Modifier.fillMaxWidth().height(56.dp)
+        ) {
+            Text("Yesterday", fontSize = 16.sp)
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedButton(
+            onClick = { showDatePicker = true },
+            modifier = Modifier.fillMaxWidth().height(56.dp)
+        ) {
+            Text("Choose a date ()", fontSize = 16.sp)
+        }
+
+        Spacer(modifier = Modifier.height(48.dp))
+        Button(
+            onClick = onNext,
+            modifier = Modifier.fillMaxWidth().height(56.dp)
+        ) {
+            Text("NEXT")
+        }
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let {
+                        val selectedDate = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                        onDateChange(selectedDate)
+                    }
+                    showDatePicker = false
+                }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 }

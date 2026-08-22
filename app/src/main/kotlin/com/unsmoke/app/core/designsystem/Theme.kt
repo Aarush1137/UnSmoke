@@ -50,6 +50,8 @@ data class UnSmokeColors(
     val elevatedSurface: Color,
     val softSurface: Color,
     val mutedText: Color,
+    val orbCore: Color,
+    val orbGlow: Color,
     val isDark: Boolean
 )
 
@@ -61,6 +63,8 @@ val LocalUnSmokeColors = staticCompositionLocalOf {
         elevatedSurface = LightSurface,
         softSurface = LightSoftSurface,
         mutedText = LightMuted,
+        orbCore = LightMint,
+        orbGlow = LightPrimaryLight,
         isDark = false
     )
 }
@@ -79,6 +83,8 @@ fun UnSmokeTheme(
             elevatedSurface = DarkElevatedSurface,
             softSurface = DarkElevatedSurface,
             mutedText = DarkMutedText,
+            orbCore = DarkPrimary,
+            orbGlow = DarkPrimaryContainer,
             isDark = true
         )
     } else {
@@ -89,6 +95,8 @@ fun UnSmokeTheme(
             elevatedSurface = LightSurface,
             softSurface = LightSoftSurface,
             mutedText = LightMuted,
+        orbCore = LightMint,
+        orbGlow = LightPrimaryLight,
             isDark = false
         )
     }
@@ -105,3 +113,4 @@ fun UnSmokeTheme(
 
 val MaterialTheme.unSmokeColors: UnSmokeColors
     @Composable get() = LocalUnSmokeColors.current
+

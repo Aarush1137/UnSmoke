@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.nrt
+﻿package com.unsmoke.app.feature.nrt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -44,7 +44,7 @@ fun NRTDashboardScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Today", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Today (${state.nrtType})", color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(state.todayLogCount.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         Text("NRT logged", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
