@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.data.database.entity.CravingEventEntity
 import com.unsmoke.app.core.domain.repository.CravingRepository
-import com.unsmoke.app.widget.WidgetUpdateWorker
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,14 +54,14 @@ class CravingViewModel @Inject constructor(
         viewModelScope.launch {
             val state = _uiState.value
             val event = CravingEventEntity(
-                timestampMillis = System.currentTimeMillis(),
+                quitAttemptId = 1L, timestamp = System.currentTimeMillis(),
                 intensity = state.intensity,
-                triggers = state.selectedTriggers.joinToString(","),
+                trigger = state.selectedTriggers.joinToString(","), location = null, intervention = null,
                 outcome = outcome,
-                notes = null
+                durationSeconds = null, nrtUsedBefore = false, mood = null
             )
-            cravingRepo.insertCraving(event)
-            WidgetUpdateWorker.scheduleImmediate(applicationContext)
+            cravingRepo.logCraving(event)
+            
             
             if (outcome == "DEFEATED") {
                 _uiState.update { it.copy(step = CravingStep.OUTCOME) }

@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // AppNavGraph will be here
+                    com.unsmoke.app.navigation.AppNavGraph()
                 }
             }
         }

@@ -1,0 +1,11 @@
+R_DEF: Internal format may change without notice
+local
+layout dummy_widget_layout
+string app_name
+string widget_craving_description
+string widget_dashboard_description
+string widget_streak_description
+style Theme.UnSmoke
+xml widget_craving_info
+xml widget_dashboard_info
+xml widget_streak_info

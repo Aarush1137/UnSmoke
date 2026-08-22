@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.unsmoke.app-debug-71:/xml_widget_dashboard_info.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/widget_dashboard_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_dashboard_info.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_dashboard_info.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/xml_widget_craving_info.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/widget_craving_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_streak_info.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_streak_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_craving_info.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_craving_info.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/xml_widget_streak_info.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/widget_streak_info.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/layout_dummy_widget_layout.xml.flat",
+        "source": "com.unsmoke.app-main-73:/layout/dummy_widget_layout.xml"
+    }
+]

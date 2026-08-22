@@ -67,14 +67,14 @@ class OnboardingViewModel @Inject constructor(
 
             val attempt = QuitAttemptEntity(
                 startEpochMillis = startEpoch,
-                cigarettesPerDay = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0,
+                cigarettesPerDay = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0, endEpochMillis = null, status = "ACTIVE", cigarettesPerPack = state.cigarettesPerPack.toIntOrNull() ?: 20, packPrice = state.packPrice.toDoubleOrNull() ?: 0.0, timezone = ZoneId.systemDefault().id, createdAt = System.currentTimeMillis(),
                 pricePerCigarette = pricePerCig,
-                currencyCode = "INR",
-                isActive = true
+                
+                
             )
             
-            quitAttemptRepo.insertQuitAttempt(attempt)
-            dataStore.setUserName(state.userName)
+            quitAttemptRepo.insertAttempt(attempt)
+            // dataStore.setUserName(state.userName)
             dataStore.setOnboardingComplete(true)
             
             _uiState.update { it.copy(isComplete = true) }

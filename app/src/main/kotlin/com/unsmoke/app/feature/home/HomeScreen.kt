@@ -76,7 +76,7 @@ fun HomeScreen(
             Text(
                 buildAnnotatedString {
                     withStyle(SpanStyle(color = Color(0xFFE9A94B))) {
-                        append("₹")
+                        append("???")
                     }
                     append(String.format("%.0f", uiState.netMoneySaved))
                 },
@@ -95,7 +95,7 @@ fun HomeScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            Text(uiState.currentQuote)
+            Text(text = uiState.currentQuote)
         }
     }
 }

@@ -57,7 +57,7 @@ fun CravingScreen(
 }
 
 @Composable
-private fun IntensityStep(intensity: Int, onChange: (Int) -> Unit, onNext: () -> Unit) {
+private fun ColumnScope.IntensityStep(intensity: Int, onChange: (Int) -> Unit, onNext: () -> Unit) {
     Text("How strong is your craving?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
     Spacer(Modifier.height(48.dp))
     Text(intensity.toString(), fontSize = 72.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
@@ -75,7 +75,7 @@ private fun IntensityStep(intensity: Int, onChange: (Int) -> Unit, onNext: () ->
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TriggerStep(selected: Set<String>, onToggle: (String) -> Unit, onNext: () -> Unit) {
+private fun ColumnScope.TriggerStep(selected: Set<String>, onToggle: (String) -> Unit, onNext: () -> Unit) {
     val triggers = listOf("Stress", "After food", "Coffee", "Boredom", "Someone smoking", "Loneliness", "Habit", "Other")
     Text("What triggered it?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
     Spacer(Modifier.height(32.dp))

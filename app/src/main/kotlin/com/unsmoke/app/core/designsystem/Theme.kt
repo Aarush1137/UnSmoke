@@ -7,93 +7,60 @@ import androidx.compose.ui.graphics.Color
 
 val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
-    onPrimary = LightOnPrimary,
-    primaryContainer = LightPrimaryContainer,
-    onPrimaryContainer = LightOnPrimaryContainer,
-    secondary = LightSecondary,
-    onSecondary = LightOnSecondary,
-    secondaryContainer = LightSecondaryContainer,
-    onSecondaryContainer = LightOnSecondaryContainer,
-    tertiary = LightTertiary,
-    onTertiary = LightOnTertiary,
-    tertiaryContainer = LightTertiaryContainer,
-    onTertiaryContainer = LightOnTertiaryContainer,
-    error = LightError,
-    onError = LightOnError,
-    errorContainer = LightErrorContainer,
-    onErrorContainer = LightOnErrorContainer,
+    onPrimary = LightSurface,
+    primaryContainer = LightPrimaryLight,
+    onPrimaryContainer = LightPrimaryDark,
+    secondary = LightLavender,
+    onSecondary = LightSurface,
     background = LightBackground,
-    onBackground = LightOnBackground,
+    onBackground = LightDarkText,
     surface = LightSurface,
-    onSurface = LightOnSurface,
-    surfaceVariant = LightSurfaceVariant,
-    onSurfaceVariant = LightOnSurfaceVariant,
-    outline = LightOutline,
-    outlineVariant = LightOutlineVariant,
-    scrim = LightScrim,
-    inverseSurface = LightInverseSurface,
-    inverseOnSurface = LightInverseOnSurface,
-    inversePrimary = LightInversePrimary,
+    onSurface = LightDarkText,
+    surfaceVariant = LightSoftSurface,
+    onSurfaceVariant = LightSecondaryText,
+    outline = LightBorder,
+    outlineVariant = LightMuted,
+    error = LightError,
+    onError = LightSurface,
 )
 
 val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
-    onPrimary = DarkOnPrimary,
+    onPrimary = DarkBackground,
     primaryContainer = DarkPrimaryContainer,
-    onPrimaryContainer = DarkOnPrimaryContainer,
+    onPrimaryContainer = DarkPrimary,
     secondary = DarkSecondary,
-    onSecondary = DarkOnSecondary,
-    secondaryContainer = DarkSecondaryContainer,
-    onSecondaryContainer = DarkOnSecondaryContainer,
-    tertiary = DarkTertiary,
-    onTertiary = DarkOnTertiary,
-    tertiaryContainer = DarkTertiaryContainer,
-    onTertiaryContainer = DarkOnTertiaryContainer,
-    error = DarkError,
-    onError = DarkOnError,
-    errorContainer = DarkErrorContainer,
-    onErrorContainer = DarkOnErrorContainer,
+    onSecondary = DarkBackground,
     background = DarkBackground,
-    onBackground = DarkOnBackground,
+    onBackground = DarkPrimaryText,
     surface = DarkSurface,
-    onSurface = DarkOnSurface,
-    surfaceVariant = DarkSurfaceVariant,
-    onSurfaceVariant = DarkOnSurfaceVariant,
-    outline = DarkOutline,
-    outlineVariant = DarkOutlineVariant,
-    scrim = DarkScrim,
-    inverseSurface = DarkInverseSurface,
-    inverseOnSurface = DarkInverseOnSurface,
-    inversePrimary = DarkInversePrimary,
+    onSurface = DarkPrimaryText,
+    surfaceVariant = DarkElevatedSurface,
+    onSurfaceVariant = DarkSecondaryText,
+    outline = DarkBorder,
+    outlineVariant = DarkMutedText,
+    error = DarkError,
+    onError = DarkBackground,
 )
 
-// Extended UnSmoke colors available via LocalUnSmokeColors
 data class UnSmokeColors(
+    val mint: Color,
+    val gold: Color,
     val success: Color,
-    val successContainer: Color,
-    val warning: Color,
-    val warningContainer: Color,
-    val info: Color,
-    val infoContainer: Color,
-    val achievementAmber: Color,
-    val achievementAmberContainer: Color,
-    val orbCore: Color,
-    val orbGlow: Color,
+    val elevatedSurface: Color,
+    val softSurface: Color,
+    val mutedText: Color,
     val isDark: Boolean
 )
 
 val LocalUnSmokeColors = staticCompositionLocalOf {
     UnSmokeColors(
-        success = SuccessLight,
-        successContainer = SuccessContainerLight,
-        warning = WarningLight,
-        warningContainer = WarningContainerLight,
-        info = InfoLight,
-        infoContainer = InfoContainerLight,
-        achievementAmber = AchievementAmber,
-        achievementAmberContainer = AchievementAmberLight,
-        orbCore = OrbCoreLight,
-        orbGlow = OrbGlowLight,
+        mint = LightMint,
+        gold = LightGold,
+        success = LightSuccess,
+        elevatedSurface = LightSurface,
+        softSurface = LightSoftSurface,
+        mutedText = LightMuted,
         isDark = false
     )
 }
@@ -106,30 +73,22 @@ fun UnSmokeTheme(
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     val unSmokeColors = if (darkTheme) {
         UnSmokeColors(
-            success = SuccessDark,
-            successContainer = SuccessContainerDark,
-            warning = WarningDark,
-            warningContainer = WarningContainerDark,
-            info = InfoDark,
-            infoContainer = InfoContainerDark,
-            achievementAmber = AchievementAmber,
-            achievementAmberContainer = AchievementAmberDark,
-            orbCore = OrbCoreDark,
-            orbGlow = OrbGlowDark,
+            mint = DarkPrimary,
+            gold = DarkGold,
+            success = DarkSuccess,
+            elevatedSurface = DarkElevatedSurface,
+            softSurface = DarkElevatedSurface,
+            mutedText = DarkMutedText,
             isDark = true
         )
     } else {
         UnSmokeColors(
-            success = SuccessLight,
-            successContainer = SuccessContainerLight,
-            warning = WarningLight,
-            warningContainer = WarningContainerLight,
-            info = InfoLight,
-            infoContainer = InfoContainerLight,
-            achievementAmber = AchievementAmber,
-            achievementAmberContainer = AchievementAmberLight,
-            orbCore = OrbCoreLight,
-            orbGlow = OrbGlowLight,
+            mint = LightMint,
+            gold = LightGold,
+            success = LightSuccess,
+            elevatedSurface = LightSurface,
+            softSurface = LightSoftSurface,
+            mutedText = LightMuted,
             isDark = false
         )
     }
@@ -144,6 +103,5 @@ fun UnSmokeTheme(
     }
 }
 
-// Convenience extension
 val MaterialTheme.unSmokeColors: UnSmokeColors
     @Composable get() = LocalUnSmokeColors.current
