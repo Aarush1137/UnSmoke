@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.progress
+package com.unsmoke.app.feature.progress
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +23,8 @@ data class ProgressUiState(
     val cravingsDefeated: Int = 0,
     val nrtLogged: Int = 0,
     val timeFilter: String = "7 Days",
+    val baselineBreathHold: Int = 0,
+    val currentBreathHold: Int = 0,
     val currencySymbol: String = "$"
 )
 
@@ -40,8 +42,10 @@ class ProgressViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 quitAttemptRepo.getActiveAttempt(),
-                dataStore.currencySymbol
-            ) { attempt, currency ->
+                dataStore.currencySymbol,
+                dataStore.baselineBreathHold,
+                dataStore.currentBreathHold
+            ) { attempt, currency, baseline, current ->
                 if (attempt != null) {
                     val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
                     val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay).toInt()
@@ -52,12 +56,16 @@ class ProgressViewModel @Inject constructor(
                             smokeFreeDays = days,
                             cigarettesAvoided = avoided,
                             moneySaved = saved,
-                            currencySymbol = currency ?: "$"
+                            currencySymbol = currency ?: "$",
+                            baselineBreathHold = baseline,
+                            currentBreathHold = current
                         )
                     }
                 } else {
                     _uiState.update { 
-                        it.copy(currencySymbol = currency ?: "$")
+                        it.copy(currencySymbol = currency ?: "$",
+                            baselineBreathHold = baseline,
+                            currentBreathHold = current)
                     }
                 }
             }.collect {}

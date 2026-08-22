@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.onboarding
+package com.unsmoke.app.feature.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,6 +28,7 @@ data class OnboardingState(
     val triggers: Set<String> = emptySet(),
     val supports: Set<String> = emptySet(),
     val nrtProduct: String = "NONE",
+    val breathHoldTime: Int = 0,
     val quitReason: String = "",
     val userName: String = "",
     val shortTermGoal: String = "",         // e.g. "Survive the first week"
@@ -80,6 +81,10 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
+    fun updateBreathHoldTime(time: Int) {
+        _uiState.update { it.copy(breathHoldTime = time) }
+    }
+
     fun completeOnboarding() {
         viewModelScope.launch {
             val state = _uiState.value
@@ -105,6 +110,7 @@ class OnboardingViewModel @Inject constructor(
             dataStore.setUserName(state.userName.ifBlank { "Champion" })
             dataStore.setQuitReason(state.quitReason.ifBlank { "Better health and freedom" })
             dataStore.setPersonalPlan(state.triggers, state.supports, state.nrtProduct)
+            dataStore.setBreathHold(state.breathHoldTime, state.breathHoldTime)
             dataStore.setGoals(
                 state.shortTermGoal.ifBlank { "Get through the first 72 hours" },
                 state.longTermGoal.ifBlank { "Live smoke-free for 1 year" }

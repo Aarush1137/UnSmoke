@@ -1,4 +1,4 @@
-package com.unsmoke.app.core.data.datastore
+﻿package com.unsmoke.app.core.data.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -29,6 +29,8 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         val PLAN_NRT_PRODUCT = stringPreferencesKey("plan_nrt_product")
         val SHORT_TERM_GOAL = stringPreferencesKey("short_term_goal")
         val LONG_TERM_GOAL = stringPreferencesKey("long_term_goal")
+        val BASELINE_BREATH_HOLD = intPreferencesKey("baseline_breath_hold")
+        val CURRENT_BREATH_HOLD = intPreferencesKey("current_breath_hold")
     }
 
     val onboardingComplete: Flow<Boolean> = dataStore.data.map { it[ONBOARDING_COMPLETE] ?: false }
@@ -36,19 +38,20 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val appLockEnabled: Flow<Boolean> = dataStore.data.map { it[APP_LOCK_ENABLED] ?: false }
     val notificationsEnabled: Flow<Boolean> = dataStore.data.map { it[NOTIFICATIONS_ENABLED] ?: true }
     val notificationStyle: Flow<String> = dataStore.data.map { it[NOTIFICATION_STYLE] ?: "GENTLE" }
-    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "₹" }
+    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "$" }
     val userName: Flow<String> = dataStore.data.map { it[USER_NAME] ?: "Champion" }
-    val quitReason: Flow<String> = dataStore.data.map { it[QUIT_REASON] ?: "Better Health & Freedom" }
-    val emergencyContactName: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_NAME] ?: "" }
-    val emergencyContactPhone: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_PHONE] ?: "" }
-    val planTriggers: Flow<Set<String>> = dataStore.data.map { it[PLAN_TRIGGERS] ?: emptySet() }
-    val planSupports: Flow<Set<String>> = dataStore.data.map { it[PLAN_SUPPORTS] ?: emptySet() }
-    val planNrtProduct: Flow<String> = dataStore.data.map { it[PLAN_NRT_PRODUCT] ?: "NONE" }
-    val shortTermGoal: Flow<String> = dataStore.data.map { it[SHORT_TERM_GOAL] ?: "" }
-    val longTermGoal: Flow<String> = dataStore.data.map { it[LONG_TERM_GOAL] ?: "" }
+    val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
+    val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
 
     suspend fun setOnboardingComplete(complete: Boolean) {
         dataStore.edit { it[ONBOARDING_COMPLETE] = complete }
+    }
+
+    suspend fun setBreathHold(baseline: Int, current: Int) {
+        dataStore.edit {
+            it[BASELINE_BREATH_HOLD] = baseline
+            it[CURRENT_BREATH_HOLD] = current
+        }
     }
 
     suspend fun setTheme(theme: String) {
@@ -67,7 +70,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[NOTIFICATION_STYLE] = style }
     }
 
-    suspend fun setCurrencySymbol(symbol: String) {
+    suspend fun updateCurrencySymbol(symbol: String) {
         dataStore.edit { it[CURRENCY_SYMBOL] = symbol }
     }
 
@@ -79,29 +82,18 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[QUIT_REASON] = reason }
     }
 
-    suspend fun setEmergencyContact(name: String, phone: String) {
-        dataStore.edit {
-            it[EMERGENCY_CONTACT_NAME] = name
-            it[EMERGENCY_CONTACT_PHONE] = phone
-        }
-    }
-
     suspend fun setPersonalPlan(triggers: Set<String>, supports: Set<String>, nrtProduct: String) {
-        dataStore.edit {
-            it[PLAN_TRIGGERS] = triggers
-            it[PLAN_SUPPORTS] = supports
-            it[PLAN_NRT_PRODUCT] = nrtProduct
+        dataStore.edit { prefs ->
+            prefs[PLAN_TRIGGERS] = triggers
+            prefs[PLAN_SUPPORTS] = supports
+            prefs[PLAN_NRT_PRODUCT] = nrtProduct
         }
     }
 
     suspend fun setGoals(shortTerm: String, longTerm: String) {
-        dataStore.edit {
-            it[SHORT_TERM_GOAL] = shortTerm
-            it[LONG_TERM_GOAL] = longTerm
+        dataStore.edit { prefs ->
+            prefs[SHORT_TERM_GOAL] = shortTerm
+            prefs[LONG_TERM_GOAL] = longTerm
         }
-    }
-
-    suspend fun clearAll() {
-        dataStore.edit { it.clear() }
     }
 }

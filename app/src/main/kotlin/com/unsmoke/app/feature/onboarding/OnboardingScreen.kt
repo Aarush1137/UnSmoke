@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.onboarding
+package com.unsmoke.app.feature.onboarding
 import androidx.compose.animation.togetherWith
 
 import androidx.compose.animation.AnimatedContent
@@ -49,6 +49,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -75,6 +76,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+import com.unsmoke.app.core.designsystem.AppColors
 private val MintColor = androidx.compose.ui.graphics.Color(0xFF8FDCD0)
 private val AmberColor = androidx.compose.ui.graphics.Color(0xFFD8AC60)
 private val DarkSurface = Color(0xFF1E2625)
@@ -174,7 +176,8 @@ fun OnboardingScreen(
                         onLongTermChange = viewModel::updateLongTermGoal,
                         onNext = { viewModel.updateStep(8) }
                     )
-                    8 -> ProfileStep(
+                    8 -> LungHealthStep( breathHoldTime = state.breathHoldTime, onTimeChange = viewModel::updateBreathHoldTime, onNext = { viewModel.updateStep(9) } )
+                    9 -> ProfileStep(
                         name = state.userName,
                         onNameChange = viewModel::updateUserName,
                         quitReason = state.quitReason,
@@ -831,3 +834,69 @@ private fun NrtCard(
 
 
 
+@Composable
+fun LungHealthStep(
+    breathHoldTime: Int,
+    onTimeChange: (Int) -> Unit,
+    onNext: () -> Unit
+) {
+    var isRunning by remember { mutableStateOf(false) }
+    var time by remember { mutableStateOf(breathHoldTime) }
+
+    LaunchedEffect(isRunning) {
+        if (isRunning) {
+            while (true) {
+                kotlinx.coroutines.delay(1000)
+                time++
+                onTimeChange(time)
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(Icons.Rounded.Healing, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(64.dp))
+        Spacer(Modifier.height(32.dp))
+        Text(
+            "Baseline Lung Health",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            "Take a deep breath and hold it as long as you comfortably can. We will track your improvement over time.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(48.dp))
+        
+        Text(
+            text = "${time} seconds",
+            fontSize = 48.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        
+        Spacer(Modifier.height(32.dp))
+        
+        Button(
+            onClick = { isRunning = !isRunning },
+            colors = ButtonDefaults.buttonColors(containerColor = if (isRunning) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+        ) {
+            Text(if (isRunning) "STOP TIMER" else "START TIMER", color = MaterialTheme.colorScheme.onPrimary)
+        }
+        
+        Spacer(Modifier.height(48.dp))
+        Button(
+            onClick = onNext,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Text("CONTINUE", color = MaterialTheme.colorScheme.onSurface)
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package com.unsmoke.app.feature.home;
 
+import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore;
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -25,21 +26,27 @@ import javax.inject.Provider;
 public final class HomeViewModel_Factory implements Factory<HomeViewModel> {
   private final Provider<QuitAttemptRepository> quitAttemptRepoProvider;
 
-  public HomeViewModel_Factory(Provider<QuitAttemptRepository> quitAttemptRepoProvider) {
+  private final Provider<UserPreferencesDataStore> dataStoreProvider;
+
+  public HomeViewModel_Factory(Provider<QuitAttemptRepository> quitAttemptRepoProvider,
+      Provider<UserPreferencesDataStore> dataStoreProvider) {
     this.quitAttemptRepoProvider = quitAttemptRepoProvider;
+    this.dataStoreProvider = dataStoreProvider;
   }
 
   @Override
   public HomeViewModel get() {
-    return newInstance(quitAttemptRepoProvider.get());
+    return newInstance(quitAttemptRepoProvider.get(), dataStoreProvider.get());
   }
 
   public static HomeViewModel_Factory create(
-      Provider<QuitAttemptRepository> quitAttemptRepoProvider) {
-    return new HomeViewModel_Factory(quitAttemptRepoProvider);
+      Provider<QuitAttemptRepository> quitAttemptRepoProvider,
+      Provider<UserPreferencesDataStore> dataStoreProvider) {
+    return new HomeViewModel_Factory(quitAttemptRepoProvider, dataStoreProvider);
   }
 
-  public static HomeViewModel newInstance(QuitAttemptRepository quitAttemptRepo) {
-    return new HomeViewModel(quitAttemptRepo);
+  public static HomeViewModel newInstance(QuitAttemptRepository quitAttemptRepo,
+      UserPreferencesDataStore dataStore) {
+    return new HomeViewModel(quitAttemptRepo, dataStore);
   }
 }

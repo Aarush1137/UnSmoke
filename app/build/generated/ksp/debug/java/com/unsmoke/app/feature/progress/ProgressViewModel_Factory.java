@@ -1,5 +1,6 @@
 package com.unsmoke.app.feature.progress;
 
+import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore;
 import com.unsmoke.app.core.domain.repository.CravingRepository;
 import com.unsmoke.app.core.domain.repository.NRTRepository;
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository;
@@ -31,26 +32,31 @@ public final class ProgressViewModel_Factory implements Factory<ProgressViewMode
 
   private final Provider<NRTRepository> nrtRepoProvider;
 
+  private final Provider<UserPreferencesDataStore> dataStoreProvider;
+
   public ProgressViewModel_Factory(Provider<QuitAttemptRepository> quitAttemptRepoProvider,
-      Provider<CravingRepository> cravingRepoProvider, Provider<NRTRepository> nrtRepoProvider) {
+      Provider<CravingRepository> cravingRepoProvider, Provider<NRTRepository> nrtRepoProvider,
+      Provider<UserPreferencesDataStore> dataStoreProvider) {
     this.quitAttemptRepoProvider = quitAttemptRepoProvider;
     this.cravingRepoProvider = cravingRepoProvider;
     this.nrtRepoProvider = nrtRepoProvider;
+    this.dataStoreProvider = dataStoreProvider;
   }
 
   @Override
   public ProgressViewModel get() {
-    return newInstance(quitAttemptRepoProvider.get(), cravingRepoProvider.get(), nrtRepoProvider.get());
+    return newInstance(quitAttemptRepoProvider.get(), cravingRepoProvider.get(), nrtRepoProvider.get(), dataStoreProvider.get());
   }
 
   public static ProgressViewModel_Factory create(
       Provider<QuitAttemptRepository> quitAttemptRepoProvider,
-      Provider<CravingRepository> cravingRepoProvider, Provider<NRTRepository> nrtRepoProvider) {
-    return new ProgressViewModel_Factory(quitAttemptRepoProvider, cravingRepoProvider, nrtRepoProvider);
+      Provider<CravingRepository> cravingRepoProvider, Provider<NRTRepository> nrtRepoProvider,
+      Provider<UserPreferencesDataStore> dataStoreProvider) {
+    return new ProgressViewModel_Factory(quitAttemptRepoProvider, cravingRepoProvider, nrtRepoProvider, dataStoreProvider);
   }
 
   public static ProgressViewModel newInstance(QuitAttemptRepository quitAttemptRepo,
-      CravingRepository cravingRepo, NRTRepository nrtRepo) {
-    return new ProgressViewModel(quitAttemptRepo, cravingRepo, nrtRepo);
+      CravingRepository cravingRepo, NRTRepository nrtRepo, UserPreferencesDataStore dataStore) {
+    return new ProgressViewModel(quitAttemptRepo, cravingRepo, nrtRepo, dataStore);
   }
 }
