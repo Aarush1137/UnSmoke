@@ -19,11 +19,14 @@ datetime = "0.8.0"
 vico = "3.3.0"
 lottie = "6.7.1"
 biometric = "1.4.0-alpha07"
+glance = "1.1.1"
 junit = "4.13.2"
 junitExt = "1.2.1"
 espresso = "3.6.1"
 
 [libraries]
+glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
