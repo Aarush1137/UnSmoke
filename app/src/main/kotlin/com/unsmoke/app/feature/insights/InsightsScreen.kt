@@ -1,9 +1,10 @@
-﻿package com.unsmoke.app.feature.insights
+package com.unsmoke.app.feature.insights
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
@@ -21,6 +22,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.AppColors
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,8 +35,6 @@ fun InsightsScreen(
     viewModel: InsightsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    // Using a hardcoded start time for demo purposes. In reality, this comes from QuitAttemptEntity.
-    val dummyTimeElapsedMillis = 3 * 24 * 60 * 60 * 1000L + 5 * 60 * 60 * 1000L // 3 days, 5 hours
 
     Scaffold(
         topBar = {
@@ -74,7 +78,7 @@ fun InsightsScreen(
                 }
 
                 item {
-                    RecoveryTimeline(dummyTimeElapsedMillis)
+                    RecoveryTimeline(state.elapsedMillis)
                 }
                 
                 item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -119,7 +123,7 @@ fun InsightsScreen(
                     item {
                         InsightCard(
                             title = "Craving Success Rate",
-                            value = "85%",
+                            value = "${state.successRate}%",
                             icon = Icons.Rounded.TrendingDown,
                             description = "Percentage of cravings successfully defeated."
                         )
@@ -137,26 +141,32 @@ private fun InsightCard(title: String, value: String, icon: ImageVector, descrip
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = AppColors.Surface),
-        shape = RoundedCornerShape(24.dp)
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier.padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
-                    .background(AppColors.Teal.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
+                    .size(56.dp)
+                    .background(
+                        Brush.linearGradient(
+                            listOf(AppColors.Teal.copy(alpha = 0.3f), AppColors.Teal.copy(alpha = 0.05f))
+                        ),
+                        shape = CircleShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = AppColors.Mint)
+                Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(28.dp))
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(title, color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp)
-                Text(value, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(title, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                Text(value, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(description, color = AppColors.Mint, fontSize = 12.sp)
+                Text(description, color = AppColors.Mint.copy(alpha = 0.8f), fontSize = 12.sp)
             }
         }
     }
@@ -179,29 +189,54 @@ fun RecoveryTimeline(elapsedMs: Long) {
             val isAchieved = elapsedMs >= milestone.thresholdMs
             val color = if (isAchieved) AppColors.Mint else Color.DarkGray
             
+            val prevThreshold = if (index == 0) 0L else milestones[index - 1].thresholdMs
+            val progressToThis = if (isAchieved) 1f else if (elapsedMs > prevThreshold) {
+                ((elapsedMs - prevThreshold).toFloat() / (milestone.thresholdMs - prevThreshold)).coerceIn(0f, 1f)
+            } else 0f
+            
+            val animatedProgress by animateFloatAsState(
+                targetValue = progressToThis,
+                animationSpec = tween(1500, easing = FastOutSlowInEasing),
+                label = "TimelineProgress"
+            )
+
             Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-                // Line and Icon
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(40.dp)) {
                     Box(
-                        modifier = Modifier.size(32.dp).background(color.copy(alpha = 0.2f), RoundedCornerShape(16.dp)),
+                        modifier = Modifier.size(32.dp).background(color.copy(alpha = 0.2f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(milestone.icon, contentDescription = null, tint = color, modifier = Modifier.size(16.dp))
                     }
                     if (index != milestones.lastIndex) {
-                        Box(modifier = Modifier.width(2.dp).fillMaxHeight().background(color.copy(alpha = 0.3f)))
+                        Box(modifier = Modifier.width(2.dp).fillMaxHeight().background(Color.DarkGray.copy(alpha = 0.3f))) {
+                            if (animatedProgress > 0f && !isAchieved) {
+                                Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(animatedProgress).background(AppColors.Mint))
+                            } else if (isAchieved) {
+                                Box(modifier = Modifier.fillMaxSize().background(AppColors.Mint.copy(alpha = 0.5f)))
+                            }
+                        }
                     }
                 }
                 
                 Spacer(Modifier.width(16.dp))
                 
-                // Content
-                Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                Column(modifier = Modifier.padding(bottom = 24.dp).fillMaxWidth()) {
                     Text(milestone.title, color = color, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Text(milestone.desc, color = if (isAchieved) Color.LightGray else Color.Gray, fontSize = 14.sp)
+                    
+                    if (!isAchieved && progressToThis > 0f) {
+                        Spacer(Modifier.height(8.dp))
+                        LinearProgressIndicator(
+                            progress = { animatedProgress },
+                            modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                            color = AppColors.Mint,
+                            trackColor = Color.DarkGray
+                        )
+                        Text("${(progressToThis * 100).toInt()}% completed", color = AppColors.Mint, fontSize = 10.sp, modifier = Modifier.padding(top = 4.dp))
+                    }
                 }
             }
         }
     }
 }
-

@@ -16,7 +16,8 @@ data class InsightsUiState(
     val bestCopingStrategy: String = "Not enough data",
     val successRate: Int = 0,
     val isLoading: Boolean = true,
-    val hasData: Boolean = false
+    val hasData: Boolean = false,
+    val elapsedMillis: Long = 0L
 )
 
 @HiltViewModel
@@ -31,6 +32,8 @@ class InsightsViewModel @Inject constructor(
         viewModelScope.launch {
             quitAttemptRepo.getActiveAttempt().collect { attempt ->
                 if (attempt != null) {
+                    val currentElapsed = System.currentTimeMillis() - attempt.startEpochMillis
+                    _uiState.update { it.copy(elapsedMillis = currentElapsed) }
                     cravingRepo.getCravings(attempt.id).collect { cravings ->
                         if (cravings.isNotEmpty()) {
                             // Calculate Top Trigger
