@@ -30,12 +30,18 @@ fun CravingTimerScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    var timeLeft by remember { mutableStateOf(600) } // 10 minutes
+    val targetEndTime by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(System.currentTimeMillis() + 600_000L) }
+    var timeLeft by remember { mutableStateOf(600) }
 
-    LaunchedEffect(Unit) {
-        while (timeLeft > 0) {
+    LaunchedEffect(targetEndTime) {
+        while (true) {
+            val remaining = ((targetEndTime - System.currentTimeMillis()) / 1000).toInt()
+            if (remaining <= 0) {
+                timeLeft = 0
+                break
+            }
+            timeLeft = remaining
             delay(1000)
-            timeLeft--
         }
     }
 
@@ -113,3 +119,4 @@ fun GlowingRing(color: Color) {
         drawCircle(color = color, radius = radius, center = center, style = Stroke(width = 6.dp.toPx()))
     }
 }
+
