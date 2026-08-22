@@ -15,6 +15,7 @@ import com.unsmoke.app.feature.craving.CravingOutcomeScreen
 import com.unsmoke.app.feature.nrt.NRTDashboardScreen
 import com.unsmoke.app.feature.progress.ProgressScreen
 import com.unsmoke.app.feature.checkin.CheckInScreen
+import com.unsmoke.app.feature.journal.JournalScreen
 import com.unsmoke.app.feature.profile.ProfileScreen
 import com.unsmoke.app.feature.plan.PlanScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
@@ -43,7 +44,7 @@ fun AppNavGraph(
                 onProgressClick = { navController.navigate(Screen.Progress.route) },
                 onNRTClick = { navController.navigate(Screen.NRT.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
-                onCheckInClick = { navController.navigate(Screen.CheckIn.route) }
+                onCheckInClick = { navController.navigate(Screen.Journal.route) }
             )
         }
         composable(route = Screen.Onboarding.route) {
@@ -83,6 +84,10 @@ fun AppNavGraph(
         composable(route = Screen.Progress.route) {
             ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onBack = { navController.popBackStack() })
         }
+        composable(route = Screen.Journal.route) {
+            JournalScreen(onBack = { navController.popBackStack() }, onAddClick = { navController.navigate(Screen.CheckIn.route) })
+        }
+
         composable(route = Screen.CheckIn.route) {
             CheckInScreen(onComplete = { navController.popBackStack() })
         }
@@ -97,4 +102,5 @@ fun AppNavGraph(
         }
     }
 }
+
 

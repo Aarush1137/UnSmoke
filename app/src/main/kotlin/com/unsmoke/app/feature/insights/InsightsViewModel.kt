@@ -15,7 +15,8 @@ data class InsightsUiState(
     val highRiskTime: String = "Not enough data",
     val bestCopingStrategy: String = "Not enough data",
     val successRate: Int = 0,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val hasData: Boolean = false
 )
 
 @HiltViewModel
@@ -52,7 +53,8 @@ class InsightsViewModel @Inject constructor(
                                     highRiskTime = highRiskTime,
                                     bestCopingStrategy = bestStrategy,
                                     successRate = rate,
-                                    isLoading = false
+                                    isLoading = false,
+                                    hasData = true
                                 )
                             }
                         } else {
@@ -64,3 +66,4 @@ class InsightsViewModel @Inject constructor(
         }
     }
 }
+

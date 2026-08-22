@@ -1,121 +1,148 @@
 package com.unsmoke.app.feature.achievements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.EmojiEvents
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.domain.engine.BadgeState
+import com.unsmoke.app.core.domain.engine.BadgeTier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AchievementsScreen(onBack: () -> Unit) {
+fun AchievementsScreen(
+    onBack: () -> Unit,
+    viewModel: AchievementsViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Achievements", fontWeight = FontWeight.SemiBold) },
+                title = { Text("Achievements", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
-                    }
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = UnSmokeColors.Mint) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF011113),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
             )
         },
-        containerColor = Color(0xFF011113) // Dark theme background
+        containerColor = UnSmokeColors.Background
     ) { padding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(Modifier.height(32.dp))
-            
-            // Hero Badge
-            Box(
-                modifier = Modifier
-                    .size(160.dp)
-                    .background(Color(0xFF1D4943), CircleShape)
-                    .padding(8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color(0xFF0B856E), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("7", fontSize = 64.sp, fontWeight = FontWeight.Bold, color = Color(0xFFD8AC60))
-                }
+        if (state.isLoading) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = UnSmokeColors.Teal)
             }
-            
-            Spacer(Modifier.height(24.dp))
-            Text("One Week", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            Text("7 days smoke-free", fontSize = 16.sp, color = Color(0xFFB6C4BF))
-            Spacer(Modifier.height(8.dp))
-            Text("Keep going!", fontSize = 16.sp, color = Color(0xFF8FDCD0), fontWeight = FontWeight.Medium)
-            
-            Spacer(Modifier.height(48.dp))
-            
-            // Grid Title
-            Text("Your badges", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Start)
-            Spacer(Modifier.height(16.dp))
-            
-            val badges = listOf("First Day", "7", "30", "90", "180", "365")
-            
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 16.dp)
             ) {
-                items(badges) { badge ->
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(
-                            modifier = Modifier
-                                .size(64.dp)
-                                .background(if (badge == "7" || badge == "First Day") Color(0xFF1D4943) else Color(0xFF0A2022), CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                badge.replace("First Day", "1"), 
-                                fontSize = 24.sp, 
-                                fontWeight = FontWeight.Bold,
-                                color = if (badge == "7" || badge == "First Day") Color(0xFFD8AC60) else Color(0xFF82918B)
-                            )
-                        }
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            if (badge == "First Day") "First Day" else " Days", 
-                            fontSize = 12.sp, 
-                            color = Color(0xFFB6C4BF)
-                        )
+                Text(
+                    text = "You've earned \ of \ badges",
+                    color = Color.White.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(bottom = 24.dp, start = 8.dp)
+                )
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(bottom = 32.dp)
+                ) {
+                    items(state.badges) { item ->
+                        BadgeCard(item)
                     }
                 }
             }
-            
-            Spacer(Modifier.weight(1f))
-            Button(
-                onClick = {},
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0B856E))
+        }
+    }
+}
+
+@Composable
+private fun BadgeCard(item: AchievementItemState) {
+    val isEarned = item.state == BadgeState.EARNED
+    val bgColor = if (isEarned) UnSmokeColors.Surface else UnSmokeColors.Surface.copy(alpha = 0.5f)
+    val iconColor = when {
+        !isEarned -> Color.White.copy(alpha = 0.2f)
+        item.badge.tier == BadgeTier.BRONZE -> Color(0xFFCD7F32)
+        item.badge.tier == BadgeTier.SILVER -> Color(0xFFC0C0C0)
+        item.badge.tier == BadgeTier.GOLD -> Color(0xFFFFD700)
+        else -> UnSmokeColors.Teal // Platinum/Special
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(0.85f),
+        colors = CardDefaults.cardColors(containerColor = bgColor),
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .background(if (isEarned) iconColor.copy(alpha = 0.1f) else Color.Transparent)
+                    .border(2.dp, if (isEarned) iconColor else Color.Transparent, CircleShape),
+                contentAlignment = Alignment.Center
             ) {
-                Text("VIEW ALL", color = Color.White, fontWeight = FontWeight.Bold)
+                Icon(
+                    imageVector = if (isEarned) Icons.Rounded.EmojiEvents else Icons.Rounded.Lock,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(32.dp)
+                )
             }
-            Spacer(Modifier.height(24.dp))
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Text(
+                text = item.badge.title,
+                fontWeight = FontWeight.Bold,
+                color = if (isEarned) Color.White else Color.White.copy(alpha = 0.5f),
+                textAlign = TextAlign.Center,
+                fontSize = 14.sp
+            )
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            Text(
+                text = if (isEarned) item.badge.description else "Locked",
+                color = if (isEarned) UnSmokeColors.Mint else Color.White.copy(alpha = 0.3f),
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                lineHeight = 14.sp
+            )
         }
     }
 }

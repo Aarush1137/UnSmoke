@@ -1,9 +1,11 @@
-﻿package com.unsmoke.app.feature.nrt
+package com.unsmoke.app.feature.nrt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Medication
+import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -98,3 +100,4 @@ fun PlanDonutRing(progress: Float, modifier: Modifier = Modifier) {
         }
     }
 }
+

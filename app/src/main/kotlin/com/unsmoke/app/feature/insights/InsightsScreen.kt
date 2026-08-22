@@ -10,6 +10,8 @@ import androidx.compose.material.icons.rounded.Psychology
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.TrendingDown
+import androidx.compose.material.icons.rounded.AutoGraph
+import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,6 +51,10 @@ fun InsightsScreen(
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = UnSmokeColors.Teal)
+            }
+        } else if (!state.hasData) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                EmptyStateCard(icon = Icons.Rounded.AutoGraph, title = "Not Enough Data", message = "We need more craving logs to calculate your patterns.")
             }
         } else {
             LazyColumn(
@@ -137,3 +143,4 @@ private fun InsightCard(title: String, value: String, icon: ImageVector, descrip
         }
     }
 }
+
