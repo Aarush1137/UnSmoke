@@ -4,6 +4,7 @@ import androidx.hilt.work.HiltWrapper_WorkerFactoryModule;
 import com.unsmoke.app.di.DataStoreModule;
 import com.unsmoke.app.di.DatabaseModule;
 import com.unsmoke.app.di.RepositoryModule;
+import com.unsmoke.app.feature.checkin.CheckInViewModel_HiltModules;
 import com.unsmoke.app.feature.craving.CravingViewModel_HiltModules;
 import com.unsmoke.app.feature.home.HomeViewModel_HiltModules;
 import com.unsmoke.app.feature.nrt.NRTViewModel_HiltModules;
@@ -163,6 +164,7 @@ public final class UnSmokeApplication_HiltComponents {
 
   @Subcomponent(
       modules = {
+          CheckInViewModel_HiltModules.KeyModule.class,
           CravingViewModel_HiltModules.KeyModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           HiltWrapper_SavedStateHandleModule.class,
@@ -207,6 +209,7 @@ public final class UnSmokeApplication_HiltComponents {
 
   @Subcomponent(
       modules = {
+          CheckInViewModel_HiltModules.BindsModule.class,
           CravingViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
           HomeViewModel_HiltModules.BindsModule.class,

@@ -22,11 +22,11 @@ fun ProgressRing(
     progress: Float, // 0f to 1f
     modifier: Modifier = Modifier,
     size: Dp = 220.dp,
-    strokeWidth: Dp = 6.dp,
+    strokeWidth: Dp = 12.dp,
     trackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     progressColor: Color = MaterialTheme.colorScheme.primary,
-    startAngle: Float = 135f,
-    sweepAngle: Float = 270f // leaves a gap at bottom
+    startAngle: Float = -90f,
+    sweepAngle: Float = 360f // leaves a gap at bottom
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,

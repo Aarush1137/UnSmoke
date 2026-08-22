@@ -79,7 +79,7 @@ fun CravingTimerScreen(
             
             Spacer(Modifier.height(64.dp))
             Button(
-                onClick = { viewModel.resolveCraving("DEFEATED", context) },
+                onClick = { viewModel.resolveCraving("DEFEATED") },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
@@ -87,7 +87,7 @@ fun CravingTimerScreen(
             }
             
             Spacer(Modifier.height(16.dp))
-            TextButton(onClick = { viewModel.resolveCraving("SMOKED", context) }) {
+            TextButton(onClick = { viewModel.resolveCraving("SMOKED") }) {
                 Text("I SMOKED", color = Color.Gray)
             }
         }

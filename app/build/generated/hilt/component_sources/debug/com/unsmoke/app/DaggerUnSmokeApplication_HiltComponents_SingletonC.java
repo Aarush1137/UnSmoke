@@ -13,16 +13,24 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.work.ListenableWorker;
 import com.unsmoke.app.core.data.database.UnSmokeDatabase;
+import com.unsmoke.app.core.data.database.dao.CheckInDao;
 import com.unsmoke.app.core.data.database.dao.CravingDao;
+import com.unsmoke.app.core.data.database.dao.NRTDao;
 import com.unsmoke.app.core.data.database.dao.QuitAttemptDao;
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore;
+import com.unsmoke.app.core.data.repository.CheckInRepositoryImpl;
 import com.unsmoke.app.core.data.repository.CravingRepositoryImpl;
+import com.unsmoke.app.core.data.repository.NRTRepositoryImpl;
 import com.unsmoke.app.core.data.repository.QuitAttemptRepositoryImpl;
 import com.unsmoke.app.di.DataStoreModule_ProvideDataStoreFactory;
 import com.unsmoke.app.di.DataStoreModule_ProvideUserPreferencesDataStoreFactory;
+import com.unsmoke.app.di.DatabaseModule_ProvideCheckInDaoFactory;
 import com.unsmoke.app.di.DatabaseModule_ProvideCravingDaoFactory;
+import com.unsmoke.app.di.DatabaseModule_ProvideNRTDaoFactory;
 import com.unsmoke.app.di.DatabaseModule_ProvideQuitAttemptDaoFactory;
 import com.unsmoke.app.di.DatabaseModule_ProvideUnSmokeDatabaseFactory;
+import com.unsmoke.app.feature.checkin.CheckInViewModel;
+import com.unsmoke.app.feature.checkin.CheckInViewModel_HiltModules;
 import com.unsmoke.app.feature.craving.CravingViewModel;
 import com.unsmoke.app.feature.craving.CravingViewModel_HiltModules;
 import com.unsmoke.app.feature.home.HomeViewModel;
@@ -393,7 +401,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(5).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, CravingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, NRTViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ProgressViewModel_HiltModules.KeyModule.provide()).build());
+      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(6).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, CheckInViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, CravingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, NRTViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ProgressViewModel_HiltModules.KeyModule.provide()).build());
     }
 
     @Override
@@ -413,30 +421,35 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
-
-      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
+      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
 
       static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
 
-      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
-
       static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
 
-      @KeepFieldType
-      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
+      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
 
-      @KeepFieldType
-      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
+      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
 
-      @KeepFieldType
-      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
 
       @KeepFieldType
       CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
 
       @KeepFieldType
+      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+
+      @KeepFieldType
       HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
+
+      @KeepFieldType
+      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
+
+      @KeepFieldType
+      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
+
+      @KeepFieldType
+      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
     }
   }
 
@@ -446,6 +459,8 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
     private final ActivityRetainedCImpl activityRetainedCImpl;
 
     private final ViewModelCImpl viewModelCImpl = this;
+
+    private Provider<CheckInViewModel> checkInViewModelProvider;
 
     private Provider<CravingViewModel> cravingViewModelProvider;
 
@@ -470,16 +485,17 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
     @SuppressWarnings("unchecked")
     private void initialize(final SavedStateHandle savedStateHandleParam,
         final ViewModelLifecycle viewModelLifecycleParam) {
-      this.cravingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
-      this.homeViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
-      this.nRTViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
-      this.onboardingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
-      this.progressViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
+      this.checkInViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
+      this.cravingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
+      this.homeViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
+      this.nRTViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
+      this.onboardingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
+      this.progressViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
     }
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(5).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, ((Provider) cravingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, ((Provider) nRTViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ((Provider) progressViewModelProvider)).build());
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(6).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, ((Provider) checkInViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, ((Provider) cravingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, ((Provider) nRTViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ((Provider) progressViewModelProvider)).build());
     }
 
     @Override
@@ -491,28 +507,33 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
 
+      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
+
+      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
+
+      static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
+
       static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
 
       static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
 
-      static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
-
-      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
-
       @KeepFieldType
       CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
+
+      @KeepFieldType
+      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
+
+      @KeepFieldType
+      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
 
       @KeepFieldType
       NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
 
       @KeepFieldType
       OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
-      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
-
-      @KeepFieldType
-      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -536,20 +557,23 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.unsmoke.app.feature.craving.CravingViewModel 
-          return (T) new CravingViewModel(singletonCImpl.cravingRepositoryImplProvider.get());
+          case 0: // com.unsmoke.app.feature.checkin.CheckInViewModel 
+          return (T) new CheckInViewModel(singletonCImpl.checkInRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get());
 
-          case 1: // com.unsmoke.app.feature.home.HomeViewModel 
+          case 1: // com.unsmoke.app.feature.craving.CravingViewModel 
+          return (T) new CravingViewModel(singletonCImpl.cravingRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get());
+
+          case 2: // com.unsmoke.app.feature.home.HomeViewModel 
           return (T) new HomeViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get());
 
-          case 2: // com.unsmoke.app.feature.nrt.NRTViewModel 
-          return (T) new NRTViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get());
+          case 3: // com.unsmoke.app.feature.nrt.NRTViewModel 
+          return (T) new NRTViewModel(singletonCImpl.nRTRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get());
 
-          case 3: // com.unsmoke.app.feature.onboarding.OnboardingViewModel 
+          case 4: // com.unsmoke.app.feature.onboarding.OnboardingViewModel 
           return (T) new OnboardingViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get(), singletonCImpl.provideUserPreferencesDataStoreProvider.get());
 
-          case 4: // com.unsmoke.app.feature.progress.ProgressViewModel 
-          return (T) new ProgressViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get());
+          case 5: // com.unsmoke.app.feature.progress.ProgressViewModel 
+          return (T) new ProgressViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get(), singletonCImpl.cravingRepositoryImplProvider.get(), singletonCImpl.nRTRepositoryImplProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -633,9 +657,13 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     private Provider<UnSmokeDatabase> provideUnSmokeDatabaseProvider;
 
-    private Provider<CravingRepositoryImpl> cravingRepositoryImplProvider;
+    private Provider<CheckInRepositoryImpl> checkInRepositoryImplProvider;
 
     private Provider<QuitAttemptRepositoryImpl> quitAttemptRepositoryImplProvider;
+
+    private Provider<CravingRepositoryImpl> cravingRepositoryImplProvider;
+
+    private Provider<NRTRepositoryImpl> nRTRepositoryImplProvider;
 
     private Provider<DataStore<Preferences>> provideDataStoreProvider;
 
@@ -651,21 +679,31 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       return WorkerFactoryModule_ProvideFactoryFactory.provideFactory(Collections.<String, javax.inject.Provider<WorkerAssistedFactory<? extends ListenableWorker>>>emptyMap());
     }
 
-    private CravingDao cravingDao() {
-      return DatabaseModule_ProvideCravingDaoFactory.provideCravingDao(provideUnSmokeDatabaseProvider.get());
+    private CheckInDao checkInDao() {
+      return DatabaseModule_ProvideCheckInDaoFactory.provideCheckInDao(provideUnSmokeDatabaseProvider.get());
     }
 
     private QuitAttemptDao quitAttemptDao() {
       return DatabaseModule_ProvideQuitAttemptDaoFactory.provideQuitAttemptDao(provideUnSmokeDatabaseProvider.get());
     }
 
+    private CravingDao cravingDao() {
+      return DatabaseModule_ProvideCravingDaoFactory.provideCravingDao(provideUnSmokeDatabaseProvider.get());
+    }
+
+    private NRTDao nRTDao() {
+      return DatabaseModule_ProvideNRTDaoFactory.provideNRTDao(provideUnSmokeDatabaseProvider.get());
+    }
+
     @SuppressWarnings("unchecked")
     private void initialize(final ApplicationContextModule applicationContextModuleParam) {
       this.provideUnSmokeDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<UnSmokeDatabase>(singletonCImpl, 1));
-      this.cravingRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CravingRepositoryImpl>(singletonCImpl, 0));
+      this.checkInRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CheckInRepositoryImpl>(singletonCImpl, 0));
       this.quitAttemptRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<QuitAttemptRepositoryImpl>(singletonCImpl, 2));
-      this.provideDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<DataStore<Preferences>>(singletonCImpl, 4));
-      this.provideUserPreferencesDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesDataStore>(singletonCImpl, 3));
+      this.cravingRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CravingRepositoryImpl>(singletonCImpl, 3));
+      this.nRTRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<NRTRepositoryImpl>(singletonCImpl, 4));
+      this.provideDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<DataStore<Preferences>>(singletonCImpl, 6));
+      this.provideUserPreferencesDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesDataStore>(singletonCImpl, 5));
     }
 
     @Override
@@ -707,8 +745,8 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.unsmoke.app.core.data.repository.CravingRepositoryImpl 
-          return (T) new CravingRepositoryImpl(singletonCImpl.cravingDao());
+          case 0: // com.unsmoke.app.core.data.repository.CheckInRepositoryImpl 
+          return (T) new CheckInRepositoryImpl(singletonCImpl.checkInDao());
 
           case 1: // com.unsmoke.app.core.data.database.UnSmokeDatabase 
           return (T) DatabaseModule_ProvideUnSmokeDatabaseFactory.provideUnSmokeDatabase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
@@ -716,10 +754,16 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
           case 2: // com.unsmoke.app.core.data.repository.QuitAttemptRepositoryImpl 
           return (T) new QuitAttemptRepositoryImpl(singletonCImpl.quitAttemptDao());
 
-          case 3: // com.unsmoke.app.core.data.datastore.UserPreferencesDataStore 
+          case 3: // com.unsmoke.app.core.data.repository.CravingRepositoryImpl 
+          return (T) new CravingRepositoryImpl(singletonCImpl.cravingDao());
+
+          case 4: // com.unsmoke.app.core.data.repository.NRTRepositoryImpl 
+          return (T) new NRTRepositoryImpl(singletonCImpl.nRTDao());
+
+          case 5: // com.unsmoke.app.core.data.datastore.UserPreferencesDataStore 
           return (T) DataStoreModule_ProvideUserPreferencesDataStoreFactory.provideUserPreferencesDataStore(singletonCImpl.provideDataStoreProvider.get());
 
-          case 4: // androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences> 
+          case 6: // androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences> 
           return (T) DataStoreModule_ProvideDataStoreFactory.provideDataStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
           default: throw new AssertionError(id);

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.unsmoke.app.feature.home.HomeScreen
+import com.unsmoke.app.feature.splash.SplashScreen
 import com.unsmoke.app.feature.onboarding.OnboardingScreen
 import com.unsmoke.app.feature.craving.CravingScreen
 import com.unsmoke.app.feature.craving.CravingTimerScreen
@@ -22,12 +23,19 @@ import com.unsmoke.app.feature.settings.SettingsScreen
 @Composable
 fun AppNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Home.route
+    startDestination: String = Screen.Splash.route
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+        composable(route = Screen.Splash.route) {
+            SplashScreen(onTimeout = {
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Splash.route) { inclusive = true }
+                }
+            })
+        }
         composable(route = Screen.Home.route) {
             HomeScreen(
                 onCravingClick = { navController.navigate(Screen.Craving.route) },

@@ -3,6 +3,7 @@ package com.unsmoke.app.feature.home
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -13,11 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.time.LocalDateTime
+import com.unsmoke.app.core.designsystem.components.ProgressRing
 
 @Composable
 fun HomeScreen(
@@ -38,64 +41,102 @@ fun HomeScreen(
     }
 
     Scaffold(
+        containerColor = Color(0xFFFAFAF8),
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
-                title = { Text("$greeting, ${uiState.userName ?: ""}") },
+                title = { Text(", ", fontWeight = FontWeight.Bold, color = Color(0xFF18201E)) },
                 actions = {
                     IconButton(onClick = {}) {
-                        Icon(Icons.Rounded.Notifications, contentDescription = "Notifications")
+                        Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = Color(0xFF596560))
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFAFAF8))
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = Color(0xFFFAFAF8)) {
                 NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Rounded.Home, "Home") }, label = { Text("Home") })
-                NavigationBarItem(selected = false, onClick = onProgressClick, icon = { Icon(Icons.Rounded.TrendingUp, "Progress") }, label = { Text("Progress") })
-                NavigationBarItem(selected = false, onClick = onCravingClick, icon = { Icon(Icons.Rounded.LocalFireDepartment, "Craving") }, label = { Text("Craving") })
-                NavigationBarItem(selected = false, onClick = onNRTClick, icon = { Icon(Icons.Rounded.Medication, "NRT") }, label = { Text("NRT") })
+                NavigationBarItem(selected = false, onClick = onProgressClick, icon = { Icon(Icons.Rounded.BarChart, "Progress") }, label = { Text("Progress") })
+                NavigationBarItem(selected = false, onClick = onCravingClick, icon = { Icon(Icons.Rounded.Adjust, "Craving") }, label = { Text("Craving") })
+                NavigationBarItem(selected = false, onClick = onNRTClick, icon = { Icon(Icons.Rounded.MedicalServices, "NRT") }, label = { Text("NRT") })
                 NavigationBarItem(selected = false, onClick = onProfileClick, icon = { Icon(Icons.Rounded.Person, "You") }, label = { Text("You") })
             }
         }
-    ) { paddingValues ->
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(padding)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "DAYS SMOKE-FREE", fontWeight = FontWeight.Bold)
-            Text(text = "${uiState.smokeFreeDays}", fontSize = 64.sp)
-            Text(text = "Since ${uiState.quitDateDisplay}")
+            Spacer(modifier = Modifier.height(24.dp))
             
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                buildAnnotatedString {
-                    withStyle(SpanStyle(color = Color(0xFFE9A94B))) {
-                        append("???")
-                    }
-                    append(String.format("%.0f", uiState.netMoneySaved))
-                },
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(
-                onClick = onCravingClick,
-                modifier = Modifier.fillMaxWidth().height(56.dp)
+            // Hero Progress Ring
+            Box(
+                modifier = Modifier.size(240.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text("I HAVE A CRAVING")
+                ProgressRing(progress = 0.8f, size = 240.dp) // Dummy progress for now
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "", fontSize = 64.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0B856E))
+                    Text(text = "Days Free", fontSize = 18.sp, color = Color(0xFF596560), fontWeight = FontWeight.Medium)
+                }
             }
             
             Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Since ", color = Color(0xFF818A84), fontSize = 14.sp)
+            Spacer(modifier = Modifier.height(32.dp))
             
-            Text(text = uiState.currentQuote)
+            // Two Metric Cards
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Card(
+                    modifier = Modifier.weight(1f).aspectRatio(1.2f),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0D2829))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Icon(Icons.Rounded.MoneyOff, contentDescription = null, tint = Color(0xFF8FDCD0), modifier = Modifier.size(24.dp))
+                        Spacer(Modifier.weight(1f))
+                        Text(String.format("?%.0f", uiState.netMoneySaved), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Spacer(Modifier.height(4.dp))
+                        Text("Money saved", fontSize = 12.sp, color = Color(0xFF82918B))
+                    }
+                }
+                
+                Card(
+                    modifier = Modifier.weight(1f).aspectRatio(1.2f),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0D2829))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Icon(Icons.Rounded.Block, contentDescription = null, tint = Color(0xFF8FDCD0), modifier = Modifier.size(24.dp))
+                        Spacer(Modifier.weight(1f))
+                        // Assuming uiState has cigarettes avoided, but let's mock it if it doesn't
+                        Text("", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Spacer(Modifier.height(4.dp))
+                        Text("Cigs avoided", fontSize = 12.sp, color = Color(0xFF82918B))
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            Button(
+                onClick = onCravingClick,
+                modifier = Modifier.fillMaxWidth().height(64.dp),
+                shape = RoundedCornerShape(18.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0B856E))
+            ) {
+                Text("I HAVE A CRAVING", fontWeight = FontWeight.Bold, fontSize = 16.sp, letterSpacing = 1.sp)
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            Text(text = uiState.currentQuote, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = Color(0xFF596560), textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

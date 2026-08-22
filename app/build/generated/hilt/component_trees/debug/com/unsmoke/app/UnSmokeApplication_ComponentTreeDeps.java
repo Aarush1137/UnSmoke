@@ -23,6 +23,8 @@ import hilt_aggregated_deps._com_unsmoke_app_UnSmokeApplication_GeneratedInjecto
 import hilt_aggregated_deps._com_unsmoke_app_di_DataStoreModule;
 import hilt_aggregated_deps._com_unsmoke_app_di_DatabaseModule;
 import hilt_aggregated_deps._com_unsmoke_app_di_RepositoryModule;
+import hilt_aggregated_deps._com_unsmoke_app_feature_checkin_CheckInViewModel_HiltModules_BindsModule;
+import hilt_aggregated_deps._com_unsmoke_app_feature_checkin_CheckInViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._com_unsmoke_app_feature_craving_CravingViewModel_HiltModules_BindsModule;
 import hilt_aggregated_deps._com_unsmoke_app_feature_craving_CravingViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._com_unsmoke_app_feature_home_HomeViewModel_HiltModules_BindsModule;
@@ -79,6 +81,8 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_unsmoke_app_di_DataStoreModule.class,
         _com_unsmoke_app_di_DatabaseModule.class,
         _com_unsmoke_app_di_RepositoryModule.class,
+        _com_unsmoke_app_feature_checkin_CheckInViewModel_HiltModules_BindsModule.class,
+        _com_unsmoke_app_feature_checkin_CheckInViewModel_HiltModules_KeyModule.class,
         _com_unsmoke_app_feature_craving_CravingViewModel_HiltModules_BindsModule.class,
         _com_unsmoke_app_feature_craving_CravingViewModel_HiltModules_KeyModule.class,
         _com_unsmoke_app_feature_home_HomeViewModel_HiltModules_BindsModule.class,
