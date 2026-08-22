@@ -699,6 +699,14 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable onboarding_completion
+drawable onboarding_craving_triggers
+drawable onboarding_nrt_tracking
+drawable onboarding_personal_goals
+drawable onboarding_quit_date
+drawable onboarding_smoking_history
+drawable onboarding_welcome
+drawable onboarding_why_quit
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -1518,6 +1526,7 @@ styleable Toolbar android_gravity android_minHeight buttonGravity collapseConten
 styleable View android_theme android_focusable paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewStubCompat android_id android_layout android_inflatedId
+xml file_paths
 xml widget_craving_info
 xml widget_dashboard_info
 xml widget_streak_info

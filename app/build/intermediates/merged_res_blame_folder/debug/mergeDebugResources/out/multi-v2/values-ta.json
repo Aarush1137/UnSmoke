@@ -4,7 +4,7 @@
             "outputFile": "com.unsmoke.app-mergeDebugResources-69:/values-ta/values-ta.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\96ae44865a8a955f56e9ed8bf59953b8\\transformed\\biometric-1.4.0-alpha07\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\5e30a200943ed9c85e485fca01465b21\\transformed\\biometric-1.4.0-alpha07\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\233729a9f6c0e13b5d376db6fa00c256\\transformed\\core-1.16.0\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\909f30601381104095b3a1021716faf8\\transformed\\core-1.16.0\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -38,24 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\9b9562754a840acf4da17caa5b81d345\\transformed\\foundation-release\\res\\values-ta\\values-ta.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,148",
-                        "endColumns": "92,97",
-                        "endOffsets": "143,241"
-                    },
-                    "to": {
-                        "startLines": "134,135",
-                        "startColumns": "4,4",
-                        "startOffsets": "14763,14856",
-                        "endColumns": "92,97",
-                        "endOffsets": "14851,14949"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\1ecd5a23603249bff3f28805bf314e7d\\transformed\\appcompat-1.6.1\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\c727b3429f44c49f2227e38ef526afb5\\transformed\\appcompat-1.6.1\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -72,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\8c44d3b4628cd1a36d2df2592f397907\\transformed\\ui-release\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\1f8d001d080587a10867d708049007c5\\transformed\\ui-release\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -89,7 +72,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\07bf1398ade9be933564d74bd328d154\\transformed\\material3-release\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\c9f01f190176f56dd35a173cc9b68fde\\transformed\\material3-release\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -103,6 +86,23 @@
                         "startOffsets": "7047,7173,7299,7420,7544,7645,7741,7854,8005,8136,8277,8361,8465,8565,8673,8790,8913,9022,9168,9312,9446,9652,9781,9902,10027,10173,10274,10372,10518,10654,10760,10873,10980,11126,11278,11387,11499,11577,11679,11782,11868,11961,12074,12154,12242,12341,12461,12556,12661,12750,12872,12976,13083,13216,13296,13407",
                         "endColumns": "125,125,120,123,100,95,112,150,130,140,83,103,99,107,116,122,108,145,143,133,205,128,120,124,145,100,97,145,135,105,112,106,145,151,108,111,77,101,102,85,92,112,79,87,98,119,94,104,88,121,103,106,132,79,110,101",
                         "endOffsets": "7168,7294,7415,7539,7640,7736,7849,8000,8131,8272,8356,8460,8560,8668,8785,8908,9017,9163,9307,9441,9647,9776,9897,10022,10168,10269,10367,10513,10649,10755,10868,10975,11121,11273,11382,11494,11572,11674,11777,11863,11956,12069,12149,12237,12336,12456,12551,12656,12745,12867,12971,13078,13211,13291,13402,13504"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\1eb73233357fa0e09b60ae21f4d2c4c0\\transformed\\foundation-release\\res\\values-ta\\values-ta.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,148",
+                        "endColumns": "92,97",
+                        "endOffsets": "143,241"
+                    },
+                    "to": {
+                        "startLines": "134,135",
+                        "startColumns": "4,4",
+                        "startOffsets": "14763,14856",
+                        "endColumns": "92,97",
+                        "endOffsets": "14851,14949"
                     }
                 }
             ]

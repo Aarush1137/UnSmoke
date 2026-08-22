@@ -1,6 +1,9 @@
 package com.unsmoke.app.feature.checkin
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -8,12 +11,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unsmoke.app.core.designsystem.UnSmokeColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,69 +29,126 @@ fun CheckInScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(state.isSaved) {
+        if (state.isSaved) onComplete()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Daily Check-in") },
+                title = { Text("Daily Check-in", color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = onComplete) {
-                        Icon(Icons.Rounded.Close, contentDescription = "Close")
+                        Icon(Icons.Rounded.Close, contentDescription = "Close", tint = Color.White)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
             )
-        }
+        },
+        containerColor = UnSmokeColors.Background
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp)) {
-            Text("How are you feeling?", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(24.dp)
+        ) {
+            Text("How was your day?", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Spacer(Modifier.height(32.dp))
             
             // Mood Selector
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                listOf(1, 2, 3, 4, 5).forEach { moodValue ->
-                    FilterChip(
-                        selected = state.mood == moodValue,
-                        onClick = { viewModel.updateMood(moodValue) },
-                        label = { Text(moodValue.toString()) }
-                    )
+            Text("OVERALL MOOD", fontSize = 12.sp, color = Color.White.copy(alpha = 0.5f), fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+            Spacer(Modifier.height(12.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                val moods = listOf("Awful", "Bad", "Okay", "Good", "Great")
+                moods.forEachIndexed { index, moodLabel ->
+                    val moodValue = index + 1
+                    val isSelected = state.mood == moodValue
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(CircleShape)
+                                .background(if (isSelected) UnSmokeColors.Mint else Color(0xFF1E2625))
+                                .clickable { viewModel.updateMood(moodValue) },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = moodValue.toString(),
+                                color = if (isSelected) Color.Black else Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Text(moodLabel, color = if (isSelected) UnSmokeColors.Mint else Color.Gray, fontSize = 12.sp)
+                    }
                 }
             }
             
-            Spacer(Modifier.height(32.dp))
-            Text("Sleep Quality", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(40.dp))
+            Text("SLEEP QUALITY", fontSize = 12.sp, color = Color.White.copy(alpha = 0.5f), fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
             Slider(
                 value = state.sleepQuality.toFloat(),
                 onValueChange = { viewModel.updateSleep(it.toInt()) },
                 valueRange = 1f..5f,
-                steps = 3
+                steps = 3,
+                colors = SliderDefaults.colors(
+                    thumbColor = UnSmokeColors.Teal,
+                    activeTrackColor = UnSmokeColors.Teal,
+                    inactiveTrackColor = Color.DarkGray
+                )
             )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Terrible", color = Color.Gray, fontSize = 12.sp)
+                Text("Excellent", color = Color.Gray, fontSize = 12.sp)
+            }
             
-            Spacer(Modifier.height(32.dp))
-            Text("Stress Level", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(40.dp))
+            Text("STRESS LEVEL", fontSize = 12.sp, color = Color.White.copy(alpha = 0.5f), fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
             Slider(
                 value = state.stressLevel.toFloat(),
                 onValueChange = { viewModel.updateStress(it.toInt()) },
                 valueRange = 1f..5f,
-                steps = 3
+                steps = 3,
+                colors = SliderDefaults.colors(
+                    thumbColor = UnSmokeColors.Amber,
+                    activeTrackColor = UnSmokeColors.Amber,
+                    inactiveTrackColor = Color.DarkGray
+                )
             )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Low", color = Color.Gray, fontSize = 12.sp)
+                Text("High", color = Color.Gray, fontSize = 12.sp)
+            }
             
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(40.dp))
             OutlinedTextField(
                 value = state.notes,
                 onValueChange = { viewModel.updateNotes(it) },
                 modifier = Modifier.fillMaxWidth().height(120.dp),
-                label = { Text("Notes for today") },
-                shape = RoundedCornerShape(12.dp)
+                placeholder = { Text("Any thoughts on today? Triggers you noticed?", color = Color.Gray) },
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = Color.DarkGray,
+                    focusedBorderColor = UnSmokeColors.Mint,
+                    unfocusedContainerColor = Color(0xFF1E2625),
+                    focusedContainerColor = Color(0xFF1E2625),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
+                )
             )
 
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = { viewModel.submitCheckIn(onComplete) },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0B856E))
+                onClick = viewModel::saveCheckIn,
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Mint),
+                shape = RoundedCornerShape(16.dp),
+                enabled = state.mood > 0
             ) {
-                Text("SAVE CHECK-IN", color = Color.White, fontWeight = FontWeight.Bold)
+                Text("SAVE JOURNAL", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
-            Spacer(Modifier.height(24.dp))
         }
     }
 }

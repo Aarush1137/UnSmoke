@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UnSmoke</string>
+    <string name="widget_craving_description">Emergency craving support � one tap to get help</string>
+    <string name="widget_dashboard_description">Full UnSmoke dashboard with all key metrics</string>
+    <string name="widget_streak_description">Shows your smoke-free streak and a quick craving button</string>
+    <style name="Theme.UnSmoke" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>

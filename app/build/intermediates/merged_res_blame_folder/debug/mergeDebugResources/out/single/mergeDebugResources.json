@@ -1,27 +1,51 @@
 [
     {
-        "merged": "com.unsmoke.app-debug-71:/xml_widget_dashboard_info.xml.flat",
-        "source": "com.unsmoke.app-main-73:/xml/widget_dashboard_info.xml"
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_quit_date.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_quit_date.png"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_dashboard_info.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_dashboard_info.xml"
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_smoking_history.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_smoking_history.png"
     },
     {
         "merged": "com.unsmoke.app-debug-71:/xml_widget_craving_info.xml.flat",
         "source": "com.unsmoke.app-main-73:/xml/widget_craving_info.xml"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_streak_info.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_streak_info.xml"
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_why_quit.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_why_quit.png"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_craving_info.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_craving_info.xml"
+        "merged": "com.unsmoke.app-debug-71:/xml_file_paths.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_completion.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_completion.png"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_craving_triggers.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_craving_triggers.png"
     },
     {
         "merged": "com.unsmoke.app-debug-71:/xml_widget_streak_info.xml.flat",
         "source": "com.unsmoke.app-main-73:/xml/widget_streak_info.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_welcome.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_welcome.png"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/xml_widget_dashboard_info.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/widget_dashboard_info.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_personal_goals.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_personal_goals.png"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable-nodpi_onboarding_nrt_tracking.png.flat",
+        "source": "com.unsmoke.app-main-73:/drawable-nodpi/onboarding_nrt_tracking.png"
     },
     {
         "merged": "com.unsmoke.app-debug-71:/layout_dummy_widget_layout.xml.flat",

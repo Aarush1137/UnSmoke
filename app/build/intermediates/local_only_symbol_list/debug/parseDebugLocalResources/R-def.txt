@@ -1,11 +1,20 @@
 R_DEF: Internal format may change without notice
 local
+drawable onboarding_completion
+drawable onboarding_craving_triggers
+drawable onboarding_nrt_tracking
+drawable onboarding_personal_goals
+drawable onboarding_quit_date
+drawable onboarding_smoking_history
+drawable onboarding_welcome
+drawable onboarding_why_quit
 layout dummy_widget_layout
 string app_name
 string widget_craving_description
 string widget_dashboard_description
 string widget_streak_description
 style Theme.UnSmoke
+xml file_paths
 xml widget_craving_info
 xml widget_dashboard_info
 xml widget_streak_info
