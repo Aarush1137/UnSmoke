@@ -1,17 +1,11 @@
 package com.unsmoke.app.core.designsystem
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 
-private val LightColorScheme = lightColorScheme(
+val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
     onPrimary = LightOnPrimary,
     primaryContainer = LightPrimaryContainer,
@@ -24,16 +18,16 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = LightOnTertiary,
     tertiaryContainer = LightTertiaryContainer,
     onTertiaryContainer = LightOnTertiaryContainer,
-    error = ErrorRed,
-    onError = Color.White,
-    errorContainer = ErrorContainer,
-    onErrorContainer = Color(0xFF410002),
+    error = LightError,
+    onError = LightOnError,
+    errorContainer = LightErrorContainer,
+    onErrorContainer = LightOnErrorContainer,
     background = LightBackground,
-    onBackground = LightTextPrimary,
+    onBackground = LightOnBackground,
     surface = LightSurface,
-    onSurface = LightTextPrimary,
+    onSurface = LightOnSurface,
     surfaceVariant = LightSurfaceVariant,
-    onSurfaceVariant = LightTextSecondary,
+    onSurfaceVariant = LightOnSurfaceVariant,
     outline = LightOutline,
     outlineVariant = LightOutlineVariant,
     scrim = LightScrim,
@@ -42,7 +36,7 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = LightInversePrimary,
 )
 
-private val DarkColorScheme = darkColorScheme(
+val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
     onPrimary = DarkOnPrimary,
     primaryContainer = DarkPrimaryContainer,
@@ -56,15 +50,15 @@ private val DarkColorScheme = darkColorScheme(
     tertiaryContainer = DarkTertiaryContainer,
     onTertiaryContainer = DarkOnTertiaryContainer,
     error = DarkError,
-    onError = Color(0xFF690005),
+    onError = DarkOnError,
     errorContainer = DarkErrorContainer,
-    onErrorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = DarkOnErrorContainer,
     background = DarkBackground,
-    onBackground = DarkTextPrimary,
+    onBackground = DarkOnBackground,
     surface = DarkSurface,
-    onSurface = DarkTextPrimary,
-    surfaceVariant = DarkElevatedSurface,
-    onSurfaceVariant = DarkTextSecondary,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkOnSurfaceVariant,
     outline = DarkOutline,
     outlineVariant = DarkOutlineVariant,
     scrim = DarkScrim,
@@ -73,25 +67,83 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = DarkInversePrimary,
 )
 
+// Extended UnSmoke colors available via LocalUnSmokeColors
+data class UnSmokeColors(
+    val success: Color,
+    val successContainer: Color,
+    val warning: Color,
+    val warningContainer: Color,
+    val info: Color,
+    val infoContainer: Color,
+    val achievementAmber: Color,
+    val achievementAmberContainer: Color,
+    val orbCore: Color,
+    val orbGlow: Color,
+    val isDark: Boolean
+)
+
+val LocalUnSmokeColors = staticCompositionLocalOf {
+    UnSmokeColors(
+        success = SuccessLight,
+        successContainer = SuccessContainerLight,
+        warning = WarningLight,
+        warningContainer = WarningContainerLight,
+        info = InfoLight,
+        infoContainer = InfoContainerLight,
+        achievementAmber = AchievementAmber,
+        achievementAmberContainer = AchievementAmberLight,
+        orbCore = OrbCoreLight,
+        orbGlow = OrbGlowLight,
+        isDark = false
+    )
+}
+
 @Composable
 fun UnSmokeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val unSmokeColors = if (darkTheme) {
+        UnSmokeColors(
+            success = SuccessDark,
+            successContainer = SuccessContainerDark,
+            warning = WarningDark,
+            warningContainer = WarningContainerDark,
+            info = InfoDark,
+            infoContainer = InfoContainerDark,
+            achievementAmber = AchievementAmber,
+            achievementAmberContainer = AchievementAmberDark,
+            orbCore = OrbCoreDark,
+            orbGlow = OrbGlowDark,
+            isDark = true
+        )
+    } else {
+        UnSmokeColors(
+            success = SuccessLight,
+            successContainer = SuccessContainerLight,
+            warning = WarningLight,
+            warningContainer = WarningContainerLight,
+            info = InfoLight,
+            infoContainer = InfoContainerLight,
+            achievementAmber = AchievementAmber,
+            achievementAmberContainer = AchievementAmberLight,
+            orbCore = OrbCoreLight,
+            orbGlow = OrbGlowLight,
+            isDark = false
+        )
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(LocalUnSmokeColors provides unSmokeColors) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = UnSmokeTypography,
+            shapes = UnSmokeShapes,
+            content = content
+        )
+    }
 }
+
+// Convenience extension
+val MaterialTheme.unSmokeColors: UnSmokeColors
+    @Composable get() = LocalUnSmokeColors.current
