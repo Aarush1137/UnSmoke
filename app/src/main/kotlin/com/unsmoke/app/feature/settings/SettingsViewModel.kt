@@ -17,7 +17,7 @@ data class SettingsUiState(
     val notificationStyle: String = "GENTLE",
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
-    val currencySymbol: String = "?",
+    val currencySymbol: String = "₹",
     val version: String = "1.1.1"
 )
 
