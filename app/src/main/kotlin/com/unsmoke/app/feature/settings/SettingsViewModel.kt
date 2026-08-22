@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.settings
+package com.unsmoke.app.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +18,7 @@ data class SettingsUiState(
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
     val currencySymbol: String = "?",
-    val version: String = "1.0.0-alpha"
+    val version: String = "1.1.1"
 )
 
 @HiltViewModel

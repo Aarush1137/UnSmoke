@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.core.network
+package com.unsmoke.app.core.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -56,8 +56,10 @@ object UpdateChecker {
     }
 
     private fun isNewerVersion(current: String, latest: String): Boolean {
-        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
-        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
+        val cleanCurrent = current.replace("v", "").substringBefore("-")
+        val cleanLatest = latest.replace("v", "").substringBefore("-")
+        val currentParts = cleanCurrent.split(".").mapNotNull { it.toIntOrNull() }
+        val latestParts = cleanLatest.split(".").mapNotNull { it.toIntOrNull() }
 
         val length = maxOf(currentParts.size, latestParts.size)
         for (i in 0 until length) {
