@@ -12,6 +12,12 @@ import com.unsmoke.app.core.designsystem.AppColors
 import androidx.compose.runtime.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import androidx.compose.animation.core.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -51,7 +57,7 @@ fun NRTDashboardScreen(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp).verticalScroll(rememberScrollState())) {
             Text("NRT Tracker", fontSize = 28.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(32.dp))
 
@@ -73,26 +79,31 @@ fun NRTDashboardScreen(
             }
 
             Spacer(Modifier.height(32.dp))
-            if (state.recommendation != null) {
-                Spacer(Modifier.height(32.dp))
-                Text("Clinical Plan", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.height(16.dp))
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-                ) {
-                    Column(modifier = Modifier.padding(20.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Rounded.Medication, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
-                            Spacer(Modifier.width(8.dp))
-                            Text("Week ${state.recommendation?.weekNumber}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            AnimatedVisibility(
+                visible = state.recommendation != null,
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 4 })
+            ) {
+                Column {
+                    Spacer(Modifier.height(32.dp))
+                    Text("Clinical Plan", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                    Spacer(Modifier.height(16.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+                    ) {
+                        Column(modifier = Modifier.padding(20.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Rounded.Medication, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                                Spacer(Modifier.width(8.dp))
+                                Text("Week ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                            }
+                            Spacer(Modifier.height(16.dp))
+                            Text("Dose: ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Text("Frequency: ", color = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Spacer(Modifier.height(8.dp))
+                            Text(state.recommendation?.instructions ?: "", fontSize = 14.sp, color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f))
                         }
-                        Spacer(Modifier.height(16.dp))
-                        Text("Dose: ${state.recommendation?.dosage}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
-                        Text("Frequency: ${state.recommendation?.frequency}", color = MaterialTheme.colorScheme.onTertiaryContainer)
-                        Spacer(Modifier.height(8.dp))
-                        Text(state.recommendation?.instructions ?: "", fontSize = 14.sp, color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f))
                     }
                 }
             }

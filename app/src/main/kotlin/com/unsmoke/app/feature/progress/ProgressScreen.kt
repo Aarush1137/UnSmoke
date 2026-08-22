@@ -2,8 +2,8 @@ package com.unsmoke.app.feature.progress
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Block
@@ -52,7 +52,7 @@ fun ProgressScreen(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp).verticalScroll(rememberScrollState())) {
             Spacer(Modifier.height(16.dp))
 
             // Tab selector
@@ -76,43 +76,42 @@ fun ProgressScreen(
 
             Spacer(Modifier.height(32.dp))
             
-            // Metric Cards Grid
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                item {
-                    MetricCard(
-                        icon = Icons.Rounded.Block,
-                        value = state.cigarettesAvoided.toString(),
-                        label = "Cigarettes avoided"
-                    )
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        MetricCard(
+                            icon = Icons.Rounded.Block,
+                            value = state.cigarettesAvoided.toString(),
+                            label = "Cigarettes avoided"
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        MetricCard(
+                            icon = Icons.Rounded.Shield,
+                            value = String.format("%s%.0f", state.currencySymbol, state.moneySaved),
+                            label = "Money saved"
+                        )
+                    }
                 }
-                item {
-                    MetricCard(
-                        icon = Icons.Rounded.Shield,
-                        value = String.format("%s%.0f", state.currencySymbol, state.moneySaved),
-                        label = "Money saved"
-                    )
-                }
-                item {
-                    MetricCard(
-                        icon = Icons.Rounded.Shield,
-                        value = state.cravingsDefeated.toString(),
-                        label = "Cravings defeated"
-                    )
-                }
-                item {
-                    MetricCard(
-                        icon = Icons.Rounded.MedicalServices,
-                        value = state.nrtLogged.toString(),
-                        label = "NRT logged"
-                    )
+                Spacer(Modifier.height(16.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        MetricCard(
+                            icon = Icons.Rounded.Shield,
+                            value = state.cravingsDefeated.toString(),
+                            label = "Cravings defeated"
+                        )
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        MetricCard(
+                            icon = Icons.Rounded.MedicalServices,
+                            value = state.nrtLogged.toString(),
+                            label = "NRT logged"
+                        )
+                    }
                 }
             }
-            
+            Spacer(Modifier.height(32.dp))
             if (state.showCheckInPrompt) {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
