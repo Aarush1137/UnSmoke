@@ -10,6 +10,8 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import com.unsmoke.app.feature.share.ShareUtils
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -90,8 +92,19 @@ fun MilestoneCelebrationOverlay(
 
                 Spacer(modifier = Modifier.height(48.dp))
 
+                val context = LocalContext.current
+
                 Button(
-                    onClick = onShare,
+                    onClick = {
+                        // Create dummy bitmap for now since we aren't capturing the composable directly
+                        val bitmap = android.graphics.Bitmap.createBitmap(500, 500, android.graphics.Bitmap.Config.ARGB_8888)
+                        val canvas = android.graphics.Canvas(bitmap)
+                        canvas.drawColor(android.graphics.Color.parseColor("#011113"))
+                        val paint = android.graphics.Paint().apply { color = android.graphics.Color.parseColor("#55D8C6"); textSize = 40f }
+                        canvas.drawText("I am $milestoneDays days Smoke Free!", 20f, 250f, paint)
+                        ShareUtils.shareBitmap(context, bitmap)
+                        onShare()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
@@ -112,3 +125,4 @@ fun MilestoneCelebrationOverlay(
         }
     }
 }
+

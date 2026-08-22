@@ -13,3 +13,7 @@
 /app/release
 *.jks
 /app/schemas/
+
+jdk*
+jdk.zip
+jdk2.zip
