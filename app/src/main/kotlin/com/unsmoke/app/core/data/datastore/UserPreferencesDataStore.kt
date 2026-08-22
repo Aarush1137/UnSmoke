@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.core.data.datastore
+package com.unsmoke.app.core.data.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -43,6 +43,10 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
     val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
 
+    val emergencyContactName: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_NAME] ?: "" }
+    val emergencyContactPhone: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_PHONE] ?: "" }
+    val quitReason: Flow<String> = dataStore.data.map { it[QUIT_REASON] ?: "Better health and freedom" }
+
     suspend fun setOnboardingComplete(complete: Boolean) {
         dataStore.edit { it[ONBOARDING_COMPLETE] = complete }
     }
@@ -70,7 +74,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[NOTIFICATION_STYLE] = style }
     }
 
-    suspend fun updateCurrencySymbol(symbol: String) {
+    suspend fun setCurrencySymbol(symbol: String) {
         dataStore.edit { it[CURRENCY_SYMBOL] = symbol }
     }
 
@@ -95,5 +99,15 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
             prefs[SHORT_TERM_GOAL] = shortTerm
             prefs[LONG_TERM_GOAL] = longTerm
         }
+    }
+    suspend fun setEmergencyContact(name: String, phone: String) {
+        dataStore.edit {
+            it[EMERGENCY_CONTACT_NAME] = name
+            it[EMERGENCY_CONTACT_PHONE] = phone
+        }
+    }
+
+    suspend fun clearAll() {
+        dataStore.edit { it.clear() }
     }
 }
