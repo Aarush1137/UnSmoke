@@ -1,7 +1,7 @@
 package com.unsmoke.app.core.data.database.entity
 
-import androidx.room3.Entity
-import androidx.room3.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_profile")
 data class UserProfileEntity(
@@ -179,3 +179,4 @@ data class TriggerLogEntity(
     val hourOfDay: Int,
     val quitAttemptId: Long
 )
+

@@ -1,7 +1,7 @@
 package com.unsmoke.app.di
 
 import android.content.Context
-import androidx.room3.Room
+import androidx.room.Room
 import com.unsmoke.app.core.data.database.UnSmokeDatabase
 import com.unsmoke.app.core.data.database.dao.*
 import dagger.Module
@@ -40,3 +40,4 @@ object DatabaseModule {
     @Provides
     fun provideUserProfileDao(db: UnSmokeDatabase): UserProfileDao = db.userProfileDao()
 }
+

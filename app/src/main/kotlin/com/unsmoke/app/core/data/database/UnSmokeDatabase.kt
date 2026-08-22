@@ -1,7 +1,7 @@
 package com.unsmoke.app.core.data.database
 
-import androidx.room3.Database
-import androidx.room3.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.unsmoke.app.core.data.database.dao.*
 import com.unsmoke.app.core.data.database.entity.*
 
@@ -35,3 +35,4 @@ abstract class UnSmokeDatabase : RoomDatabase() {
     abstract fun checkInDao(): CheckInDao
     abstract fun userProfileDao(): UserProfileDao
 }
+
