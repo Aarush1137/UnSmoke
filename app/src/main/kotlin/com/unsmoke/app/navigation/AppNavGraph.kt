@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.unsmoke.app.feature.home.HomeScreen
+import com.unsmoke.app.feature.recovery.RecoveryScreen
 import com.unsmoke.app.feature.splash.SplashScreen
 import com.unsmoke.app.feature.onboarding.OnboardingScreen
 import com.unsmoke.app.feature.craving.CravingScreen
@@ -63,7 +64,7 @@ fun AppNavGraph(
         composable(route = "craving_timer") {
             CravingTimerScreen(
                 onDefeated = { navController.navigate("craving_outcome") },
-                onSmoked = { navController.navigate(Screen.Home.route) }
+                onSmoked = { navController.navigate("recovery") }
             )
         }
         composable(route = "craving_outcome") {
@@ -96,3 +97,4 @@ fun AppNavGraph(
         }
     }
 }
+

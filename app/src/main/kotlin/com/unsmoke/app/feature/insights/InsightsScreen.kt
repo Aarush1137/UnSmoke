@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Psychology
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.TrendingDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,108 +20,119 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unsmoke.app.core.designsystem.UnSmokeColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InsightsScreen(onBack: () -> Unit) {
+fun InsightsScreen(
+    onNavigateBack: () -> Unit,
+    viewModel: InsightsViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Insights", fontWeight = FontWeight.SemiBold) },
+                title = { Text("Insights", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = UnSmokeColors.Mint)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF011113),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
             )
         },
-        containerColor = Color(0xFF011113) // Dark theme background
+        containerColor = UnSmokeColors.Background
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item { Spacer(Modifier.height(16.dp)) }
-            
-            item {
-                InsightCard(
-                    title = "TOP TRIGGER",
-                    value = "Stress",
-                    subtitle = "42% of your cravings",
-                    icon = Icons.Rounded.Psychology,
-                    iconTint = Color(0xFFE77979)
-                )
+        if (state.isLoading) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = UnSmokeColors.Teal)
             }
-            
-            item {
-                InsightCard(
-                    title = "HIGH RISK TIME",
-                    value = "7 PM ? 9 PM",
-                    subtitle = "Most cravings happen during this period.",
-                    icon = Icons.Rounded.Schedule,
-                    iconTint = Color(0xFFD8AC60)
-                )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    Text(
+                        text = "Understand your patterns. Make smarter choices.",
+                        color = Color.White.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+
+                item {
+                    InsightCard(
+                        title = "Top Trigger",
+                        value = state.topTrigger,
+                        icon = Icons.Rounded.Psychology,
+                        description = "Plan ahead when you encounter this."
+                    )
+                }
+                
+                item {
+                    InsightCard(
+                        title = "High-Risk Time",
+                        value = state.highRiskTime,
+                        icon = Icons.Rounded.Schedule,
+                        description = "Your cravings peak during this window."
+                    )
+                }
+                
+                item {
+                    InsightCard(
+                        title = "Best Coping Strategy",
+                        value = state.bestCopingStrategy,
+                        icon = Icons.Rounded.Shield,
+                        description = "This strategy has helped you the most."
+                    )
+                }
+                
+                item {
+                    InsightCard(
+                        title = "Craving Success Rate",
+                        value = "\%",
+                        icon = Icons.Rounded.TrendingDown,
+                        description = "Percentage of cravings successfully defeated."
+                    )
+                }
+                
+                item { Spacer(modifier = Modifier.height(32.dp)) }
             }
-            
-            item {
-                InsightCard(
-                    title = "BEST COPING TOOL",
-                    value = "10-minute delay",
-                    subtitle = "Works best for you.",
-                    icon = Icons.Rounded.Shield,
-                    iconTint = Color(0xFF4EC9A6)
-                )
-            }
-            
-            item {
-                InsightCard(
-                    title = "YOU'RE IMPROVING",
-                    value = "Intensity reduced",
-                    subtitle = "Craving intensity has dropped by 15%.",
-                    icon = Icons.Rounded.TrendingDown,
-                    iconTint = Color(0xFF55D8C6)
-                )
-            }
-            
-            item { Spacer(Modifier.height(24.dp)) }
         }
     }
 }
 
 @Composable
-fun InsightCard(
-    title: String,
-    value: String,
-    subtitle: String,
-    icon: ImageVector,
-    iconTint: Color
-) {
+private fun InsightCard(title: String, value: String, icon: ImageVector, description: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF0D2829))
+        colors = CardDefaults.cardColors(containerColor = UnSmokeColors.Surface),
+        shape = RoundedCornerShape(24.dp)
     ) {
-        Row(modifier = Modifier.padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.padding(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(Color(0xFF0A2022), RoundedCornerShape(12.dp)),
+                    .background(UnSmokeColors.Teal.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(24.dp))
+                Icon(icon, contentDescription = null, tint = UnSmokeColors.Mint)
             }
-            Spacer(Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(title, fontSize = 12.sp, color = Color(0xFF82918B), fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
-                Spacer(Modifier.height(4.dp))
-                Text(value, fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(4.dp))
-                Text(subtitle, fontSize = 14.sp, color = Color(0xFFB6C4BF))
+                Text(title, color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp)
+                Text(value, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(description, color = UnSmokeColors.Mint, fontSize = 12.sp)
             }
         }
     }
