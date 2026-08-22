@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             UnSmokeTheme {
+                    UpdateDialogController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -26,3 +27,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
