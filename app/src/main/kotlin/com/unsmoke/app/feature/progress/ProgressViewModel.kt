@@ -1,5 +1,11 @@
 package com.unsmoke.app.feature.progress
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.time.Instant
+import java.time.ZoneId
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.engine.CalculationEngine
@@ -12,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +32,8 @@ data class ProgressUiState(
     val timeFilter: String = "7 Days",
     val baselineBreathHold: Int = 0,
     val currentBreathHold: Int = 0,
-    val currencySymbol: String = "$"
+    val currencySymbol: String = "$",
+    val showCheckInPrompt: Boolean = false
 )
 
 @HiltViewModel
@@ -44,8 +52,9 @@ class ProgressViewModel @Inject constructor(
                 quitAttemptRepo.getActiveAttempt(),
                 dataStore.currencySymbol,
                 dataStore.baselineBreathHold,
-                dataStore.currentBreathHold
-            ) { attempt, currency, baseline, current ->
+                dataStore.currentBreathHold,
+                dataStore.lastCheckInDate
+            ) { attempt, currency, baseline, current, lastCheckIn ->
                 if (attempt != null) {
                     val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
                     val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay).toInt()
@@ -58,14 +67,16 @@ class ProgressViewModel @Inject constructor(
                             moneySaved = saved,
                             currencySymbol = currency ?: "$",
                             baselineBreathHold = baseline,
-                            currentBreathHold = current
+                            currentBreathHold = current,
+                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, attempt?.startEpochMillis ?: System.currentTimeMillis())
                         )
                     }
                 } else {
                     _uiState.update { 
                         it.copy(currencySymbol = currency ?: "$",
                             baselineBreathHold = baseline,
-                            currentBreathHold = current)
+                            currentBreathHold = current,
+                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, attempt?.startEpochMillis ?: System.currentTimeMillis()))
                     }
                 }
             }.collect {}
@@ -75,5 +86,29 @@ class ProgressViewModel @Inject constructor(
     fun setTimeFilter(filter: String) {
         _uiState.update { it.copy(timeFilter = filter) }
         // TODO: filter metrics based on time window
+    }
+
+    private fun shouldShowPrompt(lastCheckIn: String, quitStartMillis: Long): Boolean {
+        val today = LocalDate.now()
+        val lastDate = if (lastCheckIn.isNotBlank()) {
+            LocalDate.parse(lastCheckIn)
+        } else {
+            Instant.ofEpochMilli(quitStartMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+        }
+        return ChronoUnit.DAYS.between(lastDate, today) >= 7
+    }
+
+    fun submitCheckIn(breathHoldTime: Int) {
+        viewModelScope.launch {
+            val baseline = dataStore.baselineBreathHold.first()
+            dataStore.setBreathHold(baseline, breathHoldTime)
+            dataStore.setLastCheckInDate(LocalDate.now().toString())
+        }
+    }
+
+    fun dismissCheckIn() {
+        viewModelScope.launch {
+            dataStore.setLastCheckInDate(LocalDate.now().toString())
+        }
     }
 }

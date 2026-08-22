@@ -43,12 +43,18 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
     val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
 
+    val lastCheckInDate: Flow<String> = dataStore.data.map { it[LAST_CHECK_IN_DATE] ?: "" }
+
     val emergencyContactName: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_NAME] ?: "" }
     val emergencyContactPhone: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_PHONE] ?: "" }
     val quitReason: Flow<String> = dataStore.data.map { it[QUIT_REASON] ?: "Better health and freedom" }
 
     suspend fun setOnboardingComplete(complete: Boolean) {
         dataStore.edit { it[ONBOARDING_COMPLETE] = complete }
+    }
+
+    suspend fun setLastCheckInDate(dateStr: String) {
+        dataStore.edit { it[LAST_CHECK_IN_DATE] = dateStr }
     }
 
     suspend fun setBreathHold(baseline: Int, current: Int) {

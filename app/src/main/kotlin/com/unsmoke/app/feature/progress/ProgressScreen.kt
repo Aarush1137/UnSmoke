@@ -113,6 +113,67 @@ fun ProgressScreen(
                 }
             }
             
+            if (state.showCheckInPrompt) {
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Healing, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                            Spacer(Modifier.width(8.dp))
+                            Text("Weekly Lung Check-in", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Text("It's been a week! Time to test your lung capacity improvement.", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Spacer(Modifier.height(16.dp))
+                        
+                        var showTimer by remember { mutableStateOf(false) }
+                        if (showTimer) {
+                            var isRunning by remember { mutableStateOf(false) }
+                            var time by remember { mutableStateOf(0) }
+                            
+                            LaunchedEffect(isRunning) {
+                                if (isRunning) {
+                                    while (true) {
+                                        kotlinx.coroutines.delay(1000)
+                                        time++
+                                    }
+                                }
+                            }
+                            
+                            Text("${time} seconds", fontSize = 32.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                            Spacer(Modifier.height(16.dp))
+                            
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                                Button(onClick = { isRunning = !isRunning }) {
+                                    Text(if (isRunning) "STOP" else "START")
+                                }
+                                if (!isRunning && time > 0) {
+                                    Button(onClick = { 
+                                        viewModel.submitCheckIn(time)
+                                        showTimer = false
+                                    }) {
+                                        Text("SAVE")
+                                    }
+                                }
+                            }
+                        } else {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                TextButton(onClick = { viewModel.dismissCheckIn() }) {
+                                    Text("LATER")
+                                }
+                                Spacer(Modifier.width(8.dp))
+                                Button(onClick = { showTimer = true }) {
+                                    Text("START NOW")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             LungCapacityWidget(
                 baseline = state.baselineBreathHold,
                 current = state.currentBreathHold
