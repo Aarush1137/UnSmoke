@@ -404,3 +404,51 @@ Implemented within `feature/craving`:
 > [!TIP]
 > The build order follows the spec: Design System → Navigation → Onboarding → Quit Date Engine → Baseline → Home → Calculations → NRT → Craving → Emergency Mode → Check-in → Lapse → Progress → Insights → Notifications → Reasons → Journal → Achievements → Coach → Privacy/Settings → Offline → Tests → Polish
 
+---
+
+## Implementation Reconciliation — 2026-08-22
+
+The phases above remain the product vision. The application currently ships as one `app` module and contains many of the described screens, but it does not yet meet the original “all phases complete” definition. `task_todo.md` is the authoritative verified backlog; this section turns that backlog into an execution order.
+
+### Milestone A — Trustworthy first run and personal settings
+
+**Outcome:** a new user has a correct first-run path and can trust Profile and Settings to persist and affect the app.
+
+1. Route Splash by the persisted onboarding flag and persist the onboarding display name. **Implemented in the current checkpoint.**
+2. Persist profile identity, core motivation, voluntary emergency anchor, notification preference, theme, currency, and app-lock preference. **Implemented in the current checkpoint.**
+3. Apply the theme and biometric lock preferences at app start. **Implemented in the current checkpoint.**
+4. Complete global consumers for currency, notification style, dark/AMOLED theme, and settings changes during a live session.
+5. Replace the partial reset action with a single transactional reset: Room data, DataStore, widget state, and scheduled workers are cleared; the user is returned to onboarding.
+
+**Acceptance criteria:** first launch opens onboarding; completing it opens Home on the next launch; a configured app lock prompts on the next launch; profile values survive process death; reset leaves no old values or widget metrics.
+
+### Milestone B — Reliable quit-support loop
+
+**Outcome:** the daily flow is useful and every interaction is reflected in progress.
+
+1. Audit calculations from Room source-of-truth events for Dashboard, Progress, Profile, NRT, and Insights.
+2. Make craving start/outcome, NRT logging, lapse/recovery, and daily check-in survive backgrounding and update downstream summaries.
+3. Complete weekly review, quit attempts, and personal records.
+4. Add a medically safe NRT disclaimer and consistent “not medical advice” language.
+
+**Acceptance criteria:** a manually logged craving, NRT item, check-in, and lapse update all relevant pages after a relaunch; no derived value is stored as authoritative state.
+
+### Milestone C — Profile and Settings feature contract
+
+| Surface | User capability | Required follow-up |
+| --- | --- | --- |
+| Profile identity | See name, smoke-free date, and high-level progress | Format values consistently and add empty-state copy |
+| Core motivation | Edit the reason for quitting | Surface it in Home and craving support |
+| Emergency anchor | Save a voluntary contact and open the dialer | Validate phone input and provide a clear privacy explanation |
+| Settings preferences | Change name, theme, currency, coaching style, notifications, and app lock | Make every preference affect the appropriate app behaviour |
+| Data controls | Export or reset local data | Verify exports and make reset comprehensive with confirmation |
+| Quit plan entry | Review quit strategies and goals | Persist/reorder strategies and link them to cravings/insights |
+
+### Milestone D — Release readiness
+
+1. Build a real automated test suite: calculations, Room migrations, onboarding, core navigation, craving flow, settings persistence, reset, and widgets.
+2. Test with TalkBack, font scaling, colour contrast, offline use, process death, Android 8 through current Android, and notification permission states.
+3. Add branded adaptive icons, screenshots, privacy policy, signed release configuration, and versioned release notes.
+4. Publish a signed APK/AAB through a GitHub Release or a Play distribution channel. Do not distribute the debug APK as a production package.
+
+**Acceptance criteria:** `assembleDebug`, unit tests, lint, and instrumented tests pass; the signed artifact is reproducible from a clean checkout; release notes link to the exact commit and artifact checksum.

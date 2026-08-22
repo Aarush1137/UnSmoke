@@ -18,10 +18,17 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(onTimeout: () -> Unit, isDark: Boolean = true) {
+fun SplashScreen(
+    onTimeout: (onboardingComplete: Boolean) -> Unit,
+    isDark: Boolean = true,
+    viewModel: SplashViewModel = hiltViewModel()
+) {
+    val onboardingComplete by viewModel.onboardingComplete.collectAsStateWithLifecycle()
     val alphaAnim = remember { Animatable(0f) }
     val offsetYAnim = remember { Animatable(20f) }
 
@@ -29,7 +36,7 @@ fun SplashScreen(onTimeout: () -> Unit, isDark: Boolean = true) {
         alphaAnim.animateTo(1f, tween(1000, easing = LinearOutSlowInEasing))
         offsetYAnim.animateTo(0f, tween(1000, easing = LinearOutSlowInEasing))
         delay(1500)
-        onTimeout()
+        onTimeout(onboardingComplete)
     }
 
     val bgColor = if (isDark) Color(0xFF011113) else Color(0xFFFAFAF8)

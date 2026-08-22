@@ -1,44 +1,69 @@
-﻿# UnSmoke - Android Quit-Smoking Companion
+# UnSmoke
 
-UnSmoke is a premium, production-quality native Android application designed to help users stop smoking, stay smoke-free, manage cravings, track NRT (Nicotine Replacement Therapy) usage, understand triggers, build replacement behaviors, and maintain long-term progress.
+UnSmoke is an offline-first Android companion for quitting smoking. It helps people get through cravings, understand patterns, track nicotine-replacement therapy (NRT), and keep a compassionate record of progress.
 
-## 📱 Screenshots & Visuals
-*(Images sourced from ssets/master_visuals/)*
+> UnSmoke supports a quit journey; it does not provide medical advice or personalised NRT dosing. Consult a qualified healthcare professional for clinical guidance.
 
-| Home Dashboard | Cravings & Triggers | Achievements & Progress |
-| :---: | :---: | :---: |
-| <img src="assets/master_visuals/unsmoke_home_exact.jpg" width="250"/> | <img src="assets/master_visuals/craving_intervention.jpg" width="250"/> | <img src="assets/master_visuals/milestones_badges.jpg" width="250"/> |
+## What it includes
 
-| Empty States | Personal Insights | Shareable Milestones |
-| :---: | :---: | :---: |
-| <img src="assets/master_visuals/empty_states.jpg" width="250"/> | <img src="assets/master_visuals/insights_dashboard.jpg" width="250"/> | <img src="assets/master_visuals/share_cards.jpg" width="250"/> |
+- Guided craving support with intensity and trigger logging, breathing exercises, a ten-minute timer, and a no-shame lapse-recovery flow.
+- A smoke-free dashboard for elapsed time, cigarettes avoided, estimated savings, cravings, and milestones.
+- NRT product and usage tracking, including expenditure against cigarette savings.
+- Daily check-ins, a private journal, personal insights, a quit plan, achievements, and a profile with a support contact.
+- Home-screen widgets: a streak counter, full dashboard, and one-tap craving launcher.
+- On-device privacy: Room and DataStore storage, no account or cloud sync, optional Android biometric app lock, and local data export.
 
-## 🚀 Features
-*   **10-Minute Craving Intervention:** Background-safe 10-minute timer to help you beat acute cravings.
-*   **"No Shame" Recovery Flow:** If you lapse, the app doesn't reset you to zero and shame you. It compassionately asks what happened, updates your triggers, and helps you restart.
-*   **NRT Tracking:** Log gums, patches, or lozenges to visualize your weaning process.
-*   **Smart Insights:** Automatically analyzes your logs to find your highest-risk hours of the day and most effective coping strategies.
-*   **Dynamic Achievements:** Earn beautifully crafted badges for consistency and milestones.
-*   **Biometric Privacy:** Lock your sensitive health data behind Android's native BiometricPrompt.
-*   **Offline-First:** All data is stored locally in Room. No cloud syncing, no accounts required.
+## Technology
 
-## 🛠 Tech Stack
-*   **Language:** Kotlin (2.1.10)
-*   **UI Toolkit:** Jetpack Compose (BOM 2024.06.00)
-*   **Architecture:** Clean Architecture + MVVM
-*   **Database:** Room (3.0.1)
-*   **Dependency Injection:** Hilt (2.51.1)
-*   **Background Work:** WorkManager
-*   **Local Storage:** DataStore Preferences
-*   **Toolchain:** Java 21
+| Area | Implementation |
+| --- | --- |
+| Platform | Native Android, min SDK 26, target/compile SDK 36 |
+| Language and UI | Kotlin, Jetpack Compose, Material 3 |
+| App architecture | MVVM, Hilt, Navigation Compose, Coroutines and Flow |
+| Local data | Room and DataStore Preferences |
+| Background/UI extras | WorkManager, Glance widgets, Vico charts, Lottie, BiometricPrompt |
 
-## 🚧 Current Status & Known Issues
-The foundational logic, database, and UI are built. The following fixes are pending for the next development session:
-*   Enforcing the Onboarding flow on first launch.
-*   Fixing navigation back-stack issues on sub-screens.
-*   Enforcing strict Dark Mode matching the design system.
-*   Missing launcher app icon (currently showing default Android logo).
+## Run locally
 
-## 📄 License
-MIT License - Aarush Jain 2026
+1. Open the project in Android Studio with Android SDK Platform 36 installed.
+2. Use a JDK compatible with the Gradle/Android Studio setup (the project compiles Java source compatibility level 17).
+3. Connect an emulator or Android device, then run:
 
+```powershell
+.\gradlew.bat :app:assembleDebug
+.\gradlew.bat :app:installDebug
+```
+
+The APK is written to `app\build\outputs\apk\debug\app-debug.apk`.
+
+## Verification
+
+The current working tree builds successfully with:
+
+```powershell
+.\gradlew.bat :app:assembleDebug
+```
+
+Before a release, also run unit and instrumented tests once they are added, and manually check onboarding, the full craving flow, NRT logging, biometric unlock, widgets, and the reset/export paths.
+
+## Project layout
+
+```text
+app/src/main/kotlin/com/unsmoke/app/
+├── core/          # Room, DataStore, domain calculations, design system
+├── feature/       # Onboarding, home, craving, NRT, journal, settings, etc.
+├── navigation/    # Compose navigation graph and screen routes
+└── widget/        # Glance home-screen widgets
+```
+
+Design reference images live under [`assets/`](assets/). The product implementation plan and build checklist are in [`ai_artifacts/`](ai_artifacts/).
+
+## Current limitations
+
+- The launcher currently uses Android's default application icon; branded launcher assets still need to be supplied.
+- The `AMOLED` preference uses the shared dark scheme for now rather than a distinct pure-black palette.
+- The app has no committed automated test suite yet.
+
+## License
+
+MIT License — Aarush Jain, 2026.

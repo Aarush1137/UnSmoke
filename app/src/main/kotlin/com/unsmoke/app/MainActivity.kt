@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.biometric.BiometricPrompt
@@ -18,7 +19,6 @@ import com.unsmoke.app.feature.update.UpdateDialogController
 import com.unsmoke.app.navigation.AppNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,29 +34,29 @@ class MainActivity : FragmentActivity() {
         setContent {
             var isUnlocked by remember { mutableStateOf(false) }
             var isChecking by remember { mutableStateOf(true) }
-            val scope = rememberCoroutineScope()
+            val selectedTheme by dataStore.theme.collectAsState(initial = "DARK")
 
             LaunchedEffect(Unit) {
-                scope.launch {
-                    // Check if biometric is enabled (mocking logic if datastore boolean not explicitly defined yet)
-                    // For now we assume false if not found.
-                    val biometricsEnabled = false // TODO: Read from dataStore
-                    
-                    if (biometricsEnabled) {
-                        showBiometricPrompt { success ->
-                            if (success) {
-                                isUnlocked = true
-                            }
-                            isChecking = false
-                        }
-                    } else {
-                        isUnlocked = true
+                val biometricsEnabled = dataStore.appLockEnabled.first()
+
+                if (biometricsEnabled) {
+                    showBiometricPrompt { success ->
+                        isUnlocked = success
                         isChecking = false
                     }
+                } else {
+                    isUnlocked = true
+                    isChecking = false
                 }
             }
 
-            UnSmokeTheme {
+            val darkTheme = when (selectedTheme) {
+                "LIGHT" -> false
+                "SYSTEM" -> isSystemInDarkTheme()
+                else -> true // DARK and AMOLED currently share the dark colour scheme.
+            }
+
+            UnSmokeTheme(darkTheme = darkTheme) {
                 if (isChecking) {
                     // Empty loading state while checking biometrics
                     Box(Modifier.fillMaxSize())

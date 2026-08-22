@@ -74,7 +74,7 @@ class OnboardingViewModel @Inject constructor(
             )
             
             quitAttemptRepo.insertAttempt(attempt)
-            // dataStore.setUserName(state.userName)
+            dataStore.setUserName(state.userName.ifBlank { "Champion" })
             dataStore.setOnboardingComplete(true)
             
             _uiState.update { it.copy(isComplete = true) }

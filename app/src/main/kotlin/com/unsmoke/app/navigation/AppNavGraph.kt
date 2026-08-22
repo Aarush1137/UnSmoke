@@ -32,8 +32,9 @@ fun AppNavGraph(
         startDestination = startDestination
     ) {
         composable(route = Screen.Splash.route) {
-            SplashScreen(onTimeout = {
-                navController.navigate(Screen.Home.route) {
+            SplashScreen(onTimeout = { onboardingComplete ->
+                val destination = if (onboardingComplete) Screen.Home.route else Screen.Onboarding.route
+                navController.navigate(destination) {
                     popUpTo(Screen.Splash.route) { inclusive = true }
                 }
             })
@@ -93,7 +94,16 @@ fun AppNavGraph(
         }
         composable(route = Screen.Plan.route) { PlanScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Achievements.route) { AchievementsScreen(onBack = { navController.popBackStack() }) }
-        composable(route = Screen.Settings.route) { SettingsScreen(onBack = { navController.popBackStack() }) }
+        composable(route = Screen.Settings.route) {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onReset = {
+                    navController.navigate(Screen.Onboarding.route) {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(route = Screen.Profile.route) {
             ProfileScreen(onPlanClick = { navController.navigate(Screen.Plan.route) }, onAchievementsClick = { navController.navigate(Screen.Achievements.route) }, 
                 onBack = { navController.popBackStack() },
