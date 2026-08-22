@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.0] - 2026-08-22
+### Added
+- **NRT Tracker**: Dashboard showing daily logs, total expenditure vs savings, and a plan completion donut ring.
+- **Progress Screen**: Comprehensive metrics view with time-range filtering (7 Days, 30 Days, 3 Months, 1 Year) for tracking streak, money, and craving data.
+
 ## [0.5.0] - 2026-08-22
 ### Added
 - **Onboarding Flow**: 3-step animated conversational setup for capturing baseline smoking habits and user profile.
