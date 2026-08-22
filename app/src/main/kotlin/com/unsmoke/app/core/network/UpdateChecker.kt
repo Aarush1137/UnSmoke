@@ -1,4 +1,4 @@
-package com.unsmoke.app.core.network
+﻿package com.unsmoke.app.core.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,7 +9,7 @@ import java.net.URL
 object UpdateChecker {
     private const val REPO_OWNER = "Aarush1137"
     private const val REPO_NAME = "UnSmoke"
-    private const val API_URL = "https://api.github.com/repos/\/\/releases/latest"
+    private const val API_URL = "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest"
 
     data class UpdateInfo(
         val isUpdateAvailable: Boolean,
@@ -69,3 +69,4 @@ object UpdateChecker {
         return false
     }
 }
+

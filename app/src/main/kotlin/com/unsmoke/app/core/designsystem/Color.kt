@@ -1,4 +1,4 @@
-package com.unsmoke.app.core.designsystem
+﻿package com.unsmoke.app.core.designsystem
 
 import androidx.compose.ui.graphics.Color
 
@@ -33,3 +33,15 @@ val DarkMutedText = Color(0xFF82918B)
 val DarkBorder = Color(0xFF263A37)
 val DarkError = Color(0xFFE77979)
 val DarkSuccess = Color(0xFF4EC9A6)
+
+
+
+
+object AppColors {
+    val Mint = Color(0xFF8FDCD0)
+    val Teal = Color(0xFF0B856E)
+    val Amber = Color(0xFFD8AC60)
+    val Background = Color(0xFF011113)
+    val Surface = Color(0xFF0A2022)
+    val Error = Color(0xFFE77979)
+}

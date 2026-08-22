@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="launcher_background">#011113</color>
     <string name="app_name">UnSmoke</string>
     <string name="widget_craving_description">Emergency craving support � one tap to get help</string>
     <string name="widget_dashboard_description">Full UnSmoke dashboard with all key metrics</string>

@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.splash
+﻿package com.unsmoke.app.feature.splash
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -29,6 +29,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel()
 ) {
     val onboardingComplete by viewModel.onboardingComplete.collectAsStateWithLifecycle()
+    val currentOnboardingComplete by rememberUpdatedState(onboardingComplete)
     val alphaAnim = remember { Animatable(0f) }
     val offsetYAnim = remember { Animatable(20f) }
 
@@ -36,7 +37,7 @@ fun SplashScreen(
         alphaAnim.animateTo(1f, tween(1000, easing = LinearOutSlowInEasing))
         offsetYAnim.animateTo(0f, tween(1000, easing = LinearOutSlowInEasing))
         delay(1500)
-        onTimeout(onboardingComplete)
+        onTimeout(currentOnboardingComplete)
     }
 
     val bgColor = if (isDark) Color(0xFF011113) else Color(0xFFFAFAF8)
@@ -160,3 +161,4 @@ fun SplashScreen(
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.journal
+﻿package com.unsmoke.app.feature.journal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +27,7 @@ class JournalViewModel @Inject constructor(
         viewModelScope.launch {
             quitAttemptRepo.getActiveAttempt().collect { attempt ->
                 if (attempt != null) {
-                    checkInRepo.getCheckIns(attempt.id).collect { logs ->
+                    checkInRepo.getAllCheckIns().collect { logs ->
                         _uiState.update { it.copy(checkIns = logs, isLoading = false) }
                     }
                 } else {
@@ -37,3 +37,4 @@ class JournalViewModel @Inject constructor(
         }
     }
 }
+

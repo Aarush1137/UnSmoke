@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.settings
+﻿package com.unsmoke.app.feature.settings
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 import com.unsmoke.app.core.network.UpdateChecker
 import kotlinx.coroutines.launch
 
@@ -49,16 +50,16 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
+                title = { Text("Settings", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = UnSmokeColors.Mint)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -157,7 +158,7 @@ fun SettingsScreen(
                             try {
                                 val release = UpdateChecker.checkForUpdate(state.version)
                                 if (release != null) {
-                                    Toast.makeText(context, "New version ${release.tagName} available!", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, "New version ${release.latestVersion} available!", Toast.LENGTH_LONG).show()
                                 } else {
                                     Toast.makeText(context, "UnSmoke is up to date (${state.version})", Toast.LENGTH_SHORT).show()
                                 }
@@ -219,7 +220,7 @@ fun SettingsScreen(
                         viewModel.updateName(nameInput.trim())
                         showNameDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                 ) {
                     Text("Save")
                 }
@@ -232,7 +233,7 @@ fun SettingsScreen(
 
     // Currency Dialog
     if (showCurrencyDialog) {
-        val currencies = listOf("₹" to "INR (₹)", "$" to "USD ($)", "€" to "EUR (€)", "£" to "GBP (£)", "¥" to "JPY (¥)", "C$" to "CAD (C$)")
+        val currencies = listOf("â‚¹" to "INR (â‚¹)", "$" to "USD ($)", "â‚¬" to "EUR (â‚¬)", "Â£" to "GBP (Â£)", "Â¥" to "JPY (Â¥)", "C$" to "CAD (C$)")
         AlertDialog(
             onDismissRequest = { showCurrencyDialog = false },
             title = { Text("Select Currency") },
@@ -381,7 +382,7 @@ fun SettingsScreen(
     }
 }
 @Composable
-private fun SettingsSectionHeader(title: String, color: Color = UnSmokeColors.Mint) {
+private fun SettingsSectionHeader(title: String, color: Color = AppColors.Mint) {
     Text(
         text = title.uppercase(),
         color = color,
@@ -420,10 +421,10 @@ private fun SettingsToggleItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(UnSmokeColors.Mint.copy(alpha = 0.15f)),
+                        .background(AppColors.Mint.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(icon, contentDescription = null, tint = UnSmokeColors.Mint, modifier = Modifier.size(22.dp))
+                    Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(22.dp))
                 }
                 Spacer(Modifier.width(14.dp))
                 Column {
@@ -435,8 +436,8 @@ private fun SettingsToggleItem(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = UnSmokeColors.Mint,
-                    checkedTrackColor = UnSmokeColors.Teal.copy(alpha = 0.5f)
+                    checkedThumbColor = AppColors.Mint,
+                    checkedTrackColor = AppColors.Teal.copy(alpha = 0.5f)
                 )
             )
         }
@@ -471,13 +472,13 @@ private fun SettingsClickableItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(if (isDestructive) Color(0xFFFF5252).copy(alpha = 0.15f) else UnSmokeColors.Mint.copy(alpha = 0.15f)),
+                        .background(if (isDestructive) Color(0xFFFF5252).copy(alpha = 0.15f) else AppColors.Mint.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         icon,
                         contentDescription = null,
-                        tint = if (isDestructive) Color(0xFFFF5252) else UnSmokeColors.Mint,
+                        tint = if (isDestructive) Color(0xFFFF5252) else AppColors.Mint,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -499,18 +500,20 @@ private fun SettingsInfoBanner(title: String, subtitle: String) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
             .background(Color(0xFF163F3A).copy(alpha = 0.4f))
-            .border(1.dp, UnSmokeColors.Mint.copy(alpha = 0.2f), RoundedCornerShape(18.dp))
+            .border(1.dp, AppColors.Mint.copy(alpha = 0.2f), RoundedCornerShape(18.dp))
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.Top) {
-            Icon(Icons.Rounded.Security, contentDescription = null, tint = UnSmokeColors.Mint, modifier = Modifier.size(24.dp))
+            Icon(Icons.Rounded.Security, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(24.dp))
             Spacer(Modifier.width(12.dp))
             Column {
-                Text(title, color = UnSmokeColors.Mint, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(title, color = AppColors.Mint, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 Spacer(Modifier.height(4.dp))
                 Text(subtitle, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp, lineHeight = 16.sp)
             }
         }
     }
 }
+
+
 

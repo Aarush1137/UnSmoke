@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.share
+﻿package com.unsmoke.app.feature.share
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -30,7 +31,7 @@ fun UnSmokeShareCard(
     modifier: Modifier = Modifier
 ) {
     val gradient = Brush.verticalGradient(
-        colors = listOf(UnSmokeColors.Teal, UnSmokeColors.Background)
+        colors = listOf(AppColors.Teal, AppColors.Background)
     )
 
     Box(
@@ -47,7 +48,7 @@ fun UnSmokeShareCard(
         ) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.Favorite, contentDescription = null, tint = UnSmokeColors.Mint)
+                Icon(Icons.Rounded.Favorite, contentDescription = null, tint = AppColors.Mint)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("UnSmoke", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
@@ -61,14 +62,14 @@ fun UnSmokeShareCard(
                     letterSpacing = 2.sp
                 )
                 Text(
-                    text = "\ DAYS",
+                    text = "$smokeFreeDays DAYS",
                     color = Color.White,
                     fontSize = 48.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
                 Text(
                     text = "SMOKE-FREE!",
-                    color = UnSmokeColors.Mint,
+                    color = AppColors.Mint,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -80,11 +81,11 @@ fun UnSmokeShareCard(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "\", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                    Text(text = "$cigarettesAvoided", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                     Text(text = "Cigarettes Avoided", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "?\", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                    Text(text = "$moneySaved", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                     Text(text = "Saved", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
                 }
             }
@@ -94,7 +95,7 @@ fun UnSmokeShareCard(
                 Text(tagline, color = Color.White, fontSize = 16.sp, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Shared by \ on \",
+                    text = "Shared by $userName on UnSmoke",
                     color = Color.White.copy(alpha = 0.5f),
                     fontSize = 10.sp
                 )
@@ -102,3 +103,6 @@ fun UnSmokeShareCard(
         }
     }
 }
+
+
+

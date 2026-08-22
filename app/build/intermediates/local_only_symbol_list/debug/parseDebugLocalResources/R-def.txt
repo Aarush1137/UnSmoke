@@ -1,5 +1,9 @@
 R_DEF: Internal format may change without notice
 local
+color launcher_background
+drawable ic_launcher_foreground
+drawable ic_unsmoke_logo_background
+drawable ic_unsmoke_logo_foreground
 drawable onboarding_completion
 drawable onboarding_craving_triggers
 drawable onboarding_nrt_tracking
@@ -9,6 +13,8 @@ drawable onboarding_smoking_history
 drawable onboarding_welcome
 drawable onboarding_why_quit
 layout dummy_widget_layout
+mipmap ic_launcher
+mipmap ic_launcher_round
 string app_name
 string widget_craving_description
 string widget_dashboard_description

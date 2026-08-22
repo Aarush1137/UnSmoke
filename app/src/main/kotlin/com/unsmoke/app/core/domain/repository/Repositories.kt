@@ -16,6 +16,7 @@ interface CravingRepository {
 
 interface NRTRepository {
     suspend fun logUsage(usage: NRTUsageEntity): Long
+    suspend fun saveProduct(product: NRTProductEntity): Long
     fun getProducts(): Flow<List<NRTProductEntity>>
     fun getUsage(quitId: Long): Flow<List<NRTUsageEntity>>
 }

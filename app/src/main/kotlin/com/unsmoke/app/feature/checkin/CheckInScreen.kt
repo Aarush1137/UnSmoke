@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.checkin
+﻿package com.unsmoke.app.feature.checkin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,9 +29,7 @@ fun CheckInScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state.isSaved) {
-        if (state.isSaved) onComplete()
-    }
+    
 
     Scaffold(
         topBar = {
@@ -42,10 +40,10 @@ fun CheckInScreen(
                         Icon(Icons.Rounded.Close, contentDescription = "Close", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -69,7 +67,7 @@ fun CheckInScreen(
                             modifier = Modifier
                                 .size(56.dp)
                                 .clip(CircleShape)
-                                .background(if (isSelected) UnSmokeColors.Mint else Color(0xFF1E2625))
+                                .background(if (isSelected) AppColors.Mint else Color(0xFF1E2625))
                                 .clickable { viewModel.updateMood(moodValue) },
                             contentAlignment = Alignment.Center
                         ) {
@@ -81,7 +79,7 @@ fun CheckInScreen(
                             )
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(moodLabel, color = if (isSelected) UnSmokeColors.Mint else Color.Gray, fontSize = 12.sp)
+                        Text(moodLabel, color = if (isSelected) AppColors.Mint else Color.Gray, fontSize = 12.sp)
                     }
                 }
             }
@@ -94,8 +92,8 @@ fun CheckInScreen(
                 valueRange = 1f..5f,
                 steps = 3,
                 colors = SliderDefaults.colors(
-                    thumbColor = UnSmokeColors.Teal,
-                    activeTrackColor = UnSmokeColors.Teal,
+                    thumbColor = AppColors.Teal,
+                    activeTrackColor = AppColors.Teal,
                     inactiveTrackColor = Color.DarkGray
                 )
             )
@@ -112,8 +110,8 @@ fun CheckInScreen(
                 valueRange = 1f..5f,
                 steps = 3,
                 colors = SliderDefaults.colors(
-                    thumbColor = UnSmokeColors.Amber,
-                    activeTrackColor = UnSmokeColors.Amber,
+                    thumbColor = AppColors.Amber,
+                    activeTrackColor = AppColors.Amber,
                     inactiveTrackColor = Color.DarkGray
                 )
             )
@@ -131,7 +129,7 @@ fun CheckInScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color.DarkGray,
-                    focusedBorderColor = UnSmokeColors.Mint,
+                    focusedBorderColor = AppColors.Mint,
                     unfocusedContainerColor = Color(0xFF1E2625),
                     focusedContainerColor = Color(0xFF1E2625),
                     focusedTextColor = Color.White,
@@ -141,9 +139,9 @@ fun CheckInScreen(
 
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = viewModel::saveCheckIn,
+                onClick = { viewModel.submitCheckIn(onComplete) },
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Mint),
+                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint),
                 shape = RoundedCornerShape(16.dp),
                 enabled = state.mood > 0
             ) {
@@ -152,3 +150,5 @@ fun CheckInScreen(
         }
     }
 }
+
+

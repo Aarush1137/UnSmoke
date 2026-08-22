@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.celebration
+﻿package com.unsmoke.app.feature.celebration
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 import kotlinx.coroutines.delay
 
 @Composable
@@ -54,21 +54,21 @@ fun MilestoneCelebrationOverlay(
                 Box(
                     modifier = Modifier
                         .size(160.dp)
-                        .background(UnSmokeColors.Mint.copy(alpha = 0.2f), CircleShape),
+                        .background(AppColors.Mint.copy(alpha = 0.2f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         modifier = Modifier.size(80.dp),
-                        tint = UnSmokeColors.Amber
+                        tint = AppColors.Amber
                     )
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "\ DAYS",
+                    text = "$milestoneDays DAYS",
                     fontSize = 40.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color.White
@@ -77,7 +77,7 @@ fun MilestoneCelebrationOverlay(
                     text = "SMOKE-FREE",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = UnSmokeColors.Mint,
+                    color = AppColors.Mint,
                     letterSpacing = 2.sp
                 )
 
@@ -108,7 +108,7 @@ fun MilestoneCelebrationOverlay(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Icon(Icons.Rounded.Share, contentDescription = null, tint = Color.White)
@@ -125,4 +125,7 @@ fun MilestoneCelebrationOverlay(
         }
     }
 }
+
+
+
 

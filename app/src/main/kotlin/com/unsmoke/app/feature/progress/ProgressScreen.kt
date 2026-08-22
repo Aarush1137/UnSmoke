@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.progress
+﻿package com.unsmoke.app.feature.progress
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +22,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.components.ProgressRing
 
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import com.unsmoke.app.core.designsystem.AppColors
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgressScreen(
     onInsightsClick: () -> Unit,
@@ -31,12 +35,22 @@ fun ProgressScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        containerColor = Color(0xFFFAFAF8)
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            TopAppBar(
+                title = { Text("Progress", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+            )
+        }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp)) {
             Spacer(Modifier.height(16.dp))
-            Text("Progress", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color(0xFF18201E))
-            Spacer(Modifier.height(24.dp))
+
 
             // Tab selector
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -124,3 +138,7 @@ fun MetricCard(icon: ImageVector, value: String, label: String) {
         }
     }
 }
+
+
+
+

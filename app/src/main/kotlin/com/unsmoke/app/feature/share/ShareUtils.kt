@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.share
+﻿package com.unsmoke.app.feature.share
 
 import android.content.Context
 import android.content.Intent
@@ -18,7 +18,7 @@ object ShareUtils {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             stream.close()
 
-            val uri: Uri = FileProvider.getUriForFile(context, "\.fileprovider", file)
+            val uri: Uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
             
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "image/png"
@@ -32,3 +32,4 @@ object ShareUtils {
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.journal
+﻿package com.unsmoke.app.feature.journal
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 import com.unsmoke.app.core.data.database.entity.DailyCheckInEntity
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import java.time.Instant
@@ -37,27 +38,27 @@ fun JournalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Journal", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
+                title = { Text("Journal", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = UnSmokeColors.Mint) }
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onAddClick,
-                containerColor = UnSmokeColors.Teal,
+                containerColor = AppColors.Teal,
                 contentColor = Color.White
             ) {
                 Text("Daily Check-In", fontWeight = FontWeight.Bold)
             }
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = UnSmokeColors.Teal)
+                CircularProgressIndicator(color = AppColors.Teal)
             }
         } else if (state.checkIns.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -93,14 +94,14 @@ private fun JournalCard(checkIn: DailyCheckInEntity) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = UnSmokeColors.Surface),
+        colors = CardDefaults.cardColors(containerColor = AppColors.Surface),
         shape = RoundedCornerShape(24.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            Text(dateStr, color = UnSmokeColors.Mint, fontSize = 14.sp)
+            Text(dateStr, color = AppColors.Mint, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Day Rating: \/10", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            if (checkIn.tomorrowFocus.isNotBlank()) {
+            Text("Day Rating: ${checkIn.dayRating}/5", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            if (!checkIn.tomorrowFocus.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Focus for tomorrow:", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
                 Text(checkIn.tomorrowFocus, color = Color.White, fontSize = 16.sp)
@@ -108,3 +109,6 @@ private fun JournalCard(checkIn: DailyCheckInEntity) {
         }
     }
 }
+
+
+

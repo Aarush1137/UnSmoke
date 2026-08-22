@@ -1,4 +1,4 @@
-package com.unsmoke.app.navigation
+﻿package com.unsmoke.app.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -81,7 +81,7 @@ fun AppNavGraph(
         composable(route = Screen.NRT.route) {
             NRTDashboardScreen(onBack = { navController.popBackStack() })
         }
-        composable(route = Screen.Insights.route) { InsightsScreen(onBack = { navController.popBackStack() }) }
+        composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }) }
         composable(route = Screen.Progress.route) {
             ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onBack = { navController.popBackStack() })
         }
@@ -112,5 +112,7 @@ fun AppNavGraph(
         }
     }
 }
+
+
 
 

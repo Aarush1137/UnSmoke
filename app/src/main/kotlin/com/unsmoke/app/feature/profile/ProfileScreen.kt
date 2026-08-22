@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.profile
+﻿package com.unsmoke.app.feature.profile
 
 import android.content.Intent
 import android.net.Uri
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,10 +47,10 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Profile & Identity", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
+                title = { Text("Profile & Identity", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = UnSmokeColors.Mint)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
                     }
                 },
                 actions = {
@@ -57,10 +58,10 @@ fun ProfileScreen(
                         Icon(Icons.Rounded.Settings, contentDescription = "Settings", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -91,15 +92,15 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .size(88.dp)
                                 .clip(CircleShape)
-                                .background(UnSmokeColors.Mint.copy(alpha = 0.15f))
-                                .border(2.dp, UnSmokeColors.Mint, CircleShape),
+                                .background(AppColors.Mint.copy(alpha = 0.15f))
+                                .border(2.dp, AppColors.Mint, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Person,
                                 contentDescription = null,
                                 modifier = Modifier.size(52.dp),
-                                tint = UnSmokeColors.Mint
+                                tint = AppColors.Mint
                             )
                         }
 
@@ -115,7 +116,7 @@ fun ProfileScreen(
                         Text(
                             text = if (state.hasActiveAttempt) "Smoke-Free Since ${state.smokeFreeSince}" else "No Active Quit Attempt",
                             fontSize = 14.sp,
-                            color = UnSmokeColors.Mint,
+                            color = AppColors.Mint,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
@@ -132,21 +133,21 @@ fun ProfileScreen(
                         title = "Days Free",
                         value = "${state.daysSmokeFree}",
                         icon = Icons.Rounded.Timer,
-                        color = UnSmokeColors.Teal,
+                        color = AppColors.Teal,
                         modifier = Modifier.weight(1f)
                     )
                     ProfileStatCard(
                         title = "Saved",
                         value = "${state.currencySymbol}${state.moneySaved.toInt()}",
                         icon = Icons.Rounded.Savings,
-                        color = UnSmokeColors.Amber,
+                        color = AppColors.Amber,
                         modifier = Modifier.weight(1f)
                     )
                     ProfileStatCard(
                         title = "Avoided",
                         value = "${state.cigarettesAvoided}",
                         icon = Icons.Rounded.SmokingRooms,
-                        color = UnSmokeColors.Mint,
+                        color = AppColors.Mint,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -172,7 +173,7 @@ fun ProfileScreen(
                             Text("My Core Motivation", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                         IconButton(onClick = { showEditReasonDialog = true }, modifier = Modifier.size(28.dp)) {
-                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Motivation", tint = UnSmokeColors.Mint, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Motivation", tint = AppColors.Mint, modifier = Modifier.size(18.dp))
                         }
                     }
                     Spacer(Modifier.height(10.dp))
@@ -205,7 +206,7 @@ fun ProfileScreen(
                             Text("Emergency Anchor", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                         IconButton(onClick = { showEditContactDialog = true }, modifier = Modifier.size(28.dp)) {
-                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Contact", tint = UnSmokeColors.Mint, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Contact", tint = AppColors.Mint, modifier = Modifier.size(18.dp))
                         }
                     }
                     Spacer(Modifier.height(8.dp))
@@ -227,7 +228,7 @@ fun ProfileScreen(
                                 },
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .background(UnSmokeColors.Mint)
+                                    .background(AppColors.Mint)
                             ) {
                                 Icon(Icons.Rounded.Call, contentDescription = "Call Contact", tint = Color.Black)
                             }
@@ -241,11 +242,11 @@ fun ProfileScreen(
                         Spacer(Modifier.height(10.dp))
                         Button(
                             onClick = { showEditContactDialog = true },
-                            colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Mint.copy(alpha = 0.2f)),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint.copy(alpha = 0.2f)),
                             shape = RoundedCornerShape(12.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
                         ) {
-                            Text("Set Anchor Contact", color = UnSmokeColors.Mint, fontSize = 13.sp)
+                            Text("Set Anchor Contact", color = AppColors.Mint, fontSize = 13.sp)
                         }
                     }
                 }
@@ -305,7 +306,7 @@ fun ProfileScreen(
                         viewModel.updateQuitReason(newReason)
                         showEditReasonDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                 ) {
                     Text("Save")
                 }
@@ -345,7 +346,7 @@ fun ProfileScreen(
                         viewModel.updateEmergencyContact(contactName, contactPhone)
                         showEditContactDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                 ) {
                     Text("Save")
                 }
@@ -402,10 +403,10 @@ private fun ProfileNavItem(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(UnSmokeColors.Mint.copy(alpha = 0.15f)),
+                    .background(AppColors.Mint.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = UnSmokeColors.Mint, modifier = Modifier.size(24.dp))
+                Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(24.dp))
             }
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -416,4 +417,5 @@ private fun ProfileNavItem(
         }
     }
 }
+
 

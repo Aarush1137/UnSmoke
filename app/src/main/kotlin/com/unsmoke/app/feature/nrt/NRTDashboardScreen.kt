@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.nrt
+﻿package com.unsmoke.app.feature.nrt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -7,6 +7,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Medication
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import com.unsmoke.app.core.designsystem.AppColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,11 +29,24 @@ fun NRTDashboardScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            TopAppBar(
+                title = { Text("NRT Tracker", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { viewModel.toggleLogSheet(true) },
-                icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
-                text = { Text("LOG NRT") }
+                icon = { Icon(Icons.Rounded.Add, contentDescription = null, tint = androidx.compose.ui.graphics.Color.Black) },
+                text = { Text("LOG NRT", color = androidx.compose.ui.graphics.Color.Black) },
+                containerColor = AppColors.Mint
             )
         }
     ) { padding ->
@@ -47,11 +62,11 @@ fun NRTDashboardScreen(
                 ) {
                     Column {
                         Text("Today (${state.nrtType})", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(state.todayLogCount.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        Text(state.todayUnitCount.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         Text("NRT logged", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     
-                    val progress = (state.todayLogCount / 10f).coerceAtMost(1f)
+                    val progress = (state.todayUnitCount / 10f).coerceAtMost(1f)
                     PlanDonutRing(progress = progress)
                 }
             }
@@ -60,7 +75,7 @@ fun NRTDashboardScreen(
             Text("Today's log", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(16.dp))
             
-            if (state.todayLogCount == 0) {
+            if (state.todayUnitCount == 0) {
                 Text("No NRT logged today.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
                 Text("Logs will appear here in the final build...", color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -74,7 +89,7 @@ fun NRTDashboardScreen(
                 Text("Log NRT Usage", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(24.dp))
                 Button(
-                    onClick = { viewModel.logNRT(8, 3) },
+                    onClick = { viewModel.logNRT(System.currentTimeMillis(), 1, 8, 3, "General") },
                     modifier = Modifier.fillMaxWidth().height(56.dp)
                 ) {
                     Text("SAVE LOG")
@@ -100,4 +115,12 @@ fun PlanDonutRing(progress: Float, modifier: Modifier = Modifier) {
         }
     }
 }
+
+
+
+
+
+
+
+
 

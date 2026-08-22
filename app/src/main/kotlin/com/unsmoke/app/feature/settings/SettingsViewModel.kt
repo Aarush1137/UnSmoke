@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.settings
+﻿package com.unsmoke.app.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,13 +28,9 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = combine(
-        dataStore.userName,
-        dataStore.notificationsEnabled,
-        dataStore.notificationStyle,
-        dataStore.appLockEnabled,
-        dataStore.theme,
-        dataStore.currencySymbol
-    ) { name, notifEnabled, notifStyle, lockEnabled, theme, currency ->
+        combine(dataStore.userName, dataStore.notificationsEnabled, dataStore.notificationStyle, ::Triple),
+        combine(dataStore.appLockEnabled, dataStore.theme, dataStore.currencySymbol, ::Triple)
+    ) { (name, notifEnabled, notifStyle), (lockEnabled, theme, currency) ->
         SettingsUiState(
             userName = name,
             notificationsEnabled = notifEnabled,
@@ -91,3 +87,4 @@ class SettingsViewModel @Inject constructor(
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.achievements
+﻿package com.unsmoke.app.feature.achievements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 import com.unsmoke.app.core.domain.engine.BadgeState
 import com.unsmoke.app.core.domain.engine.BadgeTier
 
@@ -41,18 +41,18 @@ fun AchievementsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Achievements", fontWeight = FontWeight.Bold, color = UnSmokeColors.Mint) },
+                title = { Text("Achievements", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = UnSmokeColors.Mint) }
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = UnSmokeColors.Teal)
+                CircularProgressIndicator(color = AppColors.Teal)
             }
         } else {
             Column(
@@ -62,7 +62,7 @@ fun AchievementsScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "You've earned \ of \ badges",
+                    text = "You've earned ${state.totalEarned} of ${state.badges.size} badges",
                     color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(bottom = 24.dp, start = 8.dp)
                 )
@@ -85,13 +85,13 @@ fun AchievementsScreen(
 @Composable
 private fun BadgeCard(item: AchievementItemState) {
     val isEarned = item.state == BadgeState.EARNED
-    val bgColor = if (isEarned) UnSmokeColors.Surface else UnSmokeColors.Surface.copy(alpha = 0.5f)
+    val bgColor = if (isEarned) AppColors.Surface else AppColors.Surface.copy(alpha = 0.5f)
     val iconColor = when {
         !isEarned -> Color.White.copy(alpha = 0.2f)
         item.badge.tier == BadgeTier.BRONZE -> Color(0xFFCD7F32)
         item.badge.tier == BadgeTier.SILVER -> Color(0xFFC0C0C0)
         item.badge.tier == BadgeTier.GOLD -> Color(0xFFFFD700)
-        else -> UnSmokeColors.Teal // Platinum/Special
+        else -> AppColors.Teal // Platinum/Special
     }
 
     Card(
@@ -138,7 +138,7 @@ private fun BadgeCard(item: AchievementItemState) {
             
             Text(
                 text = if (isEarned) item.badge.description else "Locked",
-                color = if (isEarned) UnSmokeColors.Mint else Color.White.copy(alpha = 0.3f),
+                color = if (isEarned) AppColors.Mint else Color.White.copy(alpha = 0.3f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 lineHeight = 14.sp
@@ -146,3 +146,6 @@ private fun BadgeCard(item: AchievementItemState) {
         }
     }
 }
+
+
+

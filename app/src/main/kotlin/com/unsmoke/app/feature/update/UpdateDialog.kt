@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.update
+﻿package com.unsmoke.app.feature.update
 
 import android.app.DownloadManager
 import android.content.Context
@@ -39,7 +39,7 @@ fun UpdateDialogController(currentVersion: String = "0.1.0") {
             title = { Text("Update Available", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
             text = {
                 Column {
-                    Text("Version \ is now available.", fontSize = 16.sp)
+                    Text("Version ${updateInfo!!.latestVersion} is now available.", fontSize = 16.sp)
                     Spacer(Modifier.height(8.dp))
                     Text("What's new:", fontWeight = FontWeight.SemiBold)
                     Text(updateInfo!!.releaseNotes, fontSize = 14.sp)
@@ -63,15 +63,17 @@ fun UpdateDialogController(currentVersion: String = "0.1.0") {
 }
 
 private fun startDownload(context: Context, url: String, version: String) {
-    Toast.makeText(context, "Downloading UnSmoke v\...", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, "Downloading UnSmoke v${version}...", Toast.LENGTH_LONG).show()
     val request = DownloadManager.Request(Uri.parse(url))
-        .setTitle("UnSmoke Update v\")
+        .setTitle("UnSmoke Update v${version}")
         .setDescription("Downloading latest version")
         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "UnSmoke_v\.apk")
+        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "UnSmoke_v${version}.apk")
         .setAllowedOverMetered(true)
         .setAllowedOverRoaming(true)
 
     val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     manager.enqueue(request)
 }
+
+

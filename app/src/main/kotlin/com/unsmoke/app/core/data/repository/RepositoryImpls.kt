@@ -29,6 +29,7 @@ class NRTRepositoryImpl @Inject constructor(
     private val dao: NRTDao
 ) : NRTRepository {
     override suspend fun logUsage(usage: NRTUsageEntity) = dao.insertUsage(usage)
+    override suspend fun saveProduct(product: NRTProductEntity) = dao.insertProduct(product)
     override fun getProducts(): Flow<List<NRTProductEntity>> = dao.getAllProducts()
     override fun getUsage(quitId: Long): Flow<List<NRTUsageEntity>> = dao.getUsagesForQuit(quitId)
 }

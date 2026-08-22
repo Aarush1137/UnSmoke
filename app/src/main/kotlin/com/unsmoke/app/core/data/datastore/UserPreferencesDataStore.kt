@@ -24,6 +24,11 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         val QUIT_REASON = stringPreferencesKey("quit_reason")
         val EMERGENCY_CONTACT_NAME = stringPreferencesKey("emergency_contact_name")
         val EMERGENCY_CONTACT_PHONE = stringPreferencesKey("emergency_contact_phone")
+        val PLAN_TRIGGERS = stringSetPreferencesKey("plan_triggers")
+        val PLAN_SUPPORTS = stringSetPreferencesKey("plan_supports")
+        val PLAN_NRT_PRODUCT = stringPreferencesKey("plan_nrt_product")
+        val SHORT_TERM_GOAL = stringPreferencesKey("short_term_goal")
+        val LONG_TERM_GOAL = stringPreferencesKey("long_term_goal")
     }
 
     val onboardingComplete: Flow<Boolean> = dataStore.data.map { it[ONBOARDING_COMPLETE] ?: false }
@@ -36,6 +41,11 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val quitReason: Flow<String> = dataStore.data.map { it[QUIT_REASON] ?: "Better Health & Freedom" }
     val emergencyContactName: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_NAME] ?: "" }
     val emergencyContactPhone: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_PHONE] ?: "" }
+    val planTriggers: Flow<Set<String>> = dataStore.data.map { it[PLAN_TRIGGERS] ?: emptySet() }
+    val planSupports: Flow<Set<String>> = dataStore.data.map { it[PLAN_SUPPORTS] ?: emptySet() }
+    val planNrtProduct: Flow<String> = dataStore.data.map { it[PLAN_NRT_PRODUCT] ?: "NONE" }
+    val shortTermGoal: Flow<String> = dataStore.data.map { it[SHORT_TERM_GOAL] ?: "" }
+    val longTermGoal: Flow<String> = dataStore.data.map { it[LONG_TERM_GOAL] ?: "" }
 
     suspend fun setOnboardingComplete(complete: Boolean) {
         dataStore.edit { it[ONBOARDING_COMPLETE] = complete }
@@ -73,6 +83,21 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         dataStore.edit {
             it[EMERGENCY_CONTACT_NAME] = name
             it[EMERGENCY_CONTACT_PHONE] = phone
+        }
+    }
+
+    suspend fun setPersonalPlan(triggers: Set<String>, supports: Set<String>, nrtProduct: String) {
+        dataStore.edit {
+            it[PLAN_TRIGGERS] = triggers
+            it[PLAN_SUPPORTS] = supports
+            it[PLAN_NRT_PRODUCT] = nrtProduct
+        }
+    }
+
+    suspend fun setGoals(shortTerm: String, longTerm: String) {
+        dataStore.edit {
+            it[SHORT_TERM_GOAL] = shortTerm
+            it[LONG_TERM_GOAL] = longTerm
         }
     }
 

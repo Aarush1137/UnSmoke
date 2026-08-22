@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.profile
+﻿package com.unsmoke.app.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +22,7 @@ data class ProfileUiState(
     val cigarettesAvoided: Int = 0,
     val moneySaved: Double = 0.0,
     val cravingsDefeated: Int = 0,
-    val currencySymbol: String = "₹",
+    val currencySymbol: String = "â‚¹",
     val cigsPerDay: Double = 0.0,
     val packPrice: Double = 0.0,
     val emergencyContactName: String = "",
@@ -47,13 +47,9 @@ class ProfileViewModel @Inject constructor(
     private fun loadProfileData() {
         viewModelScope.launch {
             combine(
-                dataStore.userName,
-                dataStore.quitReason,
-                dataStore.currencySymbol,
-                dataStore.emergencyContactName,
-                dataStore.emergencyContactPhone,
-                quitAttemptRepo.getActiveAttempt()
-            ) { name, reason, currency, contactName, contactPhone, attempt ->
+                combine(dataStore.userName, dataStore.quitReason, dataStore.currencySymbol, ::Triple),
+                combine(dataStore.emergencyContactName, dataStore.emergencyContactPhone, quitAttemptRepo.getActiveAttempt(), ::Triple)
+            ) { (name, reason, currency), (contactName, contactPhone, attempt) ->
                 if (attempt != null) {
                     val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
                     val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
@@ -103,3 +99,4 @@ class ProfileViewModel @Inject constructor(
         }
     }
 }
+

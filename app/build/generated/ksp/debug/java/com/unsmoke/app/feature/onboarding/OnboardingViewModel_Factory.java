@@ -1,6 +1,7 @@
 package com.unsmoke.app.feature.onboarding;
 
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore;
+import com.unsmoke.app.core.domain.repository.NRTRepository;
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -26,27 +27,32 @@ import javax.inject.Provider;
 public final class OnboardingViewModel_Factory implements Factory<OnboardingViewModel> {
   private final Provider<QuitAttemptRepository> quitAttemptRepoProvider;
 
+  private final Provider<NRTRepository> nrtRepoProvider;
+
   private final Provider<UserPreferencesDataStore> dataStoreProvider;
 
   public OnboardingViewModel_Factory(Provider<QuitAttemptRepository> quitAttemptRepoProvider,
+      Provider<NRTRepository> nrtRepoProvider,
       Provider<UserPreferencesDataStore> dataStoreProvider) {
     this.quitAttemptRepoProvider = quitAttemptRepoProvider;
+    this.nrtRepoProvider = nrtRepoProvider;
     this.dataStoreProvider = dataStoreProvider;
   }
 
   @Override
   public OnboardingViewModel get() {
-    return newInstance(quitAttemptRepoProvider.get(), dataStoreProvider.get());
+    return newInstance(quitAttemptRepoProvider.get(), nrtRepoProvider.get(), dataStoreProvider.get());
   }
 
   public static OnboardingViewModel_Factory create(
       Provider<QuitAttemptRepository> quitAttemptRepoProvider,
+      Provider<NRTRepository> nrtRepoProvider,
       Provider<UserPreferencesDataStore> dataStoreProvider) {
-    return new OnboardingViewModel_Factory(quitAttemptRepoProvider, dataStoreProvider);
+    return new OnboardingViewModel_Factory(quitAttemptRepoProvider, nrtRepoProvider, dataStoreProvider);
   }
 
   public static OnboardingViewModel newInstance(QuitAttemptRepository quitAttemptRepo,
-      UserPreferencesDataStore dataStore) {
-    return new OnboardingViewModel(quitAttemptRepo, dataStore);
+      NRTRepository nrtRepo, UserPreferencesDataStore dataStore) {
+    return new OnboardingViewModel(quitAttemptRepo, nrtRepo, dataStore);
   }
 }

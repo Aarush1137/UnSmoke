@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.recovery
+﻿package com.unsmoke.app.feature.recovery
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.UnSmokeColors
+import com.unsmoke.app.core.designsystem.AppColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,14 +31,14 @@ fun RecoveryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Recovery", color = UnSmokeColors.Mint) },
+                title = { Text("Recovery", color = AppColors.Mint) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = UnSmokeColors.Mint) }
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = UnSmokeColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = UnSmokeColors.Background
+        containerColor = AppColors.Background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -52,20 +53,20 @@ fun RecoveryScreen(
                     Text("It's a bump, not the end. Let's understand what happened so you can get back stronger.", color = Color.White.copy(alpha = 0.8f))
                     Spacer(modifier = Modifier.height(32.dp))
                     
-                    Text("How many did you smoke?", color = UnSmokeColors.Mint)
+                    Text("How many did you smoke?", color = AppColors.Mint)
                     Slider(
                         value = state.cigarettesSmoked.toFloat(),
                         onValueChange = { viewModel.updateCigarettes(it.toInt()) },
                         valueRange = 1f..20f,
                         steps = 19
                     )
-                    Text("\ cigarettes", color = Color.White)
+                    Text("${state.cigarettesSmoked} cigarettes", color = Color.White)
                     
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
                         onClick = { viewModel.nextStep() },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                     ) { Text("CONTINUE", color = Color.White) }
                 }
                 2 -> {
@@ -77,7 +78,7 @@ fun RecoveryScreen(
                             RadioButton(
                                 selected = state.trigger == trigger,
                                 onClick = { viewModel.updateTrigger(trigger) },
-                                colors = RadioButtonDefaults.colors(selectedColor = UnSmokeColors.Mint)
+                                colors = RadioButtonDefaults.colors(selectedColor = AppColors.Mint)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(trigger, color = Color.White, modifier = Modifier.padding(top = 12.dp))
@@ -87,7 +88,7 @@ fun RecoveryScreen(
                     Button(
                         onClick = { viewModel.nextStep() },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                     ) { Text("CONTINUE", color = Color.White) }
                 }
                 3 -> {
@@ -99,18 +100,20 @@ fun RecoveryScreen(
                     Button(
                         onClick = { viewModel.finishRecovery(resetStreak = false) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Surface)
-                    ) { Text("IT WAS JUST A LAPSE. KEEP MY STREAK.", color = UnSmokeColors.Mint) }
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Surface)
+                    ) { Text("IT WAS JUST A LAPSE. KEEP MY STREAK.", color = AppColors.Mint) }
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Button(
                         onClick = { viewModel.finishRecovery(resetStreak = true) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = UnSmokeColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
                     ) { Text("START A NEW QUIT ATTEMPT", color = Color.White) }
                 }
             }
         }
     }
 }
+
+
