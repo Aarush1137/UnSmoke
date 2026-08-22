@@ -1,4 +1,4 @@
-package com.unsmoke.app.feature.home
+﻿package com.unsmoke.app.feature.home
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -41,21 +41,21 @@ fun HomeScreen(
     }
 
     Scaffold(
-        containerColor = Color(0xFFFAFAF8),
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
-                title = { Text(", ", fontWeight = FontWeight.Bold, color = Color(0xFF18201E)) },
+                title = { Text("$greeting, ${uiState.userName}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground) },
                 actions = {
                     IconButton(onClick = {}) {
-                        Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = Color(0xFF596560))
+                        Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFAFAF8))
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color(0xFFFAFAF8)) {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
                 NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Rounded.Home, "Home") }, label = { Text("Home") })
                 NavigationBarItem(selected = false, onClick = onProgressClick, icon = { Icon(Icons.Rounded.BarChart, "Progress") }, label = { Text("Progress") })
                 NavigationBarItem(selected = false, onClick = onCravingClick, icon = { Icon(Icons.Rounded.Adjust, "Craving") }, label = { Text("Craving") })
@@ -79,15 +79,15 @@ fun HomeScreen(
                 modifier = Modifier.size(240.dp),
                 contentAlignment = Alignment.Center
             ) {
-                ProgressRing(progress = 0.8f, size = 240.dp) // Dummy progress for now
+                ProgressRing(progress = 1.0f, size = 240.dp) 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "", fontSize = 64.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0B856E))
-                    Text(text = "Days Free", fontSize = 18.sp, color = Color(0xFF596560), fontWeight = FontWeight.Medium)
+                    Text(text = uiState.smokeFreeDays.toString(), fontSize = 64.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    Text(text = "Days Free", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
                 }
             }
             
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Since ", color = Color(0xFF818A84), fontSize = 14.sp)
+            Text(text = "Since ${uiState.quitDateDisplay}", color = MaterialTheme.colorScheme.outlineVariant, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(32.dp))
             
             // Two Metric Cards
@@ -95,29 +95,28 @@ fun HomeScreen(
                 Card(
                     modifier = Modifier.weight(1f).aspectRatio(1.2f),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0D2829))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Icon(Icons.Rounded.MoneyOff, contentDescription = null, tint = Color(0xFF8FDCD0), modifier = Modifier.size(24.dp))
+                        Icon(Icons.Rounded.MoneyOff, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                         Spacer(Modifier.weight(1f))
-                        Text(String.format("?%.0f", uiState.netMoneySaved), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(String.format("%s%.0f", uiState.currencySymbol, uiState.netMoneySaved), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(Modifier.height(4.dp))
-                        Text("Money saved", fontSize = 12.sp, color = Color(0xFF82918B))
+                        Text("Money saved", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
                 
                 Card(
                     modifier = Modifier.weight(1f).aspectRatio(1.2f),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0D2829))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Icon(Icons.Rounded.Block, contentDescription = null, tint = Color(0xFF8FDCD0), modifier = Modifier.size(24.dp))
+                        Icon(Icons.Rounded.Block, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                         Spacer(Modifier.weight(1f))
-                        // Assuming uiState has cigarettes avoided, but let's mock it if it doesn't
-                        Text("", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(uiState.smokeFreeDays.toString(), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(Modifier.height(4.dp))
-                        Text("Cigs avoided", fontSize = 12.sp, color = Color(0xFF82918B))
+                        Text("Cigs avoided", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -127,16 +126,15 @@ fun HomeScreen(
             Button(
                 onClick = onCravingClick,
                 modifier = Modifier.fillMaxWidth().height(64.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0B856E))
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("I HAVE A CRAVING", fontWeight = FontWeight.Bold, fontSize = 16.sp, letterSpacing = 1.sp)
+                Text("I HAVE A CRAVING", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, letterSpacing = 1.sp)
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            Text(text = uiState.currentQuote, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = Color(0xFF596560), textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(32.dp))
+            Text(text = uiState.currentQuote, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }

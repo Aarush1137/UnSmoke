@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unsmoke.app.core.designsystem.components.ProgressRing
-
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import com.unsmoke.app.core.designsystem.AppColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,10 +36,10 @@ fun ProgressScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text("Progress", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Progress", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -50,7 +48,6 @@ fun ProgressScreen(
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp)) {
             Spacer(Modifier.height(16.dp))
-
 
             // Tab selector
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -64,10 +61,10 @@ fun ProgressScreen(
             
             // Hero Ring
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                ProgressRing(progress = 0.75f, size = 180.dp)
+                ProgressRing(progress = 1.0f, size = 180.dp)
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("", fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0B856E))
-                    Text("Days Free", fontSize = 16.sp, color = Color(0xFF596560))
+                    Text(state.smokeFreeDays.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    Text("Days Free", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
 
@@ -90,7 +87,7 @@ fun ProgressScreen(
                 item {
                     MetricCard(
                         icon = Icons.Rounded.Shield,
-                        value = "?",
+                        value = String.format("%s%.0f", state.currencySymbol, state.moneySaved),
                         label = "Money saved"
                     )
                 }
@@ -113,9 +110,9 @@ fun ProgressScreen(
             Button(
                 onClick = onInsightsClick, 
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0B856E))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("VIEW INSIGHTS", color = Color.White, fontWeight = FontWeight.Bold)
+                Text("VIEW INSIGHTS", color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.height(24.dp))
         }
@@ -127,18 +124,14 @@ fun MetricCard(icon: ImageVector, value: String, label: String) {
     Card(
         modifier = Modifier.fillMaxWidth().aspectRatio(1.1f),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF011113))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Icon(icon, contentDescription = null, tint = Color(0xFF8FDCD0), modifier = Modifier.size(24.dp))
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
             Spacer(Modifier.weight(1f))
-            Text(value, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(value, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(4.dp))
-            Text(label, fontSize = 12.sp, color = Color(0xFF82918B), lineHeight = 16.sp)
+            Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 16.sp)
         }
     }
 }
-
-
-
-

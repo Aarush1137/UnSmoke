@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.settings
+package com.unsmoke.app.feature.settings
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -233,7 +233,7 @@ fun SettingsScreen(
 
     // Currency Dialog
     if (showCurrencyDialog) {
-        val currencies = listOf("â‚¹" to "INR (â‚¹)", "$" to "USD ($)", "â‚¬" to "EUR (â‚¬)", "Â£" to "GBP (Â£)", "Â¥" to "JPY (Â¥)", "C$" to "CAD (C$)")
+        val currencies = listOf("\u20B9" to "INR (\u20B9)", "$" to "USD ($)", "\u20AC" to "EUR (\u20AC)", "\u00A3" to "GBP (\u00A3)", "\u00A5" to "JPY (\u00A5)", "C$" to "CAD (C$)")
         AlertDialog(
             onDismissRequest = { showCurrencyDialog = false },
             title = { Text("Select Currency") },

@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.core.designsystem
+package com.unsmoke.app.core.designsystem
 
 import androidx.compose.ui.graphics.Color
 
@@ -45,3 +45,7 @@ object AppColors {
     val Surface = Color(0xFF0A2022)
     val Error = Color(0xFFE77979)
 }
+
+val AccentPink = Color(0xFFE882A3)
+val AccentOrange = Color(0xFFF0A060)
+val AccentBlue = Color(0xFF6BB5D8)
