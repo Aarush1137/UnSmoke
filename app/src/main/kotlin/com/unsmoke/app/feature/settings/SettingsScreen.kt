@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,7 +54,7 @@ fun SettingsScreen(
                 title = { Text("Settings", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
@@ -541,7 +541,7 @@ private fun SettingsClickableItem(
                     Text(subtitle, color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
                 }
             }
-            Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = Color.Transparent, modifier = Modifier.size(16.dp))
+            Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.Transparent, modifier = Modifier.size(16.dp))
         }
     }
 }

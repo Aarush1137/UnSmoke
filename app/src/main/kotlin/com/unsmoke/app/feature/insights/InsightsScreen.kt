@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
@@ -42,7 +42,7 @@ fun InsightsScreen(
                 title = { Text("Insights & Recovery", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
@@ -124,7 +124,7 @@ fun InsightsScreen(
                         InsightCard(
                             title = "Craving Success Rate",
                             value = "${state.successRate}%",
-                            icon = Icons.AutoMirrored.Rounded.TrendingDown,
+                            icon = Icons.Rounded.TrendingDown,
                             description = "Percentage of cravings successfully defeated."
                         )
                     }
@@ -186,7 +186,7 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
             72 * 60 * 60 * 1000L, 
             Icons.Rounded.CheckCircle
         ),
-        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.AutoMirrored.Rounded.DirectionsRun)
+        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.Rounded.DirectionsRun)
     )
 
     Column(modifier = Modifier.fillMaxWidth()) {

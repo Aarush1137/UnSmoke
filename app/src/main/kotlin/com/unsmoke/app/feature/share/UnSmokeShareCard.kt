@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.share
+package com.unsmoke.app.feature.share
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

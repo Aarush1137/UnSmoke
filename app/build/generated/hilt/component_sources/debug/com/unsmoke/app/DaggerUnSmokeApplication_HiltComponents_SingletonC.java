@@ -12,6 +12,9 @@ import androidx.hilt.work.WorkerFactoryModule_ProvideFactoryFactory;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.work.ListenableWorker;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.unsmoke.app.core.data.database.UnSmokeDatabase;
 import com.unsmoke.app.core.data.database.dao.CheckInDao;
 import com.unsmoke.app.core.data.database.dao.CravingDao;
@@ -20,6 +23,7 @@ import com.unsmoke.app.core.data.database.dao.QuitAttemptDao;
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore;
 import com.unsmoke.app.core.data.repository.CheckInRepositoryImpl;
 import com.unsmoke.app.core.data.repository.CravingRepositoryImpl;
+import com.unsmoke.app.core.data.repository.HealthConnectRepository;
 import com.unsmoke.app.core.data.repository.NRTRepositoryImpl;
 import com.unsmoke.app.core.data.repository.QuitAttemptRepositoryImpl;
 import com.unsmoke.app.di.DataStoreModule_ProvideDataStoreFactory;
@@ -83,10 +87,8 @@ import dagger.internal.DoubleCheck;
 import dagger.internal.IdentifierNameString;
 import dagger.internal.KeepFieldType;
 import dagger.internal.LazyClassKeyMap;
-import dagger.internal.MapBuilder;
 import dagger.internal.Preconditions;
 import dagger.internal.Provider;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -424,7 +426,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(15).put(LazyClassKeyProvider.com_unsmoke_app_feature_achievements_AchievementsViewModel, AchievementsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_analytics_AnalyticsViewModel, AnalyticsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, CheckInViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, CravingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_insights_InsightsViewModel, InsightsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_journal_JournalViewModel, JournalViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, NRTViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_plan_PlanViewModel, PlanViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ProgressViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_recovery_RecoveryViewModel, RecoveryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_splash_SplashViewModel, SplashViewModel_HiltModules.KeyModule.provide()).build());
+      return LazyClassKeyMap.<Boolean>of(ImmutableMap.<String, Boolean>builderWithExpectedSize(15).put(LazyClassKeyProvider.com_unsmoke_app_feature_achievements_AchievementsViewModel, AchievementsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_analytics_AnalyticsViewModel, AnalyticsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, CheckInViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, CravingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_insights_InsightsViewModel, InsightsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_journal_JournalViewModel, JournalViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, NRTViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_plan_PlanViewModel, PlanViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ProgressViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_recovery_RecoveryViewModel, RecoveryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_unsmoke_app_feature_splash_SplashViewModel, SplashViewModel_HiltModules.KeyModule.provide()).build());
     }
 
     @Override
@@ -442,6 +444,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       return new ViewCBuilder(singletonCImpl, activityRetainedCImpl, activityCImpl);
     }
 
+    @CanIgnoreReturnValue
     private MainActivity injectMainActivity2(MainActivity instance) {
       MainActivity_MembersInjector.injectDataStore(instance, singletonCImpl.provideUserPreferencesDataStoreProvider.get());
       return instance;
@@ -451,69 +454,48 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_unsmoke_app_feature_journal_JournalViewModel = "com.unsmoke.app.feature.journal.JournalViewModel";
 
-      static String com_unsmoke_app_feature_insights_InsightsViewModel = "com.unsmoke.app.feature.insights.InsightsViewModel";
-
-      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
-
-      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
-
-      static String com_unsmoke_app_feature_recovery_RecoveryViewModel = "com.unsmoke.app.feature.recovery.RecoveryViewModel";
-
-      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
-
-      static String com_unsmoke_app_feature_plan_PlanViewModel = "com.unsmoke.app.feature.plan.PlanViewModel";
-
-      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
+      static String com_unsmoke_app_feature_analytics_AnalyticsViewModel = "com.unsmoke.app.feature.analytics.AnalyticsViewModel";
 
       static String com_unsmoke_app_feature_settings_SettingsViewModel = "com.unsmoke.app.feature.settings.SettingsViewModel";
 
-      static String com_unsmoke_app_feature_achievements_AchievementsViewModel = "com.unsmoke.app.feature.achievements.AchievementsViewModel";
+      static String com_unsmoke_app_feature_plan_PlanViewModel = "com.unsmoke.app.feature.plan.PlanViewModel";
 
-      static String com_unsmoke_app_feature_analytics_AnalyticsViewModel = "com.unsmoke.app.feature.analytics.AnalyticsViewModel";
-
-      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
+      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
 
       static String com_unsmoke_app_feature_profile_ProfileViewModel = "com.unsmoke.app.feature.profile.ProfileViewModel";
 
       static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
 
+      static String com_unsmoke_app_feature_insights_InsightsViewModel = "com.unsmoke.app.feature.insights.InsightsViewModel";
+
+      static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
+
+      static String com_unsmoke_app_feature_achievements_AchievementsViewModel = "com.unsmoke.app.feature.achievements.AchievementsViewModel";
+
+      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
+
+      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
+
       static String com_unsmoke_app_feature_splash_SplashViewModel = "com.unsmoke.app.feature.splash.SplashViewModel";
+
+      static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
+
+      static String com_unsmoke_app_feature_recovery_RecoveryViewModel = "com.unsmoke.app.feature.recovery.RecoveryViewModel";
 
       @KeepFieldType
       JournalViewModel com_unsmoke_app_feature_journal_JournalViewModel2;
 
       @KeepFieldType
-      InsightsViewModel com_unsmoke_app_feature_insights_InsightsViewModel2;
-
-      @KeepFieldType
-      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
-
-      @KeepFieldType
-      CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
-
-      @KeepFieldType
-      RecoveryViewModel com_unsmoke_app_feature_recovery_RecoveryViewModel2;
-
-      @KeepFieldType
-      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
-      PlanViewModel com_unsmoke_app_feature_plan_PlanViewModel2;
-
-      @KeepFieldType
-      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+      AnalyticsViewModel com_unsmoke_app_feature_analytics_AnalyticsViewModel2;
 
       @KeepFieldType
       SettingsViewModel com_unsmoke_app_feature_settings_SettingsViewModel2;
 
       @KeepFieldType
-      AchievementsViewModel com_unsmoke_app_feature_achievements_AchievementsViewModel2;
+      PlanViewModel com_unsmoke_app_feature_plan_PlanViewModel2;
 
       @KeepFieldType
-      AnalyticsViewModel com_unsmoke_app_feature_analytics_AnalyticsViewModel2;
-
-      @KeepFieldType
-      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
+      CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
 
       @KeepFieldType
       ProfileViewModel com_unsmoke_app_feature_profile_ProfileViewModel2;
@@ -522,7 +504,28 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
 
       @KeepFieldType
+      InsightsViewModel com_unsmoke_app_feature_insights_InsightsViewModel2;
+
+      @KeepFieldType
+      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+
+      @KeepFieldType
+      AchievementsViewModel com_unsmoke_app_feature_achievements_AchievementsViewModel2;
+
+      @KeepFieldType
+      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
+
+      @KeepFieldType
+      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
+
+      @KeepFieldType
       SplashViewModel com_unsmoke_app_feature_splash_SplashViewModel2;
+
+      @KeepFieldType
+      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
+
+      @KeepFieldType
+      RecoveryViewModel com_unsmoke_app_feature_recovery_RecoveryViewModel2;
     }
   }
 
@@ -595,90 +598,90 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(15).put(LazyClassKeyProvider.com_unsmoke_app_feature_achievements_AchievementsViewModel, ((Provider) achievementsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_analytics_AnalyticsViewModel, ((Provider) analyticsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, ((Provider) checkInViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, ((Provider) cravingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_insights_InsightsViewModel, ((Provider) insightsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_journal_JournalViewModel, ((Provider) journalViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, ((Provider) nRTViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_plan_PlanViewModel, ((Provider) planViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ((Provider) progressViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_recovery_RecoveryViewModel, ((Provider) recoveryViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_splash_SplashViewModel, ((Provider) splashViewModelProvider)).build());
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(ImmutableMap.<String, javax.inject.Provider<ViewModel>>builderWithExpectedSize(15).put(LazyClassKeyProvider.com_unsmoke_app_feature_achievements_AchievementsViewModel, ((Provider) achievementsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_analytics_AnalyticsViewModel, ((Provider) analyticsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_checkin_CheckInViewModel, ((Provider) checkInViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_craving_CravingViewModel, ((Provider) cravingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_insights_InsightsViewModel, ((Provider) insightsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_journal_JournalViewModel, ((Provider) journalViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_nrt_NRTViewModel, ((Provider) nRTViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_plan_PlanViewModel, ((Provider) planViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_progress_ProgressViewModel, ((Provider) progressViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_recovery_RecoveryViewModel, ((Provider) recoveryViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_unsmoke_app_feature_splash_SplashViewModel, ((Provider) splashViewModelProvider)).build());
     }
 
     @Override
     public Map<Class<?>, Object> getHiltViewModelAssistedMap() {
-      return Collections.<Class<?>, Object>emptyMap();
+      return ImmutableMap.<Class<?>, Object>of();
     }
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
-
-      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
-
-      static String com_unsmoke_app_feature_splash_SplashViewModel = "com.unsmoke.app.feature.splash.SplashViewModel";
+      static String com_unsmoke_app_feature_profile_ProfileViewModel = "com.unsmoke.app.feature.profile.ProfileViewModel";
 
       static String com_unsmoke_app_feature_journal_JournalViewModel = "com.unsmoke.app.feature.journal.JournalViewModel";
 
-      static String com_unsmoke_app_feature_settings_SettingsViewModel = "com.unsmoke.app.feature.settings.SettingsViewModel";
+      static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
 
       static String com_unsmoke_app_feature_progress_ProgressViewModel = "com.unsmoke.app.feature.progress.ProgressViewModel";
 
-      static String com_unsmoke_app_feature_achievements_AchievementsViewModel = "com.unsmoke.app.feature.achievements.AchievementsViewModel";
+      static String com_unsmoke_app_feature_insights_InsightsViewModel = "com.unsmoke.app.feature.insights.InsightsViewModel";
 
       static String com_unsmoke_app_feature_onboarding_OnboardingViewModel = "com.unsmoke.app.feature.onboarding.OnboardingViewModel";
 
-      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
+      static String com_unsmoke_app_feature_settings_SettingsViewModel = "com.unsmoke.app.feature.settings.SettingsViewModel";
 
       static String com_unsmoke_app_feature_analytics_AnalyticsViewModel = "com.unsmoke.app.feature.analytics.AnalyticsViewModel";
 
-      static String com_unsmoke_app_feature_home_HomeViewModel = "com.unsmoke.app.feature.home.HomeViewModel";
-
-      static String com_unsmoke_app_feature_profile_ProfileViewModel = "com.unsmoke.app.feature.profile.ProfileViewModel";
-
-      static String com_unsmoke_app_feature_insights_InsightsViewModel = "com.unsmoke.app.feature.insights.InsightsViewModel";
-
-      static String com_unsmoke_app_feature_plan_PlanViewModel = "com.unsmoke.app.feature.plan.PlanViewModel";
-
       static String com_unsmoke_app_feature_recovery_RecoveryViewModel = "com.unsmoke.app.feature.recovery.RecoveryViewModel";
 
-      @KeepFieldType
-      CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
+      static String com_unsmoke_app_feature_achievements_AchievementsViewModel = "com.unsmoke.app.feature.achievements.AchievementsViewModel";
 
-      @KeepFieldType
-      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
+      static String com_unsmoke_app_feature_nrt_NRTViewModel = "com.unsmoke.app.feature.nrt.NRTViewModel";
 
-      @KeepFieldType
-      SplashViewModel com_unsmoke_app_feature_splash_SplashViewModel2;
+      static String com_unsmoke_app_feature_checkin_CheckInViewModel = "com.unsmoke.app.feature.checkin.CheckInViewModel";
 
-      @KeepFieldType
-      JournalViewModel com_unsmoke_app_feature_journal_JournalViewModel2;
+      static String com_unsmoke_app_feature_splash_SplashViewModel = "com.unsmoke.app.feature.splash.SplashViewModel";
 
-      @KeepFieldType
-      SettingsViewModel com_unsmoke_app_feature_settings_SettingsViewModel2;
+      static String com_unsmoke_app_feature_craving_CravingViewModel = "com.unsmoke.app.feature.craving.CravingViewModel";
 
-      @KeepFieldType
-      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
-
-      @KeepFieldType
-      AchievementsViewModel com_unsmoke_app_feature_achievements_AchievementsViewModel2;
-
-      @KeepFieldType
-      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
-      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
-
-      @KeepFieldType
-      AnalyticsViewModel com_unsmoke_app_feature_analytics_AnalyticsViewModel2;
-
-      @KeepFieldType
-      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
+      static String com_unsmoke_app_feature_plan_PlanViewModel = "com.unsmoke.app.feature.plan.PlanViewModel";
 
       @KeepFieldType
       ProfileViewModel com_unsmoke_app_feature_profile_ProfileViewModel2;
 
       @KeepFieldType
+      JournalViewModel com_unsmoke_app_feature_journal_JournalViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_unsmoke_app_feature_home_HomeViewModel2;
+
+      @KeepFieldType
+      ProgressViewModel com_unsmoke_app_feature_progress_ProgressViewModel2;
+
+      @KeepFieldType
       InsightsViewModel com_unsmoke_app_feature_insights_InsightsViewModel2;
 
       @KeepFieldType
-      PlanViewModel com_unsmoke_app_feature_plan_PlanViewModel2;
+      OnboardingViewModel com_unsmoke_app_feature_onboarding_OnboardingViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_unsmoke_app_feature_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      AnalyticsViewModel com_unsmoke_app_feature_analytics_AnalyticsViewModel2;
 
       @KeepFieldType
       RecoveryViewModel com_unsmoke_app_feature_recovery_RecoveryViewModel2;
+
+      @KeepFieldType
+      AchievementsViewModel com_unsmoke_app_feature_achievements_AchievementsViewModel2;
+
+      @KeepFieldType
+      NRTViewModel com_unsmoke_app_feature_nrt_NRTViewModel2;
+
+      @KeepFieldType
+      CheckInViewModel com_unsmoke_app_feature_checkin_CheckInViewModel2;
+
+      @KeepFieldType
+      SplashViewModel com_unsmoke_app_feature_splash_SplashViewModel2;
+
+      @KeepFieldType
+      CravingViewModel com_unsmoke_app_feature_craving_CravingViewModel2;
+
+      @KeepFieldType
+      PlanViewModel com_unsmoke_app_feature_plan_PlanViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -706,7 +709,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
           return (T) new AchievementsViewModel(singletonCImpl.quitAttemptRepositoryImplProvider.get(), singletonCImpl.cravingRepositoryImplProvider.get());
 
           case 1: // com.unsmoke.app.feature.analytics.AnalyticsViewModel 
-          return (T) new AnalyticsViewModel(singletonCImpl.cravingRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get());
+          return (T) new AnalyticsViewModel(singletonCImpl.cravingRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get(), singletonCImpl.healthConnectRepositoryProvider.get());
 
           case 2: // com.unsmoke.app.feature.checkin.CheckInViewModel 
           return (T) new CheckInViewModel(singletonCImpl.checkInRepositoryImplProvider.get(), singletonCImpl.quitAttemptRepositoryImplProvider.get());
@@ -839,6 +842,8 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     private Provider<CravingRepositoryImpl> cravingRepositoryImplProvider;
 
+    private Provider<HealthConnectRepository> healthConnectRepositoryProvider;
+
     private Provider<CheckInRepositoryImpl> checkInRepositoryImplProvider;
 
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
@@ -848,7 +853,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
     }
 
     private HiltWorkerFactory hiltWorkerFactory() {
-      return WorkerFactoryModule_ProvideFactoryFactory.provideFactory(Collections.<String, javax.inject.Provider<WorkerAssistedFactory<? extends ListenableWorker>>>emptyMap());
+      return WorkerFactoryModule_ProvideFactoryFactory.provideFactory(ImmutableMap.<String, javax.inject.Provider<WorkerAssistedFactory<? extends ListenableWorker>>>of());
     }
 
     private QuitAttemptDao quitAttemptDao() {
@@ -875,7 +880,8 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       this.provideDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<DataStore<Preferences>>(singletonCImpl, 4));
       this.provideUserPreferencesDataStoreProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesDataStore>(singletonCImpl, 3));
       this.cravingRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CravingRepositoryImpl>(singletonCImpl, 5));
-      this.checkInRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CheckInRepositoryImpl>(singletonCImpl, 6));
+      this.healthConnectRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<HealthConnectRepository>(singletonCImpl, 6));
+      this.checkInRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CheckInRepositoryImpl>(singletonCImpl, 7));
     }
 
     @Override
@@ -895,7 +901,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
 
     @Override
     public Set<Boolean> getDisableFragmentGetContextFix() {
-      return Collections.<Boolean>emptySet();
+      return ImmutableSet.<Boolean>of();
     }
 
     @Override
@@ -908,11 +914,13 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       return new ServiceCBuilder(singletonCImpl);
     }
 
+    @CanIgnoreReturnValue
     private UnSmokeApplication injectUnSmokeApplication2(UnSmokeApplication instance) {
       UnSmokeApplication_MembersInjector.injectWorkerFactory(instance, hiltWorkerFactory());
       return instance;
     }
 
+    @CanIgnoreReturnValue
     private DashboardWidgetReceiver injectDashboardWidgetReceiver2(
         DashboardWidgetReceiver instance) {
       DashboardWidgetReceiver_MembersInjector.injectQuitAttemptRepo(instance, quitAttemptRepositoryImplProvider.get());
@@ -920,6 +928,7 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
       return instance;
     }
 
+    @CanIgnoreReturnValue
     private StreakWidgetReceiver injectStreakWidgetReceiver2(StreakWidgetReceiver instance) {
       StreakWidgetReceiver_MembersInjector.injectQuitAttemptRepo(instance, quitAttemptRepositoryImplProvider.get());
       return instance;
@@ -957,7 +966,10 @@ public final class DaggerUnSmokeApplication_HiltComponents_SingletonC {
           case 5: // com.unsmoke.app.core.data.repository.CravingRepositoryImpl 
           return (T) new CravingRepositoryImpl(singletonCImpl.cravingDao());
 
-          case 6: // com.unsmoke.app.core.data.repository.CheckInRepositoryImpl 
+          case 6: // com.unsmoke.app.core.data.repository.HealthConnectRepository 
+          return (T) new HealthConnectRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 7: // com.unsmoke.app.core.data.repository.CheckInRepositoryImpl 
           return (T) new CheckInRepositoryImpl(singletonCImpl.checkInDao());
 
           default: throw new AssertionError(id);

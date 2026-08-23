@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -50,7 +50,7 @@ fun ProfileScreen(
                 title = { Text("Profile & Identity", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
                     }
                 },
                 actions = {
@@ -261,7 +261,7 @@ fun ProfileScreen(
                 ProfileNavItem(
                     title = "My Quit Plan",
                     subtitle = "Review baseline, goals & strategies",
-                    icon = Icons.AutoMirrored.Rounded.LibraryBooks,
+                    icon = Icons.Rounded.LibraryBooks,
                     onClick = onPlanClick
                 )
             }
@@ -413,7 +413,7 @@ private fun ProfileNavItem(
                 Text(title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(subtitle, color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
             }
-            Icon(Icons.AutoMirrored.Rounded.ArrowForwardIos, contentDescription = null, tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
+            Icon(Icons.Rounded.ArrowForwardIos, contentDescription = null, tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
         }
     }
 }

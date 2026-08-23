@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.checkin
+package com.unsmoke.app.feature.checkin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

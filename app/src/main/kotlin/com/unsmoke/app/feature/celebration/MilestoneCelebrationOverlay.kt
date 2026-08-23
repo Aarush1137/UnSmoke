@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.celebration
+package com.unsmoke.app.feature.celebration
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
