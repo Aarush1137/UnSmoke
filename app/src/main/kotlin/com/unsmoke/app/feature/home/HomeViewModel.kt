@@ -45,7 +45,8 @@ class HomeViewModel @Inject constructor(
     private val quitAttemptRepo: QuitAttemptRepository,
     private val cravingRepo: CravingRepository,
     private val aiRepo: AiInsightsRepository,
-    private val dataStore: UserPreferencesDataStore
+    private val dataStore: UserPreferencesDataStore,
+    private val wearSyncManager: com.unsmoke.app.core.device.WearSyncManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -74,6 +75,9 @@ class HomeViewModel @Inject constructor(
                         }
                         
                         val saved = CalculationEngine.netMoneySaved(grossSaved, nrtCost)
+                        
+                        // Sync to Wear OS
+                        viewModelScope.launch { wearSyncManager.syncQuitStatus(attempt.startEpochMillis) }
                         
                         val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
                         val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
