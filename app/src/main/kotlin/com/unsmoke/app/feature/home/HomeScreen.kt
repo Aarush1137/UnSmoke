@@ -29,6 +29,7 @@ fun HomeScreen(
     onNRTClick: () -> Unit,
     onProfileClick: () -> Unit,
     onCheckInClick: () -> Unit,
+    onBuddyClick: () -> Unit,
     onRelapseClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -49,6 +50,7 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("$greeting, ${uiState.userName}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground) },
                 actions = {
+                    IconButton(onClick = onBuddyClick) { Icon(Icons.Rounded.People, contentDescription = "Buddy", tint = MaterialTheme.colorScheme.primary) }
                     IconButton(onClick = { showNotifications = true }) { Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
