@@ -21,6 +21,7 @@ import com.unsmoke.app.feature.plan.PlanScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.insights.InsightsScreen
 import com.unsmoke.app.feature.analytics.AnalyticsScreen
+import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.settings.SettingsScreen
 
 @Composable

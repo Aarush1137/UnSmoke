@@ -1,66 +1,85 @@
 package com.unsmoke.app.feature.achievements
 
+import android.content.Context
+import android.content.Intent
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unsmoke.app.core.domain.engine.AchievementBadge
-import com.unsmoke.app.core.domain.engine.AchievementEngine
-import com.unsmoke.app.core.domain.engine.BadgeState
 import com.unsmoke.app.core.domain.engine.CalculationEngine
+import com.unsmoke.app.core.domain.engine.ShareEngine
 import com.unsmoke.app.core.domain.repository.CravingRepository
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import java.time.Instant
 
-data class AchievementItemState(
-    val badge: AchievementBadge,
-    val state: BadgeState
+data class AchievementUiModel(
+    val id: String,
+    val title: String,
+    val description: String,
+    val icon: ImageVector,
+    val isUnlocked: Boolean = false
 )
 
 data class AchievementsUiState(
-    val badges: List<AchievementItemState> = emptyList(),
-    val totalEarned: Int = 0,
-    val isLoading: Boolean = true
+    val achievements: List<AchievementUiModel> = emptyList()
 )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class AchievementsViewModel @Inject constructor(
     private val quitAttemptRepo: QuitAttemptRepository,
     private val cravingRepo: CravingRepository
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(AchievementsUiState())
-    val uiState: StateFlow<AchievementsUiState> = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            combine(
-                quitAttemptRepo.getActiveAttempt(),
-                // If attempt is null, just pass an empty list of cravings
-                quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
-                    if (attempt != null) cravingRepo.getCravings(attempt.id) else flowOf(emptyList())
-                }
-            ) { attempt, cravings ->
-                val days = if (attempt != null) CalculationEngine.smokeFreeDays(attempt.startEpochMillis) else 0
-                val defeated = cravings.count { it.outcome == "DEFEATED" }
+            quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
+                if (attempt == null) {
+                    flowOf(emptyList<AchievementUiModel>())
+                } else {
+                    cravingRepo.getCravings(attempt.id).map { attemptCravings ->
+                        val now = Instant.now().toEpochMilli()
+                        val daysFree = (now - attempt.startEpochMillis) / (1000L * 60 * 60 * 24)
+                        val cravingsDefeated = attemptCravings.count { it.outcome == "DEFEATED" }
 
-                val itemStates = AchievementEngine.allBadges.map { badge ->
-                    AchievementItemState(
-                        badge = badge,
-                        state = AchievementEngine.getBadgeState(badge, days, defeated)
-                    )
+                        listOf(
+                            AchievementUiModel("24h", "24 Hours Free", "Survive the first day", Icons.Rounded.LooksOne, daysFree >= 1),
+                            AchievementUiModel("3d", "3 Days Free", "Nicotine withdrawal peaks", Icons.Rounded.Looks3, daysFree >= 3),
+                            AchievementUiModel("1w", "1 Week Free", "A whole week clean", Icons.Rounded.Event, daysFree >= 7),
+                            AchievementUiModel("1m", "1 Month Free", "A major milestone", Icons.Rounded.CalendarMonth, daysFree >= 30),
+                            AchievementUiModel("10_cravings", "Urge Surfer", "Defeat 10 cravings", Icons.Rounded.Waves, cravingsDefeated >= 10),
+                            AchievementUiModel("50_cravings", "Craving Crusher", "Defeat 50 cravings", Icons.Rounded.Shield, cravingsDefeated >= 50),
+                            AchievementUiModel("100_cravings", "Iron Will", "Defeat 100 cravings", Icons.Rounded.Whatshot, cravingsDefeated >= 100)
+                        )
+                    }
                 }
+            }.collect { achievements ->
+                _uiState.update { it.copy(achievements = achievements) }
+            }
+        }
+    }
 
-                val earnedCount = itemStates.count { it.state == BadgeState.EARNED }
-
-                _uiState.update { 
-                    it.copy(
-                        badges = itemStates,
-                        totalEarned = earnedCount,
-                        isLoading = false
-                    ) 
-                }
-            }.collect()
+    fun shareAchievement(context: Context, achievement: AchievementUiModel, currency: String) {
+        val uri = ShareEngine.generateShareImage(context, achievement.title, achievement.description)
+        if (uri != null) {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/jpeg"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            val chooser = Intent.createChooser(intent, "Share Achievement")
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ContextCompat.startActivity(context, chooser, null)
         }
     }
 }

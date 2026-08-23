@@ -14,6 +14,56 @@ import java.io.FileOutputStream
 object ShareEngine {
     fun generateShareImage(
         context: Context,
+        title: String,
+        subtitle: String
+    ): android.net.Uri? {
+        try {
+            val width = 1080
+            val height = 1080
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.color = Color.parseColor("#192825")
+            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+            
+            paint.color = Color.parseColor("#00E676")
+            paint.alpha = 40
+            canvas.drawCircle(width / 2f, height / 2f, 400f, paint)
+            paint.alpha = 255
+            
+            paint.color = Color.WHITE
+            paint.textSize = 80f
+            paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText("UNSMOKE ACHIEVEMENT", width / 2f, 300f, paint)
+            
+            paint.color = Color.parseColor("#00E676")
+            paint.textSize = 100f
+            canvas.drawText(title, width / 2f, 600f, paint)
+            
+            paint.color = Color.WHITE
+            paint.textSize = 50f
+            canvas.drawText(subtitle, width / 2f, 750f, paint)
+            
+            paint.color = Color.GRAY
+            paint.textSize = 40f
+            paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            canvas.drawText("Created with UnSmoke", width / 2f, 1000f, paint)
+            
+            val file = File(context.cacheDir, "unsmoke_achievement.jpg")
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            }
+            return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    fun generateShareImage(
+        context: Context,
         days: Int,
         money: Double,
         currency: String

@@ -1,7 +1,7 @@
-﻿package com.unsmoke.app.feature.achievements
+package com.unsmoke.app.feature.achievements
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,23 +12,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.unsmoke.app.core.designsystem.AppColors
-import com.unsmoke.app.core.domain.engine.BadgeState
-import com.unsmoke.app.core.domain.engine.BadgeTier
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,46 +35,57 @@ fun AchievementsScreen(
     onBack: () -> Unit,
     viewModel: AchievementsViewModel = hiltViewModel()
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Achievements", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Achievements", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
+                    }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
-        if (state.isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = AppColors.Teal)
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = 16.dp)
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)) {
+            
+            // Progress Header
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                shape = RoundedCornerShape(24.dp)
             ) {
-                Text(
-                    text = "You've earned ${state.totalEarned} of ${state.badges.size} badges",
-                    color = Color.White.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(bottom = 24.dp, start = 8.dp)
-                )
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(bottom = 32.dp)
+                Row(
+                    modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    items(state.badges) { item ->
-                        BadgeCard(item)
+                    Column {
+                        Text("Unlocked", fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text("${state.achievements.count { it.isUnlocked }} / ${state.achievements.size}", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
+                    Icon(Icons.Rounded.EmojiEvents, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(64.dp))
+                }
+            }
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(bottom = 32.dp)
+            ) {
+                items(state.achievements) { achievement ->
+                    AchievementBadge(
+                        achievement = achievement,
+                        onShare = {
+                            viewModel.shareAchievement(context, achievement, "$")
+                        }
+                    )
                 }
             }
         }
@@ -83,28 +93,21 @@ fun AchievementsScreen(
 }
 
 @Composable
-private fun BadgeCard(item: AchievementItemState) {
-    val isEarned = item.state == BadgeState.EARNED
-    val bgColor = if (isEarned) AppColors.Surface else AppColors.Surface.copy(alpha = 0.5f)
-    val iconColor = when {
-        !isEarned -> Color.White.copy(alpha = 0.2f)
-        item.badge.tier == BadgeTier.BRONZE -> Color(0xFFCD7F32)
-        item.badge.tier == BadgeTier.SILVER -> Color(0xFFC0C0C0)
-        item.badge.tier == BadgeTier.GOLD -> Color(0xFFFFD700)
-        else -> AppColors.Teal // Platinum/Special
-    }
+fun AchievementBadge(
+    achievement: AchievementUiModel,
+    onShare: () -> Unit
+) {
+    val alpha = if (achievement.isUnlocked) 1f else 0.4f
+    val containerColor = if (achievement.isUnlocked) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface
+    val iconColor = if (achievement.isUnlocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(0.85f),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
-        shape = RoundedCornerShape(24.dp)
+        modifier = Modifier.fillMaxWidth().aspectRatio(0.85f).clickable(enabled = achievement.isUnlocked) { onShare() },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -112,40 +115,43 @@ private fun BadgeCard(item: AchievementItemState) {
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-                    .background(if (isEarned) iconColor.copy(alpha = 0.1f) else Color.Transparent)
-                    .border(2.dp, if (isEarned) iconColor else Color.Transparent, CircleShape),
+                    .background(if (achievement.isUnlocked) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = if (isEarned) Icons.Rounded.EmojiEvents else Icons.Rounded.Lock,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(32.dp)
-                )
+                if (achievement.isUnlocked) {
+                    Icon(achievement.icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(32.dp))
+                } else {
+                    Icon(Icons.Rounded.Lock, contentDescription = null, tint = iconColor, modifier = Modifier.size(32.dp))
+                }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             
             Text(
-                text = item.badge.title,
+                text = achievement.title,
                 fontWeight = FontWeight.Bold,
-                color = if (isEarned) Color.White else Color.White.copy(alpha = 0.5f),
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha)
             )
             
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             
             Text(
-                text = if (isEarned) item.badge.description else "Locked",
-                color = if (isEarned) AppColors.Mint else Color.White.copy(alpha = 0.3f),
-                textAlign = TextAlign.Center,
+                text = achievement.description,
                 fontSize = 12.sp,
-                lineHeight = 14.sp
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha)
             )
+            
+            if (achievement.isUnlocked) {
+                Spacer(Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.Share, contentDescription = "Share", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("Share", color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                }
+            }
         }
     }
 }
-
-
-
