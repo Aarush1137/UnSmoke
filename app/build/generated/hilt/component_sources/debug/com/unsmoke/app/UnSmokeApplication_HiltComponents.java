@@ -18,6 +18,7 @@ import com.unsmoke.app.feature.progress.ProgressViewModel_HiltModules;
 import com.unsmoke.app.feature.recovery.RecoveryViewModel_HiltModules;
 import com.unsmoke.app.feature.settings.SettingsViewModel_HiltModules;
 import com.unsmoke.app.feature.splash.SplashViewModel_HiltModules;
+import com.unsmoke.app.widget.StreakWidgetReceiver_GeneratedInjector;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -154,6 +155,7 @@ public final class UnSmokeApplication_HiltComponents {
   )
   @Singleton
   public abstract static class SingletonC implements UnSmokeApplication_GeneratedInjector,
+      StreakWidgetReceiver_GeneratedInjector,
       FragmentGetContextFix.FragmentGetContextFixEntryPoint,
       HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedComponentBuilderEntryPoint,
       ServiceComponentManager.ServiceComponentBuilderEntryPoint,
