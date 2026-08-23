@@ -4,16 +4,16 @@
 /.idea
 .DS_Store
 /build
+*/build
 /captures
 .externalNativeBuild
 .cxx
- local.properties
+local.properties
 *.keystore
 !debug.keystore
 /app/release
 *.jks
 /app/schemas/
-
 jdk*
 jdk.zip
 jdk2.zip
