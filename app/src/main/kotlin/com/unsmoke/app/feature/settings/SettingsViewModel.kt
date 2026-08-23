@@ -4,6 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.data.database.UnSmokeDatabase
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
+import com.unsmoke.app.core.domain.repository.*
+import com.unsmoke.app.core.domain.engine.ExportEngine
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,7 +22,7 @@ data class SettingsUiState(
     val notificationStyle: String = "GENTLE",
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
-    val currencySymbol: String = "₹",
+    val currencySymbol: String = "Ã¢â€šÂ¹",
     val accentColor: String = "MINT",
     val version: String = "1.1.1"
 )
@@ -25,6 +30,9 @@ data class SettingsUiState(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: UserPreferencesDataStore,
+    private val cravingRepo: CravingRepository,
+    private val nrtRepo: NRTRepository,
+    private val quitAttemptRepo: QuitAttemptRepository,
     private val database: UnSmokeDatabase
 ) : ViewModel() {
 
@@ -83,6 +91,23 @@ class SettingsViewModel @Inject constructor(
     fun updateAccentColor(accent: String) {
         viewModelScope.launch {
             dataStore.setAccentColor(accent)
+        }
+    }
+
+        fun exportData(context: Context) {
+        viewModelScope.launch {
+            val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull() ?: return@launch
+            val uri = ExportEngine.generateExport(context, attempt.id, cravingRepo, nrtRepo)
+            if (uri != null) {
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/csv"
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                val chooser = Intent.createChooser(intent, "Export Clinical Data")
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                ContextCompat.startActivity(context, chooser, null)
+            }
         }
     }
 

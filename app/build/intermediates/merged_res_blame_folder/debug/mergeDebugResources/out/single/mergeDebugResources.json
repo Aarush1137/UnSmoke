@@ -24,6 +24,10 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_smoking_history.png"
     },
     {
+        "merged": "com.unsmoke.app-debug-71:/xml_file_paths.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/file_paths.xml"
+    },
+    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_why_quit.png.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_why_quit.png"
     },
@@ -82,10 +86,6 @@
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_file_paths.xml.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\file_paths.xml"
-    },
-    {
-        "merged": "com.unsmoke.app-debug-71:/layout_widget_dashboard.xml.flat",
-        "source": "com.unsmoke.app-main-73:/layout/widget_dashboard.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_widget_dashboard.xml.flat",

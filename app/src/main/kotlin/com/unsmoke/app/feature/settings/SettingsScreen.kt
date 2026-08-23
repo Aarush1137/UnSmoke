@@ -188,11 +188,11 @@ fun SettingsScreen(
             }
             item {
                 SettingsClickableItem(
-                    title = "Export Data Backup",
-                    subtitle = "Export your quit logs and journal as JSON",
+                    title = "Export Clinical Data",
+                    subtitle = "Generate a CSV of NRT logs and Cravings for your doctor",
                     icon = Icons.Rounded.Download,
                     onClick = {
-                        Toast.makeText(context, "Exporting data to Downloads...", Toast.LENGTH_SHORT).show()
+                        viewModel.exportData(context)
                     }
                 )
             }
