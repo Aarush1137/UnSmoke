@@ -33,6 +33,7 @@ fun CravingTimerScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val targetEndTime by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(System.currentTimeMillis() + 600_000L) }
     var timeLeft by remember { mutableStateOf(600) }
+    var isBreathingMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(targetEndTime) {
         while (true) {
@@ -54,7 +55,7 @@ fun CravingTimerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ride it out", color = Color.White) },
+                title = { Text(if (isBreathingMode) "4-7-8 Breathing" else "Ride it out", color = Color.White) },
                 navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
@@ -67,20 +68,29 @@ fun CravingTimerScreen(
         ) {
             Spacer(Modifier.height(16.dp))
             
-            // Urge Surfing Visualizer
-            Box(modifier = Modifier.fillMaxWidth().height(160.dp), contentAlignment = Alignment.Center) {
-                UrgeSurfingWave(timeLeft)
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    val mins = timeLeft / 60
-                    val secs = timeLeft % 60
-                    Text(String.format("%02d:%02d", mins, secs), color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.Bold)
-                    Text("remaining", color = Color.LightGray, fontSize = 16.sp)
+            if (isBreathingMode) {
+                BreathingExercise(hapticManager = viewModel.hapticManager)
+            } else {
+                // Urge Surfing Visualizer
+                Box(modifier = Modifier.fillMaxWidth().height(160.dp), contentAlignment = Alignment.Center) {
+                    UrgeSurfingWave(timeLeft)
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        val mins = timeLeft / 60
+                        val secs = timeLeft % 60
+                        Text(String.format("%02d:%02d", mins, secs), color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.Bold)
+                        Text("remaining", color = Color.LightGray, fontSize = 16.sp)
+                    }
                 }
             }
             
             Spacer(Modifier.height(32.dp))
-            Text("Cravings peak at 3 minutes, then fade.", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-            Text("You are surfing the urge.", color = AppColors.Mint, fontSize = 16.sp)
+            if (isBreathingMode) {
+                Text("Focus on the haptic pulses.", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text("Inhale (4s), Hold (7s), Exhale (8s)", color = AppColors.Mint, fontSize = 16.sp)
+            } else {
+                Text("Cravings peak at 3 minutes, then fade.", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text("You are surfing the urge.", color = AppColors.Mint, fontSize = 16.sp)
+            }
             
             Spacer(Modifier.height(32.dp))
             
@@ -88,10 +98,10 @@ fun CravingTimerScreen(
             Text("The 4 D's Toolkit", color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Start))
             Spacer(Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                ToolkitItem(Icons.Rounded.Timer, "Delay", AppColors.Teal)
-                ToolkitItem(Icons.Rounded.Air, "Breathe", AppColors.Mint)
-                ToolkitItem(Icons.Rounded.LocalDrink, "Drink", AppColors.Amber)
-                ToolkitItem(Icons.Rounded.DirectionsRun, "Distract", AppColors.Teal)
+                ToolkitItem(Icons.Rounded.Timer, "Delay", AppColors.Teal) { isBreathingMode = false }
+                ToolkitItem(Icons.Rounded.Air, "Breathe", AppColors.Mint) { isBreathingMode = true }
+                ToolkitItem(Icons.Rounded.LocalDrink, "Drink", AppColors.Amber) {}
+                ToolkitItem(Icons.Rounded.DirectionsRun, "Distract", AppColors.Teal) {}
             }
             
             Spacer(Modifier.weight(1f))
@@ -112,10 +122,12 @@ fun CravingTimerScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolkitItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, tint: Color) {
+fun ToolkitItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, tint: Color, onClick: () -> Unit = {}) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(
+            onClick = onClick,
             shape = RoundedCornerShape(16.dp),
             color = AppColors.Surface,
             modifier = Modifier.size(64.dp)

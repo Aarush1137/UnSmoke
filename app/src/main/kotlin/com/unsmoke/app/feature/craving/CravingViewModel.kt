@@ -28,7 +28,8 @@ data class CravingUiState(
 @HiltViewModel
 class CravingViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
-    private val quitRepo: QuitAttemptRepository
+    private val quitRepo: QuitAttemptRepository,
+    val hapticManager: com.unsmoke.app.core.device.HapticGroundingManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CravingUiState())
