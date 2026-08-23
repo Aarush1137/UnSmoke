@@ -32,6 +32,7 @@ class NRTRepositoryImpl @Inject constructor(
     override suspend fun saveProduct(product: NRTProductEntity) = dao.insertProduct(product)
     override fun getProducts(): Flow<List<NRTProductEntity>> = dao.getAllProducts()
     override fun getUsage(quitId: Long): Flow<List<NRTUsageEntity>> = dao.getUsagesForQuit(quitId)
+    override suspend fun deleteUsageById(logId: Long) = dao.deleteUsageById(logId)
 }
 
 @Singleton

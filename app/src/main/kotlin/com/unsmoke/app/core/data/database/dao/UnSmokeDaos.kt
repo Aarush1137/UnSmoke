@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Delete
 import com.unsmoke.app.core.data.database.entity.*
 import kotlinx.coroutines.flow.Flow
 
@@ -42,6 +43,9 @@ interface NRTDao {
 
     @Query("SELECT * FROM nrt_usage WHERE quitAttemptId = :quitId ORDER BY timestamp DESC")
     fun getUsagesForQuit(quitId: Long): Flow<List<NRTUsageEntity>>
+
+    @Query("DELETE FROM nrt_usage WHERE id = :logId")
+    suspend fun deleteUsageById(logId: Long)
 }
 
 @Dao
@@ -61,4 +65,5 @@ interface UserProfileDao {
     @Query("SELECT * FROM user_profile WHERE id = 1")
     fun getProfile(): Flow<UserProfileEntity?>
 }
+
 

@@ -19,6 +19,7 @@ interface NRTRepository {
     suspend fun saveProduct(product: NRTProductEntity): Long
     fun getProducts(): Flow<List<NRTProductEntity>>
     fun getUsage(quitId: Long): Flow<List<NRTUsageEntity>>
+    suspend fun deleteUsageById(logId: Long)
 }
 
 interface CheckInRepository {

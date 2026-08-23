@@ -6,6 +6,7 @@ import androidx.room.CoroutinesRoom;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import javax.annotation.processing.Generated;
+import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlinx.coroutines.flow.Flow;
 
@@ -36,6 +38,8 @@ public final class NRTDao_Impl implements NRTDao {
   private final EntityInsertionAdapter<NRTUsageEntity> __insertionAdapterOfNRTUsageEntity;
 
   private final EntityInsertionAdapter<NRTProductEntity> __insertionAdapterOfNRTProductEntity;
+
+  private final SharedSQLiteStatement __preparedStmtOfDeleteUsageById;
 
   public NRTDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -101,6 +105,14 @@ public final class NRTDao_Impl implements NRTDao {
         statement.bindLong(8, _tmp);
       }
     };
+    this.__preparedStmtOfDeleteUsageById = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM nrt_usage WHERE id = ?";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -136,6 +148,31 @@ public final class NRTDao_Impl implements NRTDao {
           return _result;
         } finally {
           __db.endTransaction();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object deleteUsageById(final long logId, final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteUsageById.acquire();
+        int _argIndex = 1;
+        _stmt.bindLong(_argIndex, logId);
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfDeleteUsageById.release(_stmt);
         }
       }
     }, $completion);

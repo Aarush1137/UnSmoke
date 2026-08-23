@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Medication
 import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.CheckCircle
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
@@ -124,7 +125,7 @@ fun NRTDashboardScreen(
                 Text("No NRT logged today. Great job keeping cravings managed!", color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
                 state.todayLogs.forEach { log ->
-                    NRTLogCard(log = log)
+                    NRTLogCard(log = log, onDelete = { viewModel.deleteLog(log.id) })
                     Spacer(Modifier.height(8.dp))
                 }
             }
@@ -221,7 +222,7 @@ fun DailyAllowanceRing(current: Int, max: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun NRTLogCard(log: NRTLogItem) {
+fun NRTLogCard(log: NRTLogItem, onDelete: () -> Unit) {
     val formatter = DateTimeFormatter.ofPattern("h:mm a").withZone(ZoneId.systemDefault())
     val timeString = formatter.format(Instant.ofEpochMilli(log.timestamp))
 
@@ -235,7 +236,7 @@ fun NRTLogCard(log: NRTLogItem) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text("${log.quantity}x ${log.productName}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                 Text(timeString, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -243,6 +244,10 @@ fun NRTLogCard(log: NRTLogItem) {
                 Box(modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)).padding(horizontal = 12.dp, vertical = 6.dp)) {
                     Text("Craving: ${log.cravingBefore}/10", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                 }
+            }
+            Spacer(Modifier.width(8.dp))
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Rounded.Delete, contentDescription = "Delete log", tint = MaterialTheme.colorScheme.error)
             }
         }
     }

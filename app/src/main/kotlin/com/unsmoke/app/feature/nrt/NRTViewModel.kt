@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.nrt
+package com.unsmoke.app.feature.nrt
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -75,6 +75,12 @@ class NRTViewModel @Inject constructor(
                     }
                 }
                 .collect { source -> _uiState.update { state -> source.toUiState(state.showLogSheet) } }
+        }
+    }
+
+        fun deleteLog(logId: Long) {
+        viewModelScope.launch {
+            nrtRepo.deleteUsageById(logId)
         }
     }
 
