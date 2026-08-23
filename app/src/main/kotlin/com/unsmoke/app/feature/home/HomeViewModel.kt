@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
 import com.unsmoke.app.core.domain.repository.NRTRepository
 import com.unsmoke.app.core.domain.engine.CalculationEngine
+import com.unsmoke.app.core.domain.engine.QuitCoachData
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,7 @@ data class HomeUiState(
     val quitDateDisplay: String = "Loading...",
     val netMoneySaved: Double = 0.0,
     val currentQuote: String = "Stay strong!",
+    val dailyLesson: String = "Did you know? Nicotine cravings usually only last 5 to 10 minutes.",
     val currencySymbol: String = "$"
 )
 
@@ -72,6 +74,7 @@ class HomeViewModel @Inject constructor(
                             smokeFreeDays = days,
                             quitDateDisplay = dateStr,
                             netMoneySaved = saved,
+                            dailyLesson = QuitCoachData.getLessonForDay(days),
                             currencySymbol = currency ?: "$"
                         )
                     }
