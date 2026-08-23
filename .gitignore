@@ -17,3 +17,4 @@ local.properties
 jdk*
 jdk.zip
 jdk2.zip
+google-services.json
