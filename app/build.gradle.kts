@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,11 +7,20 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.room)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace = "com.unsmoke.app"
     compileSdk = 36
+    
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+    val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: "\"\""
+
     defaultConfig {
         applicationId = "com.unsmoke.app"
         minSdk = 26
@@ -18,6 +28,8 @@ android {
         versionCode = 6
         versionName = "1.2.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
     }
     buildTypes {
         release {
@@ -30,13 +42,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
         isCoreLibraryDesugaringEnabled = true
     }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     room { schemaDirectory("$projectDir/schemas") }
 }
 
 
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     
     implementation(libs.androidx.core.ktx)

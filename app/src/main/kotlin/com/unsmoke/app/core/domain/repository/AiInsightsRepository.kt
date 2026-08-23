@@ -11,10 +11,10 @@ import javax.inject.Singleton
 @Singleton
 class AiInsightsRepository @Inject constructor() {
 
-    // Note: In a production app, the API key must be securely fetched from a backend or build config.
+    // Fetched securely from local.properties via BuildConfig
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
-        apiKey = "YOUR_API_KEY_HERE" // We will configure this securely later
+        apiKey = com.unsmoke.app.BuildConfig.GEMINI_API_KEY
     )
 
     fun generateRelapsePrediction(cravings: List<CravingEventEntity>): Flow<String> = flow {
