@@ -31,6 +31,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         val LONG_TERM_GOAL = stringPreferencesKey("long_term_goal")
         val BASELINE_BREATH_HOLD = intPreferencesKey("baseline_breath_hold")
         val CURRENT_BREATH_HOLD = intPreferencesKey("current_breath_hold")
+        val ACCENT_COLOR = stringPreferencesKey("accent_color")
     }
 
     val onboardingComplete: Flow<Boolean> = dataStore.data.map { it[ONBOARDING_COMPLETE] ?: false }
@@ -42,6 +43,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val userName: Flow<String> = dataStore.data.map { it[USER_NAME] ?: "Champion" }
     val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
     val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
+    val accentColor: Flow<String> = dataStore.data.map { it[ACCENT_COLOR] ?: "MINT" }
 
     val lastCheckInDate: Flow<String> = dataStore.data.map { it[LAST_CHECK_IN_DATE] ?: "" }
 
@@ -82,6 +84,10 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
 
     suspend fun setCurrencySymbol(symbol: String) {
         dataStore.edit { it[CURRENCY_SYMBOL] = symbol }
+    }
+
+    suspend fun setAccentColor(accent: String) {
+        dataStore.edit { it[ACCENT_COLOR] = accent }
     }
 
     suspend fun setUserName(name: String) {

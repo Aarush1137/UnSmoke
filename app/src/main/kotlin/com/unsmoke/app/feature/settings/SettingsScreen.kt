@@ -43,6 +43,7 @@ fun SettingsScreen(
     var showNameDialog by remember { mutableStateOf(false) }
     var showCurrencyDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showAccentDialog by remember { mutableStateOf(false) }
     var showToneDialog by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var isCheckingUpdates by remember { mutableStateOf(false) }
@@ -95,6 +96,14 @@ fun SettingsScreen(
                     subtitle = state.theme,
                     icon = Icons.Rounded.Palette,
                     onClick = { showThemeDialog = true }
+                )
+            }
+            item {
+                SettingsClickableItem(
+                    title = "Accent Color",
+                    subtitle = state.accentColor.lowercase().replaceFirstChar { it.uppercase() },
+                    icon = Icons.Rounded.ColorLens,
+                    onClick = { showAccentDialog = true }
                 )
             }
 
@@ -305,6 +314,50 @@ fun SettingsScreen(
             confirmButton = {},
             dismissButton = {
                 TextButton(onClick = { showThemeDialog = false }) { Text("Close") }
+            }
+        )
+    }
+
+    // Accent Dialog
+    if (showAccentDialog) {
+        val accents = listOf(
+            "MINT" to Color(0xFF8FDCD0),
+            "PINK" to Color(0xFFE882A3),
+            "BLUE" to Color(0xFF6BB5D8),
+            "ORANGE" to Color(0xFFF0A060)
+        )
+        AlertDialog(
+            onDismissRequest = { showAccentDialog = false },
+            title = { Text("Choose Accent Color") },
+            text = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    accents.forEach { (key, color) ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                                    .then(
+                                        if (state.accentColor == key) Modifier.border(3.dp, Color.White, CircleShape) else Modifier
+                                    )
+                                    .clickable {
+                                        viewModel.updateAccentColor(key)
+                                        showAccentDialog = false
+                                    }
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(key.lowercase().replaceFirstChar { it.toString().uppercase() }, fontSize = 11.sp)
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showAccentDialog = false }) { Text("Close") }
             }
         )
     }

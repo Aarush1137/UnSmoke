@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.home
+package com.unsmoke.app.feature.home
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
@@ -32,6 +32,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showNotifications by remember { mutableStateOf(false) }
     
     val greeting = when (LocalDateTime.now().hour) {
         in 5..11 -> "Good morning"
@@ -47,8 +48,7 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("$greeting, ${uiState.userName}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground) },
                 actions = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    IconButton(onClick = { showNotifications = true }) { Icon(Icons.Rounded.Notifications, contentDescription = "Notifications", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -137,4 +137,45 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(48.dp))
         }
     }
+
+    if (showNotifications) {
+        @OptIn(ExperimentalMaterial3Api::class)
+        androidx.compose.material3.ModalBottomSheet(
+            onDismissRequest = { showNotifications = false },
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Notifications", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Spacer(Modifier.height(16.dp))
+                // Dummy list of notifications
+                NotificationItem("Check-in time!", "How are your lungs feeling today?", Icons.Rounded.MonitorHeart)
+                NotificationItem("Tapering Alert", "You're scheduled to step down your NRT dose tomorrow.", Icons.Rounded.Timeline)
+                NotificationItem("Badge Earned!", "3 Days Smoke Free", Icons.Rounded.WorkspacePremium)
+                Spacer(Modifier.height(32.dp))
+            }
+        }
+    }
 }
+
+@Composable
+private fun NotificationItem(title: String, desc: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.background, androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+            .padding(16.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        androidx.compose.material3.Icon(icon, contentDescription = null, tint = androidx.compose.material3.MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
+        Spacer(Modifier.width(16.dp))
+        Column {
+            androidx.compose.material3.Text(title, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground)
+            androidx.compose.material3.Text(desc, fontSize = 14.sp, color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }}

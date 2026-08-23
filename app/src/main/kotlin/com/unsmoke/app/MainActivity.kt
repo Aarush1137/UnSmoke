@@ -35,6 +35,7 @@ class MainActivity : FragmentActivity() {
             var isUnlocked by remember { mutableStateOf(false) }
             var isChecking by remember { mutableStateOf(true) }
             val selectedTheme by dataStore.theme.collectAsState(initial = "DARK")
+            val selectedAccent by dataStore.accentColor.collectAsState(initial = "MINT")
 
             LaunchedEffect(Unit) {
                 val biometricsEnabled = dataStore.appLockEnabled.first()
@@ -56,7 +57,7 @@ class MainActivity : FragmentActivity() {
                 else -> true // DARK and AMOLED currently share the dark colour scheme.
             }
 
-            UnSmokeTheme(darkTheme = darkTheme) {
+            UnSmokeTheme(darkTheme = darkTheme, accentName = selectedAccent) {
                 if (isChecking) {
                     // Empty loading state while checking biometrics
                     Box(Modifier.fillMaxSize())

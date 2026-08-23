@@ -18,6 +18,7 @@ data class SettingsUiState(
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
     val currencySymbol: String = "₹",
+    val accentColor: String = "MINT",
     val version: String = "1.1.1"
 )
 
@@ -29,15 +30,17 @@ class SettingsViewModel @Inject constructor(
 
     val uiState: StateFlow<SettingsUiState> = combine(
         combine(dataStore.userName, dataStore.notificationsEnabled, dataStore.notificationStyle, ::Triple),
-        combine(dataStore.appLockEnabled, dataStore.theme, dataStore.currencySymbol, ::Triple)
-    ) { (name, notifEnabled, notifStyle), (lockEnabled, theme, currency) ->
+        combine(dataStore.appLockEnabled, dataStore.theme, dataStore.currencySymbol, ::Triple),
+        dataStore.accentColor
+    ) { (name, notifEnabled, notifStyle), (lockEnabled, theme, currency), accent ->
         SettingsUiState(
             userName = name,
             notificationsEnabled = notifEnabled,
             notificationStyle = notifStyle,
             appLockEnabled = lockEnabled,
             theme = theme,
-            currencySymbol = currency
+            currencySymbol = currency,
+            accentColor = accent
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
 
@@ -74,6 +77,12 @@ class SettingsViewModel @Inject constructor(
     fun updateCurrencySymbol(symbol: String) {
         viewModelScope.launch {
             dataStore.setCurrencySymbol(symbol)
+        }
+    }
+
+    fun updateAccentColor(accent: String) {
+        viewModelScope.launch {
+            dataStore.setAccentColor(accent)
         }
     }
 

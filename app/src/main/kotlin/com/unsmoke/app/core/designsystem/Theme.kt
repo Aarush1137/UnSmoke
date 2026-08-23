@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.core.designsystem
+package com.unsmoke.app.core.designsystem
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
@@ -72,31 +72,45 @@ val LocalUnSmokeColors = staticCompositionLocalOf {
 @Composable
 fun UnSmokeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    accentName: String = "MINT",
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val accentPrimary = when (accentName) {
+        "PINK" -> AccentPink
+        "ORANGE" -> AccentOrange
+        "BLUE" -> AccentBlue
+        else -> if (darkTheme) DarkPrimary else LightPrimary
+    }
+    val accentContainer = accentPrimary.copy(alpha = 0.25f)
+
+    val colorScheme = if (darkTheme) {
+        DarkColorScheme.copy(primary = accentPrimary, primaryContainer = accentContainer, onPrimaryContainer = accentPrimary)
+    } else {
+        LightColorScheme.copy(primary = accentPrimary, primaryContainer = accentContainer, onPrimaryContainer = accentPrimary)
+    }
+
     val unSmokeColors = if (darkTheme) {
         UnSmokeColors(
-            mint = DarkPrimary,
+            mint = accentPrimary,
             gold = DarkGold,
             success = DarkSuccess,
             elevatedSurface = DarkElevatedSurface,
             softSurface = DarkElevatedSurface,
             mutedText = DarkMutedText,
-            orbCore = DarkPrimary,
-            orbGlow = DarkPrimaryContainer,
+            orbCore = accentPrimary,
+            orbGlow = accentContainer,
             isDark = true
         )
     } else {
         UnSmokeColors(
-            mint = LightMint,
+            mint = accentPrimary,
             gold = LightGold,
             success = LightSuccess,
             elevatedSurface = LightSurface,
             softSurface = LightSoftSurface,
             mutedText = LightMuted,
-        orbCore = LightMint,
-        orbGlow = LightPrimaryLight,
+            orbCore = accentPrimary,
+            orbGlow = accentContainer,
             isDark = false
         )
     }
