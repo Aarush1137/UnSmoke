@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter
 data class HomeUiState(
     val userName: String = "User",
     val smokeFreeDays: Int = 0,
+    val startEpochMillis: Long? = null,
     val quitDateDisplay: String = "Loading...",
     val netMoneySaved: Double = 0.0,
     val currentQuote: String = "Stay strong!",
@@ -80,6 +81,7 @@ class HomeViewModel @Inject constructor(
                         _uiState.value.copy(
                             userName = name,
                             smokeFreeDays = days,
+                            startEpochMillis = attempt.startEpochMillis,
                             quitDateDisplay = dateStr,
                             netMoneySaved = saved,
                             dailyLesson = QuitCoachData.getLessonForDay(days),

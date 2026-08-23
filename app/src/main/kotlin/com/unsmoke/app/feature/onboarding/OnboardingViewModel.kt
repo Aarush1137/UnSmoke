@@ -91,7 +91,7 @@ class OnboardingViewModel @Inject constructor(
             val state = _uiState.value
             val packPriceDouble = state.packPrice.toDoubleOrNull() ?: 0.0
             val perPackInt = state.cigarettesPerPack.toIntOrNull() ?: 20
-            val pricePerCig = if (perPackInt > 0) packPriceDouble / perPackInt else 0.0
+            val pricePerCig = packPriceDouble // the input is now directly price per cigarette
             val startEpoch = state.quitDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
             quitAttemptRepo.insertAttempt(
