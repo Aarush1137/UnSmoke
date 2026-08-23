@@ -10,5 +10,6 @@
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
     android:description="@string/widget_craving_description"
-    android:previewLayout="@layout/dummy_widget_layout"
-    android:initialLayout="@layout/dummy_widget_layout" />
+    android:previewLayout="@layout/widget_craving"
+    android:initialLayout="@layout/widget_craving" />
+
