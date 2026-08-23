@@ -713,6 +713,7 @@ int drawable onboarding_why_quit 0x7f080076
 int drawable test_level_drawable 0x7f080077
 int drawable tooltip_frame_dark 0x7f080078
 int drawable tooltip_frame_light 0x7f080079
+int drawable widget_bg 0x7f08007a
 int id ALT 0x7f090000
 int id CTRL 0x7f090001
 int id FUNCTION 0x7f090002
@@ -915,9 +916,10 @@ int id view_tree_on_back_pressed_dispatcher_owner 0x7f0900c6
 int id view_tree_saved_state_registry_owner 0x7f0900c7
 int id view_tree_view_model_store_owner 0x7f0900c8
 int id visible_removing_fragment_view_tag 0x7f0900c9
-int id withText 0x7f0900ca
-int id wrap_content 0x7f0900cb
-int id wrapped_composition_tag 0x7f0900cc
+int id widget_days 0x7f0900ca
+int id withText 0x7f0900cb
+int id wrap_content 0x7f0900cc
+int id wrapped_composition_tag 0x7f0900cd
 int integer abc_config_activityDefaultDur 0x7f0a0000
 int integer abc_config_activityShortDur 0x7f0a0001
 int integer cancel_button_image_alpha 0x7f0a0002
@@ -973,6 +975,7 @@ int layout select_dialog_item_material 0x7f0c0027
 int layout select_dialog_multichoice_material 0x7f0c0028
 int layout select_dialog_singlechoice_material 0x7f0c0029
 int layout support_simple_spinner_dropdown_item 0x7f0c002a
+int layout widget_streak 0x7f0c002b
 int mipmap ic_launcher 0x7f0d0000
 int mipmap ic_launcher_round 0x7f0d0001
 int string abc_action_bar_home_description 0x7f0e0000

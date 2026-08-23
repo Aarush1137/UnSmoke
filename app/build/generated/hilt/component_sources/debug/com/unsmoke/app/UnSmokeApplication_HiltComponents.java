@@ -12,6 +12,7 @@ import com.unsmoke.app.feature.insights.InsightsViewModel_HiltModules;
 import com.unsmoke.app.feature.journal.JournalViewModel_HiltModules;
 import com.unsmoke.app.feature.nrt.NRTViewModel_HiltModules;
 import com.unsmoke.app.feature.onboarding.OnboardingViewModel_HiltModules;
+import com.unsmoke.app.feature.plan.PlanViewModel_HiltModules;
 import com.unsmoke.app.feature.profile.ProfileViewModel_HiltModules;
 import com.unsmoke.app.feature.progress.ProgressViewModel_HiltModules;
 import com.unsmoke.app.feature.recovery.RecoveryViewModel_HiltModules;
@@ -181,6 +182,7 @@ public final class UnSmokeApplication_HiltComponents {
           JournalViewModel_HiltModules.KeyModule.class,
           NRTViewModel_HiltModules.KeyModule.class,
           OnboardingViewModel_HiltModules.KeyModule.class,
+          PlanViewModel_HiltModules.KeyModule.class,
           ProfileViewModel_HiltModules.KeyModule.class,
           ProgressViewModel_HiltModules.KeyModule.class,
           RecoveryViewModel_HiltModules.KeyModule.class,
@@ -232,6 +234,7 @@ public final class UnSmokeApplication_HiltComponents {
           JournalViewModel_HiltModules.BindsModule.class,
           NRTViewModel_HiltModules.BindsModule.class,
           OnboardingViewModel_HiltModules.BindsModule.class,
+          PlanViewModel_HiltModules.BindsModule.class,
           ProfileViewModel_HiltModules.BindsModule.class,
           ProgressViewModel_HiltModules.BindsModule.class,
           RecoveryViewModel_HiltModules.BindsModule.class,

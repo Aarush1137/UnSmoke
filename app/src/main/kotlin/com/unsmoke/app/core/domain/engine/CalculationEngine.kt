@@ -30,7 +30,7 @@ object CalculationEngine {
 
     /** Net savings = gross - NRT expenditure */
     fun netMoneySaved(grossSaved: Double, nrtExpenditure: Double): Double {
-        return grossSaved - nrtExpenditure
+        return maxOf(0.0, grossSaved - nrtExpenditure)
     }
 
     /** Whole cigarette packs avoided */

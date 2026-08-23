@@ -1,9 +1,5 @@
 [
     {
-        "merged": "com.unsmoke.app-debug-71:/drawable_ic_unsmoke_logo_foreground.xml.flat",
-        "source": "com.unsmoke.app-main-73:/drawable/ic_unsmoke_logo_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
@@ -14,6 +10,10 @@
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_unsmoke_logo_foreground.xml.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_unsmoke_logo_foreground.xml"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/drawable_widget_bg.xml.flat",
+        "source": "com.unsmoke.app-main-73:/drawable/widget_bg.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_dashboard_info.xml.flat",
@@ -48,6 +48,10 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_craving_info.xml"
     },
     {
+        "merged": "com.unsmoke.app-debug-71:/xml_widget_streak_info.xml.flat",
+        "source": "com.unsmoke.app-main-73:/xml/widget_streak_info.xml"
+    },
+    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_dummy_widget_layout.xml.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\layout\\dummy_widget_layout.xml"
     },
@@ -66,6 +70,10 @@
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_craving_triggers.png.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_craving_triggers.png"
+    },
+    {
+        "merged": "com.unsmoke.app-debug-71:/layout_widget_streak.xml.flat",
+        "source": "com.unsmoke.app-main-73:/layout/widget_streak.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_quit_date.png.flat",

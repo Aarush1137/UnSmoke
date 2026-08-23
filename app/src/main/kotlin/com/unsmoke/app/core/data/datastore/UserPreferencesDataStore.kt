@@ -39,7 +39,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val appLockEnabled: Flow<Boolean> = dataStore.data.map { it[APP_LOCK_ENABLED] ?: false }
     val notificationsEnabled: Flow<Boolean> = dataStore.data.map { it[NOTIFICATIONS_ENABLED] ?: true }
     val notificationStyle: Flow<String> = dataStore.data.map { it[NOTIFICATION_STYLE] ?: "GENTLE" }
-    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "₹" }
+    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "â‚¹" }
     val userName: Flow<String> = dataStore.data.map { it[USER_NAME] ?: "Champion" }
     val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
     val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
@@ -50,6 +50,10 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val emergencyContactName: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_NAME] ?: "" }
     val emergencyContactPhone: Flow<String> = dataStore.data.map { it[EMERGENCY_CONTACT_PHONE] ?: "" }
     val quitReason: Flow<String> = dataStore.data.map { it[QUIT_REASON] ?: "Better health and freedom" }
+    val shortTermGoal: Flow<String> = dataStore.data.map { it[SHORT_TERM_GOAL] ?: "Save money for a vacation" }
+    val longTermGoal: Flow<String> = dataStore.data.map { it[LONG_TERM_GOAL] ?: "Live a long, healthy life" }
+    val planTriggers: Flow<Set<String>> = dataStore.data.map { it[PLAN_TRIGGERS] ?: emptySet() }
+    val planSupports: Flow<Set<String>> = dataStore.data.map { it[PLAN_SUPPORTS] ?: emptySet() }
 
     suspend fun setOnboardingComplete(complete: Boolean) {
         dataStore.edit { it[ONBOARDING_COMPLETE] = complete }
