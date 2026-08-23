@@ -167,12 +167,16 @@ fun SettingsScreen(
                             try {
                                 val release = UpdateChecker.checkForUpdate(state.version)
                                 if (release != null) {
-                                    Toast.makeText(context, "New version ${release.latestVersion} available!", Toast.LENGTH_LONG).show()
+                                    if (release.isUpdateAvailable) {
+                                        Toast.makeText(context, "New version ${release.latestVersion} available!", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        Toast.makeText(context, "UnSmoke is up to date (${state.version})", Toast.LENGTH_SHORT).show()
+                                    }
                                 } else {
-                                    Toast.makeText(context, "UnSmoke is up to date (${state.version})", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Unable to reach GitHub. Try again later.", Toast.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
-                                Toast.makeText(context, "Unable to check for updates right now.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Error checking for updates.", Toast.LENGTH_SHORT).show()
                             } finally {
                                 isCheckingUpdates = false
                             }

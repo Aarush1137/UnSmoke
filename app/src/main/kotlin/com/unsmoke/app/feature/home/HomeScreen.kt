@@ -159,6 +159,45 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // AI Quit Coach Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Rounded.AutoAwesome, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Gemini AI Insights", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    if (uiState.isAiLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp).align(Alignment.CenterHorizontally),
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    } else if (uiState.aiInsight != null) {
+                        Text(
+                            text = uiState.aiInsight!!,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                            fontSize = 14.sp,
+                            lineHeight = 20.sp
+                        )
+                    } else {
+                        Button(
+                            onClick = { viewModel.fetchAiInsight() },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onTertiaryContainer, contentColor = MaterialTheme.colorScheme.tertiaryContainer),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        ) {
+                            Text("Analyze My Cravings", fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Quick Actions Row
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Card(

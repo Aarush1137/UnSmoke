@@ -2,11 +2,14 @@ package com.unsmoke.app.feature.home
 
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.firstOrNull
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
 import com.unsmoke.app.core.domain.repository.NRTRepository
+import com.unsmoke.app.core.domain.repository.CravingRepository
+import com.unsmoke.app.core.domain.repository.AiInsightsRepository
 import com.unsmoke.app.core.domain.engine.CalculationEngine
 import com.unsmoke.app.core.domain.engine.QuitCoachData
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
@@ -29,7 +32,9 @@ data class HomeUiState(
     val netMoneySaved: Double = 0.0,
     val currentQuote: String = "Stay strong!",
     val dailyLesson: String = "Did you know? Nicotine cravings usually only last 5 to 10 minutes.",
-    val currencySymbol: String = "$"
+    val currencySymbol: String = "$",
+    val aiInsight: String? = null,
+    val isAiLoading: Boolean = false
 )
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
@@ -37,6 +42,8 @@ data class HomeUiState(
 class HomeViewModel @Inject constructor(
     private val nrtRepo: NRTRepository,
     private val quitAttemptRepo: QuitAttemptRepository,
+    private val cravingRepo: CravingRepository,
+    private val aiRepo: AiInsightsRepository,
     private val dataStore: UserPreferencesDataStore
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -70,7 +77,7 @@ class HomeViewModel @Inject constructor(
                         val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
                         val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
                         
-                        HomeUiState(
+                        _uiState.value.copy(
                             userName = name,
                             smokeFreeDays = days,
                             quitDateDisplay = dateStr,
@@ -81,7 +88,26 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }.collect { state ->
-                _uiState.value = state
+                // Preserve AI insight when other state updates
+                _uiState.value = state.copy(
+                    aiInsight = _uiState.value.aiInsight,
+                    isAiLoading = _uiState.value.isAiLoading
+                )
+            }
+        }
+    }
+
+    fun fetchAiInsight() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isAiLoading = true) }
+            val activeAttempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
+            if (activeAttempt != null) {
+                val cravings = cravingRepo.getCravings(activeAttempt.id).firstOrNull() ?: emptyList()
+                aiRepo.generateRelapsePrediction(cravings).collect { insight ->
+                    _uiState.update { it.copy(aiInsight = insight, isAiLoading = false) }
+                }
+            } else {
+                _uiState.update { it.copy(aiInsight = "Log a quit attempt first.", isAiLoading = false) }
             }
         }
     }

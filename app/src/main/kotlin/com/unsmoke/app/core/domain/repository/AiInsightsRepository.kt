@@ -29,8 +29,8 @@ class AiInsightsRepository @Inject constructor() {
             append("Identify their primary triggers, high-risk times of day, and provide a short, encouraging 2-sentence actionable advice.\n\n")
             
             cravings.takeLast(20).forEach { craving ->
-                append("- Intensity: /10, Trigger: , ")
-                append("Time: \n")
+                append("- Intensity: ${craving.intensity}/10, Trigger: ${craving.trigger}, ")
+                append("Time: ${craving.timestamp}\n")
             }
         }
 
