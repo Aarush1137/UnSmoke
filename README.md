@@ -1,6 +1,6 @@
 <div align="center">
   <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="100" />
-  <h1>UnSmoke ðŸš­</h1>
+  <h1>UnSmoke Ã°Å¸Å¡Â­</h1>
   <p><b>The Evidence-Based, Gamified Quit Smoking Companion</b></p>
 </div>
 
@@ -8,7 +8,7 @@
 
 UnSmoke is an advanced Android application designed to help users quit smoking through a combination of psychological support, **Cognitive Behavioral Therapy (CBT)** techniques, and clinical **Nicotine Replacement Therapy (NRT)** tapering protocols. Built entirely with Jetpack Compose and Kotlin 2.0.
 
-## ðŸ“¸ Screenshots
+## Ã°Å¸â€œÂ¸ Screenshots
 
 <div align="center">
   <img src="docs/screenshots/home.png" alt="Home Screen" width="250"/>
@@ -20,9 +20,9 @@ UnSmoke is an advanced Android application designed to help users quit smoking t
 
 ---
 
-## âœ¨ In-Depth Features
+## Ã¢Å“Â¨ In-Depth Features
 
-### ðŸŒŠ 1. Urge Surfing & The 4 D's Protocol
+### Ã°Å¸Å’Å  1. Urge Surfing & The 4 D's Protocol
 When a craving hits, users can launch the **Craving Timer**. It features a visual "breathing wave" animation that mimics the physiological curve of a craving (which usually peaks and subsides within 3-5 minutes). 
 While the timer runs, the app provides the **4 D's Toolkit**:
 - **Delay:** Wait 5 minutes.
@@ -30,26 +30,26 @@ While the timer runs, the app provides the **4 D's Toolkit**:
 - **Drink Water:** Distract the oral fixation.
 - **Distract:** Engage the mind elsewhere.
 
-### ðŸ“‰ 2. Clinical NRT Tapering Engine
+### Ã°Å¸â€œâ€° 2. Clinical NRT Tapering Engine
 UnSmoke doesn't just track your days; it actively manages your nicotine step-down. The integrated **NRT Tapering Engine**:
 - Calculates progressive 12-week step-down instructions based on your baseline.
 - Tracks gum/patch usage directly in the NRT Dashboard.
 - Deducts NRT expenditure from your total "Money Saved" for an accurate financial picture.
 
-### ðŸ« 3. Lung Capacity & Health Recovery
+### Ã°Å¸Â«Â 3. Lung Capacity & Health Recovery
 Track how your body heals over time:
 - **Baseline Capture:** During onboarding, users hold their breath to establish a baseline lung capacity.
 - **Weekly Check-ins:** The app prompts you weekly to re-test your breath-hold, visualizing respiratory improvement via a dynamic expanding lung widget.
-- **Health Timeline:** Unlock physiological milestonesâ€”from 20 minutes (blood pressure normalizing) to 1 year (heart disease risk halving).
+- **Health Timeline:** Unlock physiological milestonesÃ¢â‚¬â€from 20 minutes (blood pressure normalizing) to 1 year (heart disease risk halving).
 
-### ðŸ† 4. Gamified Milestone Badges
+### Ã°Å¸Ââ€  4. Gamified Milestone Badges
 A comprehensive achievement engine rewards both craving resistance and streak consistency:
 - **Milestone Badges:** Unlocked at 24 hours, 3 days, 1 week, 1 month, etc.
 - **Craving Crusher Badges:** Earned by successfully letting the Craving Timer run its course without giving in.
 
 ---
 
-## ðŸ›  Tech Stack & Architecture
+## Ã°Å¸â€ºÂ  Tech Stack & Architecture
 
 UnSmoke is built strictly following modern Android development guidelines and Clean Architecture principles:
 
@@ -65,30 +65,30 @@ UnSmoke is built strictly following modern Android development guidelines and Cl
 
 ---
 
-## ðŸ— Project Structure
+## Ã°Å¸Ââ€” Project Structure
 
 The project is modularized by feature within the pp module for clear separation of concerns:
 
 `	ext
 app/src/main/kotlin/com/unsmoke/app/
-â”œâ”€â”€ core/                  # Core infrastructure and shared components
-â”‚   â”œâ”€â”€ data/              # Room DAOs, DataStore, Repositories, Entities
-â”‚   â”œâ”€â”€ domain/            # CalculationEngine, NRTTaperingEngine, Achievements
-â”‚   â”œâ”€â”€ designsystem/      # Theme, Typography, AppColors, Shared Composables
-â”œâ”€â”€ feature/               # Feature modules (MVVM structure)
-â”‚   â”œâ”€â”€ home/              # Dashboard, savings overview, daily stats
-â”‚   â”œâ”€â”€ onboarding/        # First-time user setup & baseline capture
-â”‚   â”œâ”€â”€ progress/          # Streak tracking, badges, weekly lung check-ins
-â”‚   â”œâ”€â”€ cravings/          # Urge surfing, craving timer, coping toolkit
-â”‚   â”œâ”€â”€ nrt/               # Clinical tapering dashboard and logging
-â”‚   â”œâ”€â”€ settings/          # User preferences
-â”œâ”€â”€ UnSmokeApplication.kt  # Hilt Application Class
-â””â”€â”€ MainActivity.kt        # Entry Point
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ core/                  # Core infrastructure and shared components
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ data/              # Room DAOs, DataStore, Repositories, Entities
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ domain/            # CalculationEngine, NRTTaperingEngine, Achievements
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ designsystem/      # Theme, Typography, AppColors, Shared Composables
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ feature/               # Feature modules (MVVM structure)
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ home/              # Dashboard, savings overview, daily stats
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ onboarding/        # First-time user setup & baseline capture
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ progress/          # Streak tracking, badges, weekly lung check-ins
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ cravings/          # Urge surfing, craving timer, coping toolkit
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ nrt/               # Clinical tapering dashboard and logging
+Ã¢â€â€š   Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ settings/          # User preferences
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ UnSmokeApplication.kt  # Hilt Application Class
+Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ MainActivity.kt        # Entry Point
 `
 
 ---
 
-## ðŸ’» How to Setup and Run Locally
+## Ã°Å¸â€™Â» How to Setup and Run Locally
 
 ### Prerequisites
 - **Android Studio**: Koala / Jellyfish (or newer) recommended.
@@ -110,8 +110,8 @@ app/src/main/kotlin/com/unsmoke/app/
 
 ---
 
-## ðŸ¤ Contributing
+## Ã°Å¸Â¤Â Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-## ðŸ“„ License
+## Ã°Å¸â€œâ€ž License
 [MIT](https://choosealicense.com/licenses/mit/)
