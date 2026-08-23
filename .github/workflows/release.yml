@@ -25,6 +25,22 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Create mock google-services.json
+        run: |
+          cat << 'EOF' > app/google-services.json
+          {
+            "project_info": { "project_number": "0000", "project_id": "mock" },
+            "client": [{
+              "client_info": {
+                "mobilesdk_app_id": "1:0000:android:0000",
+                "android_client_info": { "package_name": "com.unsmoke.app" }
+              },
+              "api_key": [{ "current_key": "mock" }]
+            }],
+            "configuration_version": "1"
+          }
+          EOF
+
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
