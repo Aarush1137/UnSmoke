@@ -32,6 +32,7 @@ data class HomeUiState(
     val currencySymbol: String = "$"
 )
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val nrtRepo: NRTRepository,

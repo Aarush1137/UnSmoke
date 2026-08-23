@@ -52,6 +52,7 @@ private data class NRTSource(
     val usages: List<NRTUsageEntity>
 )
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class NRTViewModel @Inject constructor(
     private val nrtRepo: NRTRepository,

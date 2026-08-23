@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.craving
+package com.unsmoke.app.feature.craving
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -55,7 +55,7 @@ fun CravingTimerScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Ride it out", color = Color.White) },
-                navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
+                navigationIcon = { IconButton(onClick = {}) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
@@ -91,7 +91,7 @@ fun CravingTimerScreen(
                 ToolkitItem(Icons.Rounded.Timer, "Delay", AppColors.Teal)
                 ToolkitItem(Icons.Rounded.Air, "Breathe", AppColors.Mint)
                 ToolkitItem(Icons.Rounded.LocalDrink, "Drink", AppColors.Amber)
-                ToolkitItem(Icons.Rounded.DirectionsRun, "Distract", AppColors.Teal)
+                ToolkitItem(Icons.AutoMirrored.Rounded.DirectionsRun, "Distract", AppColors.Teal)
             }
             
             Spacer(Modifier.weight(1f))

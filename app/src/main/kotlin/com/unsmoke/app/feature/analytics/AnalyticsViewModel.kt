@@ -7,6 +7,7 @@ import com.unsmoke.app.core.domain.repository.CravingRepository
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -23,6 +24,7 @@ data class CravingAnalyticsState(
     val averageHeartRate: Long? = null
 )
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class AnalyticsViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,

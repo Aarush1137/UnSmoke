@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.profile
+package com.unsmoke.app.feature.profile
 
 import android.content.Intent
 import android.net.Uri
@@ -261,7 +261,7 @@ fun ProfileScreen(
                 ProfileNavItem(
                     title = "My Quit Plan",
                     subtitle = "Review baseline, goals & strategies",
-                    icon = Icons.Rounded.LibraryBooks,
+                    icon = Icons.AutoMirrored.Rounded.LibraryBooks,
                     onClick = onPlanClick
                 )
             }

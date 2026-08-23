@@ -90,7 +90,7 @@ class MainActivity : FragmentActivity() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Unlock UnSmoke")
             .setSubtitle("Confirm your identity to access your private data.")
-            .setDeviceCredentialAllowed(true)
+            .setAllowedAuthenticators(androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL or androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK)
             .build()
 
         biometricPrompt.authenticate(promptInfo)

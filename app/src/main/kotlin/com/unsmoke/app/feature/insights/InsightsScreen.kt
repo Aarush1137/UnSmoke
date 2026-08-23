@@ -124,7 +124,7 @@ fun InsightsScreen(
                         InsightCard(
                             title = "Craving Success Rate",
                             value = "${state.successRate}%",
-                            icon = Icons.Rounded.TrendingDown,
+                            icon = Icons.AutoMirrored.Rounded.TrendingDown,
                             description = "Percentage of cravings successfully defeated."
                         )
                     }
@@ -186,7 +186,7 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
             72 * 60 * 60 * 1000L, 
             Icons.Rounded.CheckCircle
         ),
-        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.Rounded.DirectionsRun)
+        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.AutoMirrored.Rounded.DirectionsRun)
     )
 
     Column(modifier = Modifier.fillMaxWidth()) {
