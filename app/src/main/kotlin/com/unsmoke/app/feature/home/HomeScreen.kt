@@ -133,6 +133,58 @@ fun HomeScreen(
             }
             
             Spacer(modifier = Modifier.height(32.dp))
+            
+            // Daily Quit Coach Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Rounded.Lightbulb, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Daily Quit Coach", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Did you know? Nicotine cravings usually only last 5 to 10 minutes. By using the 'I HAVE A CRAVING' button above, you can urge-surf through it completely safe.",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Quick Actions Row
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Card(
+                    modifier = Modifier.weight(1f).clickable { onNRTClick() },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Rounded.Medication, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.height(8.dp))
+                        Text("Log NRT", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+                Card(
+                    modifier = Modifier.weight(1f).clickable { onCheckInClick() },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Rounded.Air, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.height(8.dp))
+                        Text("Lung Test", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
             Text(text = uiState.currentQuote, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(48.dp))
         }

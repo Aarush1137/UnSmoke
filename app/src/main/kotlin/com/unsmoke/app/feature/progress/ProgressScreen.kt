@@ -261,7 +261,7 @@ fun LungCapacityWidget(
             
             Spacer(Modifier.height(16.dp))
             Text(
-                "Your lung capacity has improved by %!",
+                "Your lung capacity has improved by ${((progress - 1f) * 100).toInt()}%!",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
