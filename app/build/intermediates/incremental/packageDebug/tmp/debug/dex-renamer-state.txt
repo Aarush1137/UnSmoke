@@ -1,4 +1,4 @@
-#Sun Aug 23 21:50:49 IST 2026
+#Sun Aug 23 22:01:41 IST 2026
 base.0=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.10=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\4\\classes.dex
@@ -10,6 +10,7 @@ base.15=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProj
 base.16=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\desugar_lib_dex\\debug\\l8DexDesugarLibDebug\\classes1000.dex
 base.17=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
 base.18=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
+base.19=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes4.dex
 base.2=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex
 base.3=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex
 base.4=E\:\\Projects\\Unsmoke\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\12\\classes.dex
@@ -29,6 +30,7 @@ path.15=9/classes.dex
 path.16=classes1000.dex
 path.17=classes2.dex
 path.18=classes3.dex
+path.19=classes4.dex
 path.2=10/classes.dex
 path.3=11/classes.dex
 path.4=12/classes.dex
@@ -48,6 +50,7 @@ renamed.15=classes16.dex
 renamed.16=classes17.dex
 renamed.17=classes18.dex
 renamed.18=classes19.dex
+renamed.19=classes20.dex
 renamed.2=classes3.dex
 renamed.3=classes4.dex
 renamed.4=classes5.dex

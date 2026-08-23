@@ -15,8 +15,8 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.2.1"
+        versionCode = 6
+        versionName = "1.2.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,6 +40,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     
     implementation(libs.androidx.core.ktx)
+    implementation(libs.google.generativeai)
     implementation(libs.health.connect.client)
     implementation(libs.androidx.activity.compose)
     

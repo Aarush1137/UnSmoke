@@ -4,7 +4,7 @@
             "outputFile": "com.unsmoke.app-mergeDebugResources-70:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\4daea912254c52e903cc0003c715b679\\transformed\\appcompat-1.6.1\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\aarus\\.gradle\\caches\\8.13\\transforms\\9b019f957d5b39eec9c74d1643a8d195\\transformed\\appcompat-1.6.1\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
