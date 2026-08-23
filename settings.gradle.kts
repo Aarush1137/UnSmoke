@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UnSmoke"
 include(":app")
+
+include(":wear")

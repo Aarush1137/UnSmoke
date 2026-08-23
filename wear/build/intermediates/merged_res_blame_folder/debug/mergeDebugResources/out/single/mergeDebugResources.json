@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.unsmoke.wear-debug-55:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.unsmoke.wear-main-57:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.wear-debug-55:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.wear-main-57:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.wear-debug-55:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.wear-main-57:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.unsmoke.wear-debug-55:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.unsmoke.wear-main-57:/drawable/ic_launcher_foreground.xml"
+    }
+]
