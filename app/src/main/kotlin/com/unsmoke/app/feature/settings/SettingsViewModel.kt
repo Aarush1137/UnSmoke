@@ -22,7 +22,7 @@ data class SettingsUiState(
     val notificationStyle: String = "GENTLE",
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
-    val currencySymbol: String = "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹",
+    val currencySymbol: String = "\u20B9",
     val accentColor: String = "MINT",
     val version: String = "1.2.0"
 )
