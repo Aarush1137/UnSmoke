@@ -1,20 +1,20 @@
 -- Merging decision tree log ---
 provider#androidx.core.content.FileProvider
-INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:66:13-74:20
+INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:68:13-76:20
 	android:grantUriPermissions
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:70:13-47
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:72:13-47
 	android:authorities
 		INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:68:13-64
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:70:13-64
 	android:exported
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:69:13-37
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:71:13-37
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:67:13-62
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:69:13-62
 manifest
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-76:12
-INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-76:12
-INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-76:12
-INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-76:12
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-78:12
+INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-78:12
+INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-78:12
+INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:1-78:12
 MERGED from [androidx.hilt:hilt-work:1.2.0] C:\Users\aarus\.gradle\caches\8.13\transforms\20102d93129acdbd0268917557ece829\transformed\hilt-work-1.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.hilt:hilt-navigation-compose:1.2.0] C:\Users\aarus\.gradle\caches\8.13\transforms\6da6525fd5261adc4e011c3071b48221\transformed\hilt-navigation-compose-1.2.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.hilt:hilt-navigation:1.2.0] C:\Users\aarus\.gradle\caches\8.13\transforms\06ebdb1965294a9d8a4f63c4d1fb03d3\transformed\hilt-navigation-1.2.0\AndroidManifest.xml:2:1-7:12
@@ -112,33 +112,41 @@ MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] C:\Users\aarus\.gradle\ca
 		INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:5:5-66
+	android:name
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:5:22-64
+uses-permission#android.permission.REQUEST_INSTALL_PACKAGES
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:6:5-82
+	android:name
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:6:22-80
 uses-permission#android.permission.POST_NOTIFICATIONS
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:5:5-76
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:7:5-76
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:5:22-74
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:7:22-74
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:6:5-80
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:8:5-80
 MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\aarus\.gradle\caches\8.13\transforms\36471c7f6b6b00951f3281e93abd8e82\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
 MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\aarus\.gradle\caches\8.13\transforms\36471c7f6b6b00951f3281e93abd8e82\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:6:22-78
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:8:22-78
 uses-permission#android.permission.USE_BIOMETRIC
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:7:5-71
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:9:5-71
 MERGED from [androidx.biometric:biometric:1.4.0-alpha07] C:\Users\aarus\.gradle\caches\8.13\transforms\24bdfe2746b021b9cd38ddcec56454df\transformed\biometric-1.4.0-alpha07\AndroidManifest.xml:22:5-72
 MERGED from [androidx.biometric:biometric:1.4.0-alpha07] C:\Users\aarus\.gradle\caches\8.13\transforms\24bdfe2746b021b9cd38ddcec56454df\transformed\biometric-1.4.0-alpha07\AndroidManifest.xml:22:5-72
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:7:22-69
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:9:22-69
 uses-permission#android.permission.VIBRATE
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:8:5-65
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:10:5-65
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:8:22-63
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:10:22-63
 uses-permission#android.permission.SCHEDULE_EXACT_ALARM
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:9:5-78
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:11:5-78
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:9:22-76
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:11:22-76
 application
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:11:5-75:19
-INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:11:5-75:19
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:13:5-77:19
+INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:13:5-77:19
 MERGED from [androidx.biometric:biometric:1.4.0-alpha07] C:\Users\aarus\.gradle\caches\8.13\transforms\24bdfe2746b021b9cd38ddcec56454df\transformed\biometric-1.4.0-alpha07\AndroidManifest.xml:27:5-33:19
 MERGED from [androidx.biometric:biometric:1.4.0-alpha07] C:\Users\aarus\.gradle\caches\8.13\transforms\24bdfe2746b021b9cd38ddcec56454df\transformed\biometric-1.4.0-alpha07\AndroidManifest.xml:27:5-33:19
 MERGED from [com.airbnb.android:lottie:6.7.1] C:\Users\aarus\.gradle\caches\8.13\transforms\54425fac96102e86220ae5ddec03991f\transformed\lottie-6.7.1\AndroidManifest.xml:7:5-20
@@ -168,79 +176,79 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\aarus\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.16.0] C:\Users\aarus\.gradle\caches\8.13\transforms\f889a62bb222b6b6830b16a508ffc520\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:17:9-35
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:19:9-35
 	android:label
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:15:9-41
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:17:9-41
 	android:roundIcon
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:16:9-54
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:18:9-54
 	android:icon
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:14:9-43
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:16:9-43
 	android:allowBackup
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:15:9-35
 	android:theme
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:18:9-45
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:20:9-45
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:12:9-43
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:14:9-43
 activity#com.unsmoke.app.MainActivity
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:20:9-28:20
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:22:9-30:20
 	android:exported
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:22:13-36
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:24:13-36
 	android:theme
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:23:13-49
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:25:13-49
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:23:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:24:13-27:29
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:26:13-29:29
 action#android.intent.action.MAIN
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:25:17-69
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:27:17-69
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:25:25-66
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:27:25-66
 category#android.intent.category.LAUNCHER
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:28:17-77
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:28:27-74
 receiver#com.unsmoke.app.widget.StreakWidgetReceiver
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:30:9-40:20
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:32:9-42:20
 	android:label
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:33:13-43
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:35:13-43
 	android:exported
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:32:13-36
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:34:13-36
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:31:13-56
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:33:13-56
 intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:34:13-36:29
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:36:13-38:29
 action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:35:17-84
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:37:17-84
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:35:25-81
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:37:25-81
 meta-data#android.appwidget.provider
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:37:13-39:62
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:39:13-41:62
 	android:resource
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:39:17-59
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:41:17-59
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:38:17-58
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:40:17-58
 receiver#com.unsmoke.app.widget.DashboardWidgetReceiver
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:42:9-52:20
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:44:9-54:20
 	android:label
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:45:13-46
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:47:13-46
 	android:exported
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:44:13-36
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:46:13-36
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:43:13-59
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:45:13-59
 receiver#com.unsmoke.app.widget.CravingWidgetReceiver
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:54:9-64:20
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:56:9-66:20
 	android:label
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:57:13-44
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:59:13-44
 	android:exported
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:56:13-36
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:58:13-36
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:55:13-57
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:57:13-57
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:71:13-73:54
+ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:73:13-75:54
 	android:resource
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:73:17-51
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:75:17-51
 	android:name
-		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:72:17-67
+		ADDED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml:74:17-67
 uses-sdk
 INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\Projects\Unsmoke\app\src\main\AndroidManifest.xml

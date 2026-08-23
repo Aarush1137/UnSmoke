@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.update
+package com.unsmoke.app.feature.update
 
 import android.app.DownloadManager
 import android.content.Context
@@ -17,8 +17,9 @@ import com.unsmoke.app.core.network.UpdateChecker
 import kotlinx.coroutines.launch
 
 @Composable
-fun UpdateDialogController(currentVersion: String = "0.1.0") {
+fun UpdateDialogController() {
     val context = LocalContext.current
+    val currentVersion = try { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "0.1.0" } catch (e: Exception) { "0.1.0" }
     val coroutineScope = rememberCoroutineScope()
     var updateInfo by remember { mutableStateOf<UpdateChecker.UpdateInfo?>(null) }
     var showDialog by remember { mutableStateOf(false) }
@@ -67,6 +68,7 @@ private fun startDownload(context: Context, url: String, version: String) {
     val request = DownloadManager.Request(Uri.parse(url))
         .setTitle("UnSmoke Update v${version}")
         .setDescription("Downloading latest version")
+        .setMimeType("application/vnd.android.package-archive")
         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "UnSmoke_v${version}.apk")
         .setAllowedOverMetered(true)
