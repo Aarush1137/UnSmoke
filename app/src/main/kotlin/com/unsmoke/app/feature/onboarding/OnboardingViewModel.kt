@@ -49,6 +49,7 @@ class OnboardingViewModel @Inject constructor(
     fun updateStep(step: Int) = _uiState.update { it.copy(step = step) }
     fun updateQuitDate(date: LocalDate) = _uiState.update { it.copy(quitDate = date) }
     fun updateCigarettesPerDay(value: String) = _uiState.update { it.copy(cigarettesPerDay = value) }
+    fun updateCigarettesPerPack(value: String) = _uiState.update { it.copy(cigarettesPerPack = value) }
     fun updatePackPrice(value: String) = _uiState.update { it.copy(packPrice = value) }
     fun updateUserName(name: String) = _uiState.update { it.copy(userName = name) }
     fun updateQuitReason(reason: String) = _uiState.update { it.copy(quitReason = reason) }

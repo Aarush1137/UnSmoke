@@ -142,6 +142,8 @@ fun OnboardingScreen(
                     3 -> BaselineStep(
                         cigsPerDay = state.cigarettesPerDay,
                         onCigsChange = viewModel::updateCigarettesPerDay,
+                        cigsPerPack = state.cigarettesPerPack,
+                        onCigsPerPackChange = viewModel::updateCigarettesPerPack,
                         packPrice = state.packPrice,
                         onPriceChange = viewModel::updatePackPrice,
                         onNext = { viewModel.updateStep(4) }
@@ -395,6 +397,8 @@ private fun QuitDateStep(
 private fun BaselineStep(
     cigsPerDay: String,
     onCigsChange: (String) -> Unit,
+    cigsPerPack: String,
+    onCigsPerPackChange: (String) -> Unit,
     packPrice: String,
     onPriceChange: (String) -> Unit,
     onNext: () -> Unit
@@ -416,12 +420,15 @@ private fun BaselineStep(
 
     DarkOutlinedField(cigsPerDay, onCigsChange, "Cigarettes per day", KeyboardType.Number)
     Spacer(Modifier.height(16.dp))
+    DarkOutlinedField(cigsPerPack, onCigsPerPackChange, "Cigarettes per pack (usually 10 or 20)", KeyboardType.Number)
+    Spacer(Modifier.height(16.dp))
     DarkOutlinedField(packPrice, onPriceChange, "Price per pack (\u20B9)", KeyboardType.Decimal)
 
     val cigsNum = cigsPerDay.toDoubleOrNull() ?: 0.0
+    val packNum = cigsPerPack.toDoubleOrNull() ?: 20.0
     val priceNum = packPrice.toDoubleOrNull() ?: 0.0
-    if (cigsNum > 0 && priceNum > 0) {
-        val dailyCost = (cigsNum / 20.0) * priceNum
+    if (cigsNum > 0 && priceNum > 0 && packNum > 0) {
+        val dailyCost = (cigsNum / packNum) * priceNum
         val yearlyCost = dailyCost * 365
         Spacer(Modifier.height(16.dp))
         Card(
@@ -451,7 +458,8 @@ private fun BaselineStep(
         "NEXT",
         onNext,
         cigsPerDay.toDoubleOrNull()?.let { it > 0.0 } == true &&
-            packPrice.toDoubleOrNull()?.let { it >= 0.0 } == true
+            packPrice.toDoubleOrNull()?.let { it >= 0.0 } == true &&
+            cigsPerPack.toDoubleOrNull()?.let { it > 0.0 } == true
     )
     Spacer(Modifier.height(24.dp))
 }
