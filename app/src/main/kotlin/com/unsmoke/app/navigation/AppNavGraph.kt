@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.navigation
+package com.unsmoke.app.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -76,6 +76,16 @@ fun AppNavGraph(
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 }
+            )
+        }
+        composable(route = "recovery") {
+            RecoveryScreen(
+                onComplete = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
         composable(route = Screen.NRT.route) {
