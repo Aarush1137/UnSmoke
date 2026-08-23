@@ -39,7 +39,7 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
     val appLockEnabled: Flow<Boolean> = dataStore.data.map { it[APP_LOCK_ENABLED] ?: false }
     val notificationsEnabled: Flow<Boolean> = dataStore.data.map { it[NOTIFICATIONS_ENABLED] ?: true }
     val notificationStyle: Flow<String> = dataStore.data.map { it[NOTIFICATION_STYLE] ?: "GENTLE" }
-    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "â‚¹" }
+    val currencySymbol: Flow<String> = dataStore.data.map { it[CURRENCY_SYMBOL] ?: "\u20B9" }
     val userName: Flow<String> = dataStore.data.map { it[USER_NAME] ?: "Champion" }
     val baselineBreathHold: Flow<Int> = dataStore.data.map { it[BASELINE_BREATH_HOLD] ?: 0 }
     val currentBreathHold: Flow<Int> = dataStore.data.map { it[CURRENT_BREATH_HOLD] ?: 0 }
