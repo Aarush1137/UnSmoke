@@ -13,6 +13,6 @@
 - [ ] **Feature 4: Clinician Export (CSV)**
   - Implement `ExportEngine.kt` to generate a CSV of NRT logs and Cravings.
   - Add Export button and Share Intent via `FileProvider`.
-- [ ] **Feature 5: Social Share Cards**
+- [x] **Feature 5: Social Share Cards**
   - Implement bitmap generation for milestone badges.
   - Wire up a native Android share sheet for Instagram/WhatsApp sharing.

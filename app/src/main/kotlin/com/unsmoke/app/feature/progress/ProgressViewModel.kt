@@ -9,6 +9,10 @@ import java.time.ZoneId
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.engine.CalculationEngine
+import com.unsmoke.app.core.domain.engine.ShareEngine
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import com.unsmoke.app.core.domain.repository.CravingRepository
 import com.unsmoke.app.core.domain.repository.NRTRepository
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
@@ -80,6 +84,22 @@ class ProgressViewModel @Inject constructor(
                     }
                 }
             }.collect {}
+        }
+    }
+
+        fun shareMilestone(context: Context, currency: String) {
+        val days = uiState.value.smokeFreeDays
+        val money = uiState.value.moneySaved
+        val uri = ShareEngine.generateShareImage(context, days, money, currency)
+        if (uri != null) {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "image/jpeg"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            val chooser = Intent.createChooser(intent, "Share Milestone")
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ContextCompat.startActivity(context, chooser, null)
         }
     }
 
