@@ -29,6 +29,7 @@ fun HomeScreen(
     onNRTClick: () -> Unit,
     onProfileClick: () -> Unit,
     onCheckInClick: () -> Unit,
+    onRelapseClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -183,8 +184,13 @@ fun HomeScreen(
                     }
                 }
             }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(onClick = onRelapseClick) {
+                Text("I slipped up and smoked...", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Medium)
+            }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(text = uiState.currentQuote, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(48.dp))
         }

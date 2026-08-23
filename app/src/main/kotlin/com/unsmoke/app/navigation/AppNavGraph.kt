@@ -42,6 +42,7 @@ fun AppNavGraph(
         }
         composable(route = Screen.Home.route) {
             HomeScreen(
+                    onRelapseClick = { navController.navigate("recovery") },
                 onCravingClick = { navController.navigate(Screen.Craving.route) },
                 onProgressClick = { navController.navigate(Screen.Progress.route) },
                 onNRTClick = { navController.navigate(Screen.NRT.route) },

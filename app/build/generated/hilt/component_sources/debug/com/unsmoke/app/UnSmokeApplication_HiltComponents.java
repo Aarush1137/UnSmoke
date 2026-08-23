@@ -5,6 +5,7 @@ import com.unsmoke.app.di.DataStoreModule;
 import com.unsmoke.app.di.DatabaseModule;
 import com.unsmoke.app.di.RepositoryModule;
 import com.unsmoke.app.feature.achievements.AchievementsViewModel_HiltModules;
+import com.unsmoke.app.feature.analytics.AnalyticsViewModel_HiltModules;
 import com.unsmoke.app.feature.checkin.CheckInViewModel_HiltModules;
 import com.unsmoke.app.feature.craving.CravingViewModel_HiltModules;
 import com.unsmoke.app.feature.home.HomeViewModel_HiltModules;
@@ -177,6 +178,7 @@ public final class UnSmokeApplication_HiltComponents {
   @Subcomponent(
       modules = {
           AchievementsViewModel_HiltModules.KeyModule.class,
+          AnalyticsViewModel_HiltModules.KeyModule.class,
           CheckInViewModel_HiltModules.KeyModule.class,
           CravingViewModel_HiltModules.KeyModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
@@ -230,6 +232,7 @@ public final class UnSmokeApplication_HiltComponents {
   @Subcomponent(
       modules = {
           AchievementsViewModel_HiltModules.BindsModule.class,
+          AnalyticsViewModel_HiltModules.BindsModule.class,
           CheckInViewModel_HiltModules.BindsModule.class,
           CravingViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,

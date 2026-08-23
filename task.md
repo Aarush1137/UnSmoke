@@ -4,7 +4,7 @@
 - [x] **Feature 1: Craving Analytics Dashboard**
   - Create database queries for aggregating cravings by time and trigger.
   - Build `AnalyticsScreen.kt` with a visual heatmap/bar chart.
-- [ ] **Feature 2: CBT Relapse Autopsy Flow**
+- [x] **Feature 2: CBT Relapse Autopsy Flow**
   - Create `RelapseAutopsyScreen.kt` with the 3-step recovery questionnaire.
   - Intercept the "I Smoked" button to route here before resetting the streak.
 - [ ] **Feature 3: Daily Quit Coach**
