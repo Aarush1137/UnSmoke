@@ -9,7 +9,7 @@
   - Wire it to AchievementEngine to show recently unlocked badges, weekly check-in reminders, or pending clinical tapering recommendations.
 
 ### 2. Default Currency & Theme Accents
-- **Currency:** Update UserPreferencesDataStore and SettingsViewModel to default to ₹ (Rupee) instead of $/?.
+- **Currency:** Update UserPreferencesDataStore and SettingsViewModel to default to ‚¹ (Rupee) instead of $/?.
 - **Theme Accents:** 
   - Ensure the Settings page allows selecting accents (Mint, Pink, Blue, Orange).
   - Update AppTheme in Theme.kt to dynamically read the accent from UserPreferencesDataStore and apply the primary color across all screens.

@@ -7,7 +7,7 @@ object QuoteEngine {
 
     private val quotes = mapOf(
         QuoteCategory.CRAVING_ACTIVE to listOf(
-            "Craving ≠ command.",
+            "Craving isn't a command.",
             "You didn't need to make the craving disappear. You only needed to outlast it.",
             "An urge is temporary.",
             "Don't negotiate with a 10-minute craving.",

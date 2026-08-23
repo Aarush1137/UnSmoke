@@ -9,7 +9,7 @@ data class UserProfileEntity(
     val name: String?,
     val notificationStyle: String,
     val currency: String = "INR",
-    val currencySymbol: String = "₹",
+    val currencySymbol: String = "\u20B9",
     val appLockEnabled: Boolean = false,
     val theme: String = "SYSTEM",
     val createdAt: Long

@@ -41,9 +41,9 @@ fun BreathingOrb(
             animation = keyframes {
                 durationMillis = 12000
                 0.75f at 0 using EaseInOut     // start small
-                1.0f at 4000 using EaseInOut   // inhale 4s → full
+                1.0f at 4000 using EaseInOut   // inhale 4s ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ full
                 1.0f at 5000 using LinearEasing // hold 1s
-                0.75f at 11000 using EaseInOut  // exhale 6s → small  
+                0.75f at 11000 using EaseInOut  // exhale 6s ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ small  
                 0.75f at 12000 using LinearEasing // pause 1s
             },
             repeatMode = RepeatMode.Restart
