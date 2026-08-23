@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.domain.engine.PersonalizationEngine
 import com.unsmoke.app.core.domain.repository.CravingRepository
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
+import com.unsmoke.app.core.domain.repository.NRTRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,13 +18,15 @@ data class InsightsUiState(
     val successRate: Int = 0,
     val isLoading: Boolean = true,
     val hasData: Boolean = false,
+    val usesNRT: Boolean = false,
     val elapsedMillis: Long = 0L
 )
 
 @HiltViewModel
 class InsightsViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
-    private val quitAttemptRepo: QuitAttemptRepository
+    private val quitAttemptRepo: QuitAttemptRepository,
+    private val nrtRepo: NRTRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(InsightsUiState())
     val uiState: StateFlow<InsightsUiState> = _uiState.asStateFlow()
@@ -33,6 +36,8 @@ class InsightsViewModel @Inject constructor(
             quitAttemptRepo.getActiveAttempt().collect { attempt ->
                 if (attempt != null) {
                     val currentElapsed = System.currentTimeMillis() - attempt.startEpochMillis
+                    val nrtUsages = nrtRepo.getUsage(attempt.id).firstOrNull() ?: emptyList()
+                    val hasNRT = nrtUsages.isNotEmpty()
                     _uiState.update { it.copy(elapsedMillis = currentElapsed) }
                     cravingRepo.getCravings(attempt.id).collect { cravings ->
                         if (cravings.isNotEmpty()) {
@@ -52,6 +57,7 @@ class InsightsViewModel @Inject constructor(
                             
                             _uiState.update { 
                                 it.copy(
+                                    usesNRT = hasNRT,
                                     topTrigger = topTrigger,
                                     highRiskTime = highRiskTime,
                                     bestCopingStrategy = bestStrategy,
@@ -61,7 +67,7 @@ class InsightsViewModel @Inject constructor(
                                 )
                             }
                         } else {
-                            _uiState.update { it.copy(isLoading = false) }
+                            _uiState.update { it.copy(isLoading = false, usesNRT = hasNRT) }
                         }
                     }
                 }

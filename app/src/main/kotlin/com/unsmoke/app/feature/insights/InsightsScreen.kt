@@ -78,7 +78,7 @@ fun InsightsScreen(
                 }
 
                 item {
-                    RecoveryTimeline(state.elapsedMillis)
+                    RecoveryTimeline(state.elapsedMillis, state.usesNRT)
                 }
                 
                 item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -175,12 +175,17 @@ private fun InsightCard(title: String, value: String, icon: ImageVector, descrip
 data class HealthMilestone(val title: String, val desc: String, val thresholdMs: Long, val icon: ImageVector)
 
 @Composable
-fun RecoveryTimeline(elapsedMs: Long) {
+fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
     val milestones = listOf(
         HealthMilestone("20 Minutes", "Blood pressure & pulse normalize.", 20 * 60 * 1000L, Icons.Rounded.Favorite),
         HealthMilestone("8 Hours", "Carbon monoxide levels drop by 50%.", 8 * 60 * 60 * 1000L, Icons.Rounded.Air),
         HealthMilestone("48 Hours", "Sense of taste and smell start to return.", 48 * 60 * 60 * 1000L, Icons.Rounded.Restaurant),
-        HealthMilestone("72 Hours", "Nicotine is fully out of your system.", 72 * 60 * 60 * 1000L, Icons.Rounded.CheckCircle),
+        HealthMilestone(
+            "72 Hours", 
+            if (usesNRT) "NRT continues to stabilize cravings without smoke." else "Nicotine is fully out of your system.", 
+            72 * 60 * 60 * 1000L, 
+            Icons.Rounded.CheckCircle
+        ),
         HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.Rounded.DirectionsRun)
     )
 
