@@ -22,9 +22,9 @@ data class SettingsUiState(
     val notificationStyle: String = "GENTLE",
     val appLockEnabled: Boolean = false,
     val theme: String = "DARK",
-    val currencySymbol: String = "Ã¢â€šÂ¹",
+    val currencySymbol: String = "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹",
     val accentColor: String = "MINT",
-    val version: String = "1.1.1"
+    val version: String = "1.2.0"
 )
 
 @HiltViewModel
