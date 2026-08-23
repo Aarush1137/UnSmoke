@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.core.domain.engine
+package com.unsmoke.app.core.domain.engine
 
 object NRTTaperingEngine {
     
@@ -6,33 +6,38 @@ object NRTTaperingEngine {
         val weekNumber: Int,
         val dosage: String,
         val frequency: String,
+        val maxPiecesPerDay: Int,
         val instructions: String
     )
 
     fun getNicotexGumPlan(weeksSmokeFree: Int, initialDosageMg: Int): TaperingRecommendation {
         return when (weeksSmokeFree) {
             in 0..6 -> TaperingRecommendation(
-                weekNumber = weeksSmokeFree,
+                weekNumber = weeksSmokeFree + 1,
                 dosage = "${initialDosageMg}mg",
                 frequency = "1 piece every 1-2 hours",
-                instructions = "Chew slowly until you feel a peppery taste, then park it between your cheek and gum."
+                maxPiecesPerDay = 24,
+                instructions = "Chew slowly until peppery, then park between cheek and gum."
             )
             in 7..9 -> TaperingRecommendation(
-                weekNumber = weeksSmokeFree,
+                weekNumber = weeksSmokeFree + 1,
                 dosage = "${initialDosageMg}mg",
                 frequency = "1 piece every 2-4 hours",
+                maxPiecesPerDay = 14,
                 instructions = "Start reducing frequency. Wait longer between pieces."
             )
             in 10..12 -> TaperingRecommendation(
-                weekNumber = weeksSmokeFree,
+                weekNumber = weeksSmokeFree + 1,
                 dosage = "${initialDosageMg}mg",
                 frequency = "1 piece every 4-8 hours",
+                maxPiecesPerDay = 6,
                 instructions = "You are almost there! Only use when absolutely necessary."
             )
             else -> TaperingRecommendation(
-                weekNumber = weeksSmokeFree,
+                weekNumber = weeksSmokeFree + 1,
                 dosage = "0mg",
                 frequency = "None",
+                maxPiecesPerDay = 0,
                 instructions = "You have completed the 12-week NRT tapering program!"
             )
         }
