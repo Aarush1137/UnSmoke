@@ -148,7 +148,7 @@ fun HomeScreen(
                     }
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "Did you know? Nicotine cravings usually only last 5 to 10 minutes. By using the 'I HAVE A CRAVING' button above, you can urge-surf through it completely safe.",
+                        text = uiState.dailyLesson,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         fontSize = 14.sp,
                         lineHeight = 20.sp

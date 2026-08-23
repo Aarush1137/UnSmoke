@@ -14,8 +14,14 @@ drawable onboarding_smoking_history
 drawable onboarding_welcome
 drawable onboarding_why_quit
 drawable widget_bg
+id widget_btn_log_nrt
+id widget_craving_root
+id widget_dashboard_root
 id widget_days
+id widget_nrt_count
 layout dummy_widget_layout
+layout widget_craving
+layout widget_dashboard
 layout widget_streak
 mipmap ic_launcher
 mipmap ic_launcher_round

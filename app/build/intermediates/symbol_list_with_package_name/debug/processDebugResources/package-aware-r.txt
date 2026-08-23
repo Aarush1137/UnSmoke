@@ -918,7 +918,11 @@ id view_tree_on_back_pressed_dispatcher_owner
 id view_tree_saved_state_registry_owner
 id view_tree_view_model_store_owner
 id visible_removing_fragment_view_tag
+id widget_btn_log_nrt
+id widget_craving_root
+id widget_dashboard_root
 id widget_days
+id widget_nrt_count
 id withText
 id wrap_content
 id wrapped_composition_tag
@@ -977,6 +981,8 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+layout widget_craving
+layout widget_dashboard
 layout widget_streak
 mipmap ic_launcher
 mipmap ic_launcher_round

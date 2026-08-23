@@ -8,14 +8,6 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_nrt_tracking.png.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_nrt_tracking.png"
-    },
-    {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_unsmoke_logo_foreground.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_unsmoke_logo_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_dashboard_info.xml.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_dashboard_info.xml"
     },
@@ -28,20 +20,44 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_completion.png"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_launcher_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_smoking_history.png.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_smoking_history.png"
     },
     {
-        "merged": "com.unsmoke.app-debug-71:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.unsmoke.app-main-73:/mipmap-anydpi-v26/ic_launcher.xml"
-    },
-    {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_why_quit.png.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_why_quit.png"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_widget_craving.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\layout\\widget_craving.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_dummy_widget_layout.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\layout\\dummy_widget_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_widget_bg.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\widget_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_streak_info.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_streak_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_quit_date.png.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_quit_date.png"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_nrt_tracking.png.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_nrt_tracking.png"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_unsmoke_logo_foreground.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_unsmoke_logo_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_launcher_foreground.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
@@ -52,8 +68,8 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_craving_info.xml"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_dummy_widget_layout.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\layout\\dummy_widget_layout.xml"
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\ic_launcher_background.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_personal_goals.png.flat",
@@ -68,27 +84,15 @@
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\file_paths.xml"
     },
     {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable_widget_bg.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable\\widget_bg.xml"
+        "merged": "com.unsmoke.app-debug-71:/layout_widget_dashboard.xml.flat",
+        "source": "com.unsmoke.app-main-73:/layout/widget_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\layout_widget_dashboard.xml.flat",
+        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\layout\\widget_dashboard.xml"
     },
     {
         "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_craving_triggers.png.flat",
         "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_craving_triggers.png"
-    },
-    {
-        "merged": "com.unsmoke.app-debug-71:/drawable_ic_launcher_background.xml.flat",
-        "source": "com.unsmoke.app-main-73:/drawable/ic_launcher_background.xml"
-    },
-    {
-        "merged": "com.unsmoke.app-debug-71:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.unsmoke.app-main-73:/mipmap-anydpi-v26/ic_launcher_round.xml"
-    },
-    {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\xml_widget_streak_info.xml.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\xml\\widget_streak_info.xml"
-    },
-    {
-        "merged": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-debug-71:\\drawable-nodpi_onboarding_quit_date.png.flat",
-        "source": "C:\\Users\\aarus\\.gradle\\daemon\\8.13\\com.unsmoke.app-main-73:\\drawable-nodpi\\onboarding_quit_date.png"
     }
 ]

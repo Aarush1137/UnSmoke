@@ -20,6 +20,7 @@ import com.unsmoke.app.feature.profile.ProfileScreen
 import com.unsmoke.app.feature.plan.PlanScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.insights.InsightsScreen
+import com.unsmoke.app.feature.analytics.AnalyticsScreen
 import com.unsmoke.app.feature.settings.SettingsScreen
 
 @Composable
@@ -91,9 +92,10 @@ fun AppNavGraph(
         composable(route = Screen.NRT.route) {
             NRTDashboardScreen(onBack = { navController.popBackStack() })
         }
-        composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }) }
+                composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }) }
+        composable(route = Screen.Analytics.route) { AnalyticsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Progress.route) {
-            ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onBack = { navController.popBackStack() })
+            ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onAnalyticsClick = { navController.navigate(Screen.Analytics.route) }, onBack = { navController.popBackStack() })
         }
         composable(route = Screen.Journal.route) {
             JournalScreen(onBack = { navController.popBackStack() }, onAddClick = { navController.navigate(Screen.CheckIn.route) })

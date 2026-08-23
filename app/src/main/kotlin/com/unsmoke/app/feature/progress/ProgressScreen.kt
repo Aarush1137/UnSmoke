@@ -33,6 +33,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 @Composable
 fun ProgressScreen(
     onInsightsClick: () -> Unit,
+    onAnalyticsClick: () -> Unit,
     onBack: () -> Unit,
     viewModel: ProgressViewModel = hiltViewModel()
 ) {
