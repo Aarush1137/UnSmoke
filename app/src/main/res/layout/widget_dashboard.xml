@@ -30,7 +30,7 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <View
+    <FrameLayout
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#263A37"

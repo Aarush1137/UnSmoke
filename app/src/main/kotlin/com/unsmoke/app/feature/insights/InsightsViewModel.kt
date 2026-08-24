@@ -45,16 +45,19 @@ class InsightsViewModel @Inject constructor(
                     val nrtUsages = nrtRepo.getUsage(attempt.id).firstOrNull() ?: emptyList()
                     val hasNRT = nrtUsages.isNotEmpty()
                     
-                    titrationRepo.getLogsForAttempt(attempt.id).collect { logs ->
-                        val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
-                        _uiState.update { it.copy(
-                            elapsedMillis = currentElapsed,
-                            isVaping = attempt.substanceType == "VAPING",
-                            currentNicotineStrengthMg = currentMg,
-                            titrationLogs = logs
-                        ) }
+                    launch {
+                        titrationRepo.getLogsForAttempt(attempt.id).collect { logs ->
+                            val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
+                            _uiState.update { it.copy(
+                                elapsedMillis = currentElapsed,
+                                isVaping = attempt.substanceType == "VAPING",
+                                currentNicotineStrengthMg = currentMg,
+                                titrationLogs = logs
+                            ) }
+                        }
                     }
-                    cravingRepo.getCravings(attempt.id).collect { cravings ->
+                    launch {
+                        cravingRepo.getCravings(attempt.id).collect { cravings ->
                         if (cravings.isNotEmpty()) {
                             // Calculate Top Trigger
                             val triggers = cravings.mapNotNull { it.trigger }.flatMap { it.split(",") }.filter { it.isNotBlank() }
@@ -84,6 +87,7 @@ class InsightsViewModel @Inject constructor(
                         } else {
                             _uiState.update { it.copy(isLoading = false, usesNRT = hasNRT) }
                         }
+                    }
                     }
                 }
             }
