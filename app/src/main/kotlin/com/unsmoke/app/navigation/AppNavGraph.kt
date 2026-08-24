@@ -52,6 +52,7 @@ fun AppNavGraph(
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
                 onCheckInClick = { navController.navigate(Screen.Journal.route) },
                 onBuddyClick = { navController.navigate(Screen.Buddy.route) },
+                onCompanionClick = { navController.navigate(Screen.Companion.route) },
                 onRewardsClick = { navController.navigate(Screen.Rewards.route) }
             )
         }
@@ -113,7 +114,8 @@ fun AppNavGraph(
         }
         composable(route = Screen.Plan.route) { PlanScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Achievements.route) { AchievementsScreen(onBack = { navController.popBackStack() }) }
-        composable(route = Screen.Buddy.route) { com.unsmoke.app.feature.companion.CompanionScreen(onBack = { navController.popBackStack() }) }
+        composable(route = Screen.Buddy.route) { com.unsmoke.app.feature.buddy.BuddyScreen() }
+        composable(route = Screen.Companion.route) { com.unsmoke.app.feature.companion.CompanionScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Rewards.route) { RewardsScreen(onNavigateBack = { navController.popBackStack() }) }
         composable(route = Screen.Settings.route) {
             SettingsScreen(

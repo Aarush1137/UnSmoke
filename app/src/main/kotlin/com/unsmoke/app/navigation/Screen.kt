@@ -18,5 +18,6 @@ sealed class Screen(val route: String) {
     object Buddy : Screen("buddy")
     object Rewards : Screen("rewards")
     object TriggerMap : Screen("trigger_map")
+    object Companion : Screen("companion")
 }
 
