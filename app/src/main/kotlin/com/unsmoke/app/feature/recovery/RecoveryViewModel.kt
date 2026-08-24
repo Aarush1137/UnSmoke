@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unsmoke.app.core.data.database.entity.SmokingEventEntity
 import com.unsmoke.app.core.data.database.entity.QuitAttemptEntity
 import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
+import com.unsmoke.app.core.data.repository.CompanionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +22,8 @@ data class RecoveryUiState(
 
 @HiltViewModel
 class RecoveryViewModel @Inject constructor(
-    private val quitAttemptRepo: QuitAttemptRepository
+    private val quitAttemptRepo: QuitAttemptRepository,
+    private val companionRepo: CompanionRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(RecoveryUiState())
     val uiState: StateFlow<RecoveryUiState> = _uiState.asStateFlow()
@@ -51,7 +53,18 @@ class RecoveryViewModel @Inject constructor(
                         createdAt = System.currentTimeMillis(),
                         pricePerCigarette = attempt.pricePerCigarette
                     )
-                    quitAttemptRepo.insertAttempt(newAttempt)
+                    val newId = quitAttemptRepo.insertAttempt(newAttempt)
+                    
+                    companionRepo.getCompanion(attempt.id).firstOrNull()?.let { oldComp ->
+                        val newHealth = (oldComp.health - 25).coerceAtLeast(0)
+                        val damagedComp = oldComp.copy(
+                            id = 0, // Generate new row
+                            quitAttemptId = newId,
+                            health = newHealth,
+                            mood = if (newHealth < 50) "SAD" else "NEUTRAL"
+                        )
+                        companionRepo.insertCompanion(damagedComp)
+                    }
                 }
             }
             _uiState.update { it.copy(isComplete = true) }
