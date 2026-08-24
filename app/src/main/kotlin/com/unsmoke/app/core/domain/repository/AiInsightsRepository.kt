@@ -2,6 +2,7 @@ package com.unsmoke.app.core.domain.repository
 
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.ai.client.generativeai.Chat
 import com.unsmoke.app.core.data.database.entity.CravingEventEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -42,5 +43,31 @@ class AiInsightsRepository @Inject constructor() {
         } catch (e: Exception) {
             emit("Analysis temporarily unavailable. Stay strong!")
         }
+    }
+
+    fun startCbtChatSession(
+        userName: String,
+        cravings: List<CravingEventEntity>,
+        daysSmokeFree: Int,
+        usesNRT: Boolean
+    ): Chat {
+        val systemInstruction = buildString {
+            append("You are 'UnSmoke Coach', an empathetic, expert addiction recovery AI therapist.\n")
+            append("The user's name is $userName. They have been smoke-free for $daysSmokeFree days.\n")
+            if (usesNRT) append("They are currently using Nicotine Replacement Therapy or vaping to step down.\n")
+            if (cravings.isNotEmpty()) {
+                val triggers = cravings.mapNotNull { it.trigger }.flatMap { it.split(",") }.filter { it.isNotBlank() }
+                val topTrigger = triggers.groupingBy { it.trim() }.eachCount().maxByOrNull { it.value }?.key
+                append("Their top craving trigger historically is: $topTrigger.\n")
+            }
+            append("Keep responses extremely concise (1-3 sentences max) and conversational. Focus on CBT (Cognitive Behavioral Therapy) grounding techniques and urge surfing. Never break character.")
+        }
+
+        val initialHistory = listOf(
+            content(role = "user") { text(systemInstruction) },
+            content(role = "model") { text("Understood. I am ready to help $userName. What's on their mind?") }
+        )
+
+        return generativeModel.startChat(history = initialHistory)
     }
 }

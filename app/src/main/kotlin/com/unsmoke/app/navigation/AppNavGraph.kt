@@ -16,6 +16,7 @@ import com.unsmoke.app.feature.nrt.NRTDashboardScreen
 import com.unsmoke.app.feature.progress.ProgressScreen
 import com.unsmoke.app.feature.checkin.CheckInScreen
 import com.unsmoke.app.feature.journal.JournalScreen
+import com.unsmoke.app.feature.coach.AiCoachScreen
 import com.unsmoke.app.feature.profile.ProfileScreen
 import com.unsmoke.app.feature.plan.PlanScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
@@ -74,7 +75,8 @@ fun AppNavGraph(
         composable(route = "craving_timer") {
             CravingTimerScreen(
                 onDefeated = { navController.navigate("craving_outcome") },
-                onSmoked = { navController.navigate("recovery") }
+                onSmoked = { navController.navigate("recovery") },
+                onChatWithCoach = { navController.navigate(Screen.AiCoach.route) }
             )
         }
         composable(route = "craving_outcome") {
