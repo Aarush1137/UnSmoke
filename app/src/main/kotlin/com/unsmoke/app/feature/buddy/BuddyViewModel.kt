@@ -58,10 +58,10 @@ class BuddyViewModel @Inject constructor(
         }
     }
 
-    fun pairWithCode(code: String) {
+    fun sendBuddyRequest(code: String) {
         val myUid = _uiState.value.myProfile?.uid ?: return
         viewModelScope.launch {
-            val success = buddyRepo.pairWithCode(myUid, code)
+            val success = buddyRepo.sendBuddyRequest(myUid, code)
             if (!success) {
                 _uiState.update { it.copy(error = "Invalid pairing code") }
             }
@@ -77,5 +77,27 @@ class BuddyViewModel @Inject constructor(
     
     fun clearError() {
         _uiState.update { it.copy(error = null) }
+    }
+    fun acceptBuddyRequest() {
+        val myProfile = _uiState.value.myProfile ?: return
+        val pendingUid = myProfile.pendingBuddyRequestUid ?: return
+        viewModelScope.launch {
+            try {
+                buddyRepo.acceptBuddyRequest(myProfile.uid, pendingUid)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
+        }
+    }
+
+    fun rejectBuddyRequest() {
+        val myProfile = _uiState.value.myProfile ?: return
+        viewModelScope.launch {
+            try {
+                buddyRepo.rejectBuddyRequest(myProfile.uid)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
+        }
     }
 }

@@ -44,7 +44,36 @@ fun BuddyScreen(
                 val myProfile = state.myProfile
                 val buddyProfile = state.buddyProfile
 
-                if (myProfile?.buddyUid == null) {
+                                if (myProfile?.pendingBuddyRequestUid != null && myProfile.buddyUid == null) {
+                    // Incoming Request
+                    Spacer(Modifier.height(32.dp))
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Incoming Buddy Request!", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            Spacer(Modifier.height(8.dp))
+                            Text("Someone wants to be your accountability buddy.", color = Color.LightGray, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                            Spacer(Modifier.height(24.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                Button(
+                                    onClick = { viewModel.rejectBuddyRequest() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                                ) {
+                                    Text("Decline")
+                                }
+                                Button(
+                                    onClick = { viewModel.acceptBuddyRequest() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                                ) {
+                                    Text("Accept")
+                                }
+                            }
+                        }
+                    }
+                } else if (myProfile?.buddyUid == null) {
                     // Not paired yet
                     Text("Pair with a Buddy", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
@@ -81,7 +110,7 @@ fun BuddyScreen(
                     )
                     Spacer(Modifier.height(16.dp))
                     Button(
-                        onClick = { viewModel.pairWithCode(inputCode) },
+                        onClick = { viewModel.sendBuddyRequest(inputCode) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         enabled = inputCode.length == 6

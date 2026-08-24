@@ -13,7 +13,8 @@ data class BuddyProfile(
     val uid: String = "",
     val pairingCode: String = "",
     val buddyUid: String? = null,
-    val needsHelp: Boolean = false
+    val needsHelp: Boolean = false,
+    val pendingBuddyRequestUid: String? = null
 )
 
 @Singleton
@@ -39,17 +40,27 @@ class BuddyRepository @Inject constructor() {
         return uid
     }
 
-    suspend fun pairWithCode(myUid: String, buddyCode: String): Boolean {
+        suspend fun sendBuddyRequest(myUid: String, buddyCode: String): Boolean {
         // Find user with that code
         val snapshot = profilesCollection.whereEqualTo("pairingCode", buddyCode).get().await()
         if (snapshot.isEmpty) return false
         
-        val buddyUid = snapshot.documents.first().id
-        
-        // Update both profiles
-        profilesCollection.document(myUid).update("buddyUid", buddyUid).await()
-        profilesCollection.document(buddyUid).update("buddyUid", myUid).await()
+        val targetUid = snapshot.documents.first().id
+        // Send request by updating the target's pending field
+        profilesCollection.document(targetUid).update("pendingBuddyRequestUid", myUid).await()
         return true
+    }
+
+    suspend fun acceptBuddyRequest(myUid: String, requesterUid: String) {
+        // Form the bond bidirectionally
+        profilesCollection.document(myUid).update(
+            mapOf("buddyUid" to requesterUid, "pendingBuddyRequestUid" to null)
+        ).await()
+        profilesCollection.document(requesterUid).update("buddyUid", myUid).await()
+    }
+
+    suspend fun rejectBuddyRequest(myUid: String) {
+        profilesCollection.document(myUid).update("pendingBuddyRequestUid", null).await()
     }
 
     fun observeMyProfile(myUid: String): Flow<BuddyProfile?> = callbackFlow {
