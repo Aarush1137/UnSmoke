@@ -33,7 +33,9 @@ data class OnboardingState(
     val userName: String = "",
     val shortTermGoal: String = "",         // e.g. "Survive the first week"
     val longTermGoal: String = "",          // e.g. "Run a 5K without wheezing"
-    val isComplete: Boolean = false
+    val isComplete: Boolean = false,
+    val substanceType: String = "CIGARETTE",
+    val nicotineStrengthMg: String = ""
 )
 
 @HiltViewModel
@@ -48,6 +50,8 @@ class OnboardingViewModel @Inject constructor(
 
     fun updateStep(step: Int) = _uiState.update { it.copy(step = step) }
     fun updateQuitDate(date: LocalDate) = _uiState.update { it.copy(quitDate = date) }
+    fun updateSubstanceType(type: String) = _uiState.update { it.copy(substanceType = type) }
+    fun updateNicotineStrength(mg: String) = _uiState.update { it.copy(nicotineStrengthMg = mg) }
     fun updateCigarettesPerDay(value: String) = _uiState.update { it.copy(cigarettesPerDay = value) }
     fun updateCigarettesPerPack(value: String) = _uiState.update { it.copy(cigarettesPerPack = value) }
     fun updatePackPrice(value: String) = _uiState.update { it.copy(packPrice = value) }
@@ -89,19 +93,29 @@ class OnboardingViewModel @Inject constructor(
     fun completeOnboarding() {
         viewModelScope.launch {
             val state = _uiState.value
-            val packPriceDouble = state.packPrice.toDoubleOrNull() ?: 0.0
             val perPackInt = state.cigarettesPerPack.toIntOrNull() ?: 20
-            val pricePerCig = packPriceDouble // the input is now directly price per cigarette
-            val startEpoch = state.quitDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val packPriceDouble = state.packPrice.toDoubleOrNull() ?: 0.0
+            
+            val rawConsumption = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0
+            val dailyRate = if (state.substanceType == "VAPING") rawConsumption / 7.0 else rawConsumption
+            
+            val pricePerCig = packPriceDouble // For vaping, this is price per pod
+            val startEpoch = if (state.quitDate.isEqual(LocalDate.now())) {
+                System.currentTimeMillis()
+            } else {
+                state.quitDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            }
 
             quitAttemptRepo.insertAttempt(
                 QuitAttemptEntity(
                     startEpochMillis = startEpoch,
-                    cigarettesPerDay = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0,
+                    cigarettesPerDay = dailyRate,
                     endEpochMillis = null,
                     status = "ACTIVE",
                     cigarettesPerPack = perPackInt,
                     packPrice = packPriceDouble,
+                    substanceType = state.substanceType,
+                    nicotineStrengthMg = state.nicotineStrengthMg.toDoubleOrNull(),
                     pricePerCigarette = pricePerCig,
                     timezone = ZoneId.systemDefault().id,
                     createdAt = System.currentTimeMillis()

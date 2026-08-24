@@ -2,6 +2,8 @@ package com.unsmoke.app.core.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Index
+import androidx.room.ForeignKey
 
 @Entity(tableName = "user_profile")
 data class UserProfileEntity(
@@ -76,8 +78,6 @@ data class NRTProductEntity(
     val name: String,
     val nicotineStrengthMg: Double?,
     val packPrice: Double,
-    val substanceType: String = "CIGARETTE",
-    val nicotineStrengthMg: Double? = null,
     val unitsPerPack: Int,
     val pricePerUnit: Double,
     val isActive: Boolean = true
@@ -186,3 +186,23 @@ data class TriggerLogEntity(
     val quitAttemptId: Long
 )
 
+
+@Entity(
+    tableName = "titration_log",
+    foreignKeys = [
+        ForeignKey(
+            entity = QuitAttemptEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["quitAttemptId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["quitAttemptId"])]
+)
+data class TitrationLogEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val quitAttemptId: Long,
+    val nicotineStrengthMg: Double,
+    val timestamp: Long,
+    val notes: String?
+)

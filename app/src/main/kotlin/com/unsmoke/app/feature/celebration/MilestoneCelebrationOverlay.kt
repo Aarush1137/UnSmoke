@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.unsmoke.app.feature.share.ShareUtils
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +55,7 @@ fun MilestoneCelebrationOverlay(
                 Box(
                     modifier = Modifier
                         .size(160.dp)
-                        .background(AppColors.Mint.copy(alpha = 0.2f), CircleShape),
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -77,7 +78,7 @@ fun MilestoneCelebrationOverlay(
                     text = "SMOKE-FREE",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = AppColors.Mint,
+                    color = MaterialTheme.colorScheme.primary,
                     letterSpacing = 2.sp
                 )
 
@@ -108,7 +109,7 @@ fun MilestoneCelebrationOverlay(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Icon(Icons.Rounded.Share, contentDescription = null, tint = Color.White)

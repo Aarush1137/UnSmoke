@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -69,13 +70,13 @@ fun BreathingExercise(
             modifier = Modifier
                 .size(150.dp)
                 .scale(animatedScale)
-                .background(AppColors.Mint.copy(alpha = 0.3f), CircleShape)
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), CircleShape)
         )
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .scale(animatedScale)
-                .background(AppColors.Mint.copy(alpha = 0.6f), CircleShape)
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), CircleShape)
         )
         Text(
             text = phase,

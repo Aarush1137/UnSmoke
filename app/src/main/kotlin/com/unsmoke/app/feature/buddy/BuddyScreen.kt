@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,17 +29,17 @@ fun BuddyScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Quit Buddy", color = Color.White) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (state.isLoading) {
-                CircularProgressIndicator(color = AppColors.Mint)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             } else {
                 val myProfile = state.myProfile
                 val buddyProfile = state.buddyProfile
@@ -57,7 +58,7 @@ fun BuddyScreen(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                     ) {
                         Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("YOUR CODE", color = AppColors.Mint, fontWeight = FontWeight.Bold)
+                            Text("YOUR CODE", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                             Spacer(Modifier.height(8.dp))
                             Text(myProfile?.pairingCode ?: "---", color = Color.White, fontSize = 48.sp, letterSpacing = 8.sp)
                         }
@@ -82,10 +83,10 @@ fun BuddyScreen(
                     Button(
                         onClick = { viewModel.pairWithCode(inputCode) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         enabled = inputCode.length == 6
                     ) {
-                        Text("PAIR NOW", color = AppColors.Background, fontWeight = FontWeight.Bold)
+                        Text("PAIR NOW", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
                     }
                     
                     if (state.error != null) {
@@ -94,7 +95,7 @@ fun BuddyScreen(
                     }
                 } else {
                     // Paired
-                    Text("Buddy Connected!", color = AppColors.Mint, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    Text("Buddy Connected!", color = MaterialTheme.colorScheme.primary, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     
                     Spacer(Modifier.height(48.dp))
                     
@@ -124,7 +125,7 @@ fun BuddyScreen(
                         modifier = Modifier.fillMaxWidth().height(64.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = if (myProfile.needsHelp) AppColors.Surface else AppColors.Amber)
                     ) {
-                        Text(if (myProfile.needsHelp) "CANCEL SOS" else "SEND SOS", color = if (myProfile.needsHelp) Color.White else AppColors.Background, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text(if (myProfile.needsHelp) "CANCEL SOS" else "SEND SOS", color = if (myProfile.needsHelp) Color.White else MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     }
                 }
             }

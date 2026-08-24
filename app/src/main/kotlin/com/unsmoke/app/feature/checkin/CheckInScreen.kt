@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -40,10 +41,10 @@ fun CheckInScreen(
                         Icon(Icons.Rounded.Close, contentDescription = "Close", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -67,7 +68,7 @@ fun CheckInScreen(
                             modifier = Modifier
                                 .size(56.dp)
                                 .clip(CircleShape)
-                                .background(if (isSelected) AppColors.Mint else Color(0xFF1E2625))
+                                .background(if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFF1E2625))
                                 .clickable { viewModel.updateMood(moodValue) },
                             contentAlignment = Alignment.Center
                         ) {
@@ -79,7 +80,7 @@ fun CheckInScreen(
                             )
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(moodLabel, color = if (isSelected) AppColors.Mint else Color.Gray, fontSize = 12.sp)
+                        Text(moodLabel, color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray, fontSize = 12.sp)
                     }
                 }
             }
@@ -92,8 +93,8 @@ fun CheckInScreen(
                 valueRange = 1f..5f,
                 steps = 3,
                 colors = SliderDefaults.colors(
-                    thumbColor = AppColors.Teal,
-                    activeTrackColor = AppColors.Teal,
+                    thumbColor = MaterialTheme.colorScheme.secondary,
+                    activeTrackColor = MaterialTheme.colorScheme.secondary,
                     inactiveTrackColor = Color.DarkGray
                 )
             )
@@ -129,7 +130,7 @@ fun CheckInScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color.DarkGray,
-                    focusedBorderColor = AppColors.Mint,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedContainerColor = Color(0xFF1E2625),
                     focusedContainerColor = Color(0xFF1E2625),
                     focusedTextColor = Color.White,
@@ -141,7 +142,7 @@ fun CheckInScreen(
             Button(
                 onClick = { viewModel.submitCheckIn(onComplete) },
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(16.dp),
                 enabled = state.mood > 0
             ) {

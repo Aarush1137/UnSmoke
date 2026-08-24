@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,16 +52,16 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Settings", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -114,7 +115,7 @@ fun SettingsScreen(
             }
             item {
                 SettingsToggleItem(
-                    title = "Daily Push Notifications",
+                    title = "Daily Push Notifications (Coming Soon!)",
                     subtitle = "Morning preparation & evening check-in reminders",
                     icon = Icons.Rounded.Notifications,
                     checked = state.notificationsEnabled,
@@ -233,7 +234,7 @@ fun SettingsScreen(
                         viewModel.updateName(nameInput.trim())
                         showNameDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text("Save")
                 }
@@ -439,7 +440,7 @@ fun SettingsScreen(
     }
 }
 @Composable
-private fun SettingsSectionHeader(title: String, color: Color = AppColors.Mint) {
+private fun SettingsSectionHeader(title: String, color: Color = MaterialTheme.colorScheme.primary) {
     Text(
         text = title.uppercase(),
         color = color,
@@ -478,10 +479,10 @@ private fun SettingsToggleItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(AppColors.Mint.copy(alpha = 0.15f)),
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(22.dp))
+                    Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
                 }
                 Spacer(Modifier.width(14.dp))
                 Column {
@@ -493,8 +494,8 @@ private fun SettingsToggleItem(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = AppColors.Mint,
-                    checkedTrackColor = AppColors.Teal.copy(alpha = 0.5f)
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)
                 )
             )
         }
@@ -529,13 +530,13 @@ private fun SettingsClickableItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(if (isDestructive) Color(0xFFFF5252).copy(alpha = 0.15f) else AppColors.Mint.copy(alpha = 0.15f)),
+                        .background(if (isDestructive) Color(0xFFFF5252).copy(alpha = 0.15f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         icon,
                         contentDescription = null,
-                        tint = if (isDestructive) Color(0xFFFF5252) else AppColors.Mint,
+                        tint = if (isDestructive) Color(0xFFFF5252) else MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -557,14 +558,14 @@ private fun SettingsInfoBanner(title: String, subtitle: String) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
             .background(Color(0xFF163F3A).copy(alpha = 0.4f))
-            .border(1.dp, AppColors.Mint.copy(alpha = 0.2f), RoundedCornerShape(18.dp))
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(18.dp))
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.Top) {
-            Icon(Icons.Rounded.Security, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(24.dp))
+            Icon(Icons.Rounded.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
             Spacer(Modifier.width(12.dp))
             Column {
-                Text(title, color = AppColors.Mint, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(title, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 Spacer(Modifier.height(4.dp))
                 Text(subtitle, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp, lineHeight = 16.sp)
             }

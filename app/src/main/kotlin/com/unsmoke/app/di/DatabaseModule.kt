@@ -22,7 +22,7 @@ object DatabaseModule {
             context,
             UnSmokeDatabase::class.java,
             "unsmoke_db")
-            .addMigrations(UnSmokeDatabase.MIGRATION_1_2, UnSmokeDatabase.MIGRATION_2_3)
+            .addMigrations(UnSmokeDatabase.MIGRATION_1_2, UnSmokeDatabase.MIGRATION_2_3, UnSmokeDatabase.MIGRATION_3_4)
             .build()
     }
 
@@ -45,4 +45,6 @@ object DatabaseModule {
     fun provideRewardGoalDao(database: UnSmokeDatabase): RewardGoalDao {
         return database.rewardGoalDao()
     }
+    @Provides
+    fun provideTitrationLogDao(database: UnSmokeDatabase) = database.titrationLogDao()
 }

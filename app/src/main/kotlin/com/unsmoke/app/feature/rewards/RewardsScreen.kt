@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -159,13 +160,13 @@ fun RewardGoalCard(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
-                            .background(if (isAchieved) AppColors.Teal.copy(alpha = 0.2f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                            .background(if (isAchieved) MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = if (isAchieved) Icons.Rounded.Check else Icons.Rounded.Star,
                             contentDescription = null,
-                            tint = if (isAchieved) AppColors.Teal else MaterialTheme.colorScheme.primary
+                            tint = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(Modifier.width(16.dp))
@@ -189,7 +190,7 @@ fun RewardGoalCard(
             LinearProgressIndicator(
                 progress = { progress.toFloat() },
                 modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
-                color = if (isAchieved) AppColors.Teal else MaterialTheme.colorScheme.primary,
+                color = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
             )
             
@@ -202,7 +203,7 @@ fun RewardGoalCard(
                 Text(
                     text = if (isAchieved) "Fully Funded!" else "% Funded",
                     fontSize = 12.sp,
-                    color = if (isAchieved) AppColors.Teal else MaterialTheme.colorScheme.primary,
+                    color = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
                 if (!isAchieved) {

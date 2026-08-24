@@ -11,9 +11,15 @@ import androidx.compose.material.icons.rounded.*
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -36,29 +42,31 @@ fun InsightsScreen(
     viewModel: InsightsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var showTitrationDialog by remember { mutableStateOf(false) }
+    var dropInput by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Insights & Recovery", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Insights & Recovery", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background,
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
-            FloatingActionButton(onClick = onMapClick, containerColor = AppColors.Mint, contentColor = AppColors.Background) {
+            FloatingActionButton(onClick = onMapClick, containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.background) {
                 Icon(Icons.Rounded.Map, contentDescription = "View Trigger Map")
             }
         }
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = AppColors.Teal)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
             }
         } else {
             LazyColumn(
@@ -83,6 +91,15 @@ fun InsightsScreen(
                     )
                 }
 
+                if (state.isVaping) {
+                    item {
+                        TitrationCard(
+                            currentMg = state.currentNicotineStrengthMg,
+                            onLogDrop = { showTitrationDialog = true }
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
+                }
                 item {
                     RecoveryTimeline(state.elapsedMillis, state.usesNRT)
                 }
@@ -140,6 +157,34 @@ fun InsightsScreen(
             }
         }
     }
+
+    if (showTitrationDialog) {
+        AlertDialog(
+            onDismissRequest = { showTitrationDialog = false },
+            title = { Text("Log Nicotine Drop") },
+            text = {
+                OutlinedTextField(
+                    value = dropInput,
+                    onValueChange = { dropInput = it },
+                    label = { Text("New Strength (mg/ml)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                )
+            },
+            confirmButton = {
+                Button(onClick = {
+                    val mg = dropInput.toDoubleOrNull()
+                    if (mg != null) {
+                        viewModel.logTitrationDrop(mg)
+                    }
+                    showTitrationDialog = false
+                    dropInput = ""
+                }) { Text("Save") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showTitrationDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
 }
 
 @Composable
@@ -159,20 +204,20 @@ private fun InsightCard(title: String, value: String, icon: ImageVector, descrip
                     .size(56.dp)
                     .background(
                         Brush.linearGradient(
-                            listOf(AppColors.Teal.copy(alpha = 0.3f), AppColors.Teal.copy(alpha = 0.05f))
+                            listOf(MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f), MaterialTheme.colorScheme.secondary.copy(alpha = 0.05f))
                         ),
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(28.dp))
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(title, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp, fontWeight = FontWeight.Medium)
                 Text(value, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(description, color = AppColors.Mint.copy(alpha = 0.8f), fontSize = 12.sp)
+                Text(description, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f), fontSize = 12.sp)
             }
         }
     }
@@ -198,7 +243,7 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
     Column(modifier = Modifier.fillMaxWidth()) {
         milestones.forEachIndexed { index, milestone ->
             val isAchieved = elapsedMs >= milestone.thresholdMs
-            val color = if (isAchieved) AppColors.Mint else Color.DarkGray
+            val color = if (isAchieved) MaterialTheme.colorScheme.primary else Color.DarkGray
             
             val prevThreshold = if (index == 0) 0L else milestones[index - 1].thresholdMs
             val progressToThis = if (isAchieved) 1f else if (elapsedMs > prevThreshold) {
@@ -222,9 +267,9 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
                     if (index != milestones.lastIndex) {
                         Box(modifier = Modifier.width(2.dp).fillMaxHeight().background(Color.DarkGray.copy(alpha = 0.3f))) {
                             if (animatedProgress > 0f && !isAchieved) {
-                                Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(animatedProgress).background(AppColors.Mint))
+                                Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(animatedProgress).background(MaterialTheme.colorScheme.primary))
                             } else if (isAchieved) {
-                                Box(modifier = Modifier.fillMaxSize().background(AppColors.Mint.copy(alpha = 0.5f)))
+                                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)))
                             }
                         }
                     }
@@ -241,12 +286,39 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
                         LinearProgressIndicator(
                             progress = { animatedProgress },
                             modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
-                            color = AppColors.Mint,
+                            color = MaterialTheme.colorScheme.primary,
                             trackColor = Color.DarkGray
                         )
-                        Text("${(progressToThis * 100).toInt()}% completed", color = AppColors.Mint, fontSize = 10.sp, modifier = Modifier.padding(top = 4.dp))
+                        Text("${(progressToThis * 100).toInt()}% completed", color = MaterialTheme.colorScheme.primary, fontSize = 10.sp, modifier = Modifier.padding(top = 4.dp))
                     }
                 }
+            }
+        }
+    }
+
+}
+@Composable
+fun TitrationCard(currentMg: Double?, onLogDrop: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Rounded.Opacity, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer, modifier = Modifier.size(32.dp))
+            Spacer(Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Vape Titration", color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(if (currentMg != null) "Current: ${currentMg}mg" else "No strength logged", color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.8f), fontSize = 14.sp)
+            }
+            Button(
+                onClick = onLogDrop,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onTertiaryContainer, contentColor = MaterialTheme.colorScheme.tertiaryContainer)
+            ) {
+                Text("Log Drop")
             }
         }
     }

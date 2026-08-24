@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,27 +39,27 @@ fun JournalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Journal", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Journal", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
+                    IconButton(onClick = onBack) { Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onAddClick,
-                containerColor = AppColors.Teal,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = Color.White
             ) {
                 Text("Daily Check-In", fontWeight = FontWeight.Bold)
             }
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = AppColors.Teal)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
             }
         } else if (state.checkIns.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -98,7 +99,7 @@ private fun JournalCard(checkIn: DailyCheckInEntity) {
         shape = RoundedCornerShape(24.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            Text(dateStr, color = AppColors.Mint, fontSize = 14.sp)
+            Text(dateStr, color = MaterialTheme.colorScheme.primary, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(8.dp))
             Text("Day Rating: ${checkIn.dayRating}/5", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             if (!checkIn.tomorrowFocus.isNullOrBlank()) {

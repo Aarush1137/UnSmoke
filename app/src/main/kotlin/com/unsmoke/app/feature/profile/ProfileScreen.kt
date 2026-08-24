@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -47,10 +48,10 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Profile & Identity", fontWeight = FontWeight.Bold, color = AppColors.Mint) },
+                title = { Text("Profile & Identity", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = AppColors.Mint)
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 actions = {
@@ -58,10 +59,10 @@ fun ProfileScreen(
                         Icon(Icons.Rounded.Settings, contentDescription = "Settings", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -92,15 +93,15 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .size(88.dp)
                                 .clip(CircleShape)
-                                .background(AppColors.Mint.copy(alpha = 0.15f))
-                                .border(2.dp, AppColors.Mint, CircleShape),
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
+                                .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Person,
                                 contentDescription = null,
                                 modifier = Modifier.size(52.dp),
-                                tint = AppColors.Mint
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
 
@@ -116,7 +117,7 @@ fun ProfileScreen(
                         Text(
                             text = if (state.hasActiveAttempt) "Smoke-Free Since ${state.smokeFreeSince}" else "No Active Quit Attempt",
                             fontSize = 14.sp,
-                            color = AppColors.Mint,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
@@ -133,7 +134,7 @@ fun ProfileScreen(
                         title = "Days Free",
                         value = "${state.daysSmokeFree}",
                         icon = Icons.Rounded.Timer,
-                        color = AppColors.Teal,
+                        color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.weight(1f)
                     )
                     ProfileStatCard(
@@ -147,7 +148,7 @@ fun ProfileScreen(
                         title = "Avoided",
                         value = "${state.cigarettesAvoided}",
                         icon = Icons.Rounded.SmokingRooms,
-                        color = AppColors.Mint,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -173,7 +174,7 @@ fun ProfileScreen(
                             Text("My Core Motivation", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                         IconButton(onClick = { showEditReasonDialog = true }, modifier = Modifier.size(28.dp)) {
-                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Motivation", tint = AppColors.Mint, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Motivation", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                         }
                     }
                     Spacer(Modifier.height(10.dp))
@@ -206,7 +207,7 @@ fun ProfileScreen(
                             Text("Emergency Anchor", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
                         IconButton(onClick = { showEditContactDialog = true }, modifier = Modifier.size(28.dp)) {
-                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Contact", tint = AppColors.Mint, modifier = Modifier.size(18.dp))
+                            Icon(Icons.Rounded.Edit, contentDescription = "Edit Contact", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                         }
                     }
                     Spacer(Modifier.height(8.dp))
@@ -228,7 +229,7 @@ fun ProfileScreen(
                                 },
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .background(AppColors.Mint)
+                                    .background(MaterialTheme.colorScheme.primary)
                             ) {
                                 Icon(Icons.Rounded.Call, contentDescription = "Call Contact", tint = Color.Black)
                             }
@@ -242,11 +243,11 @@ fun ProfileScreen(
                         Spacer(Modifier.height(10.dp))
                         Button(
                             onClick = { showEditContactDialog = true },
-                            colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint.copy(alpha = 0.2f)),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
                             shape = RoundedCornerShape(12.dp),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
                         ) {
-                            Text("Set Anchor Contact", color = AppColors.Mint, fontSize = 13.sp)
+                            Text("Set Anchor Contact", color = MaterialTheme.colorScheme.primary, fontSize = 13.sp)
                         }
                     }
                 }
@@ -306,7 +307,7 @@ fun ProfileScreen(
                         viewModel.updateQuitReason(newReason)
                         showEditReasonDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text("Save")
                 }
@@ -346,7 +347,7 @@ fun ProfileScreen(
                         viewModel.updateEmergencyContact(contactName, contactPhone)
                         showEditContactDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text("Save")
                 }
@@ -403,10 +404,10 @@ private fun ProfileNavItem(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(AppColors.Mint.copy(alpha = 0.15f)),
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(24.dp))
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
             }
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {

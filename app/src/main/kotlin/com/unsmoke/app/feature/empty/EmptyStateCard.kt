@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.empty
+package com.unsmoke.app.feature.empty
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -40,14 +41,14 @@ fun EmptyStateCard(
         Box(
             modifier = Modifier
                 .size(120.dp)
-                .background(AppColors.Teal.copy(alpha = 0.15f), CircleShape),
+                .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
-                tint = AppColors.Mint
+                tint = MaterialTheme.colorScheme.primary
             )
         }
         
@@ -78,7 +79,7 @@ fun EmptyStateCard(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Text(

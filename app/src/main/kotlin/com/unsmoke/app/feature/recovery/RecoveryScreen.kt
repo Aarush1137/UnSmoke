@@ -6,6 +6,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,14 +32,14 @@ fun RecoveryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Recovery", color = AppColors.Mint) },
+                title = { Text("Recovery", color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = AppColors.Mint) }
+                    IconButton(onClick = onBack) { Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -53,7 +54,7 @@ fun RecoveryScreen(
                     Text("It's a bump, not the end. Let's understand what happened so you can get back stronger.", color = Color.White.copy(alpha = 0.8f))
                     Spacer(modifier = Modifier.height(32.dp))
                     
-                    Text("How many did you smoke?", color = AppColors.Mint)
+                    Text("How many did you smoke?", color = MaterialTheme.colorScheme.primary)
                     Slider(
                         value = state.cigarettesSmoked.toFloat(),
                         onValueChange = { viewModel.updateCigarettes(it.toInt()) },
@@ -66,7 +67,7 @@ fun RecoveryScreen(
                     Button(
                         onClick = { viewModel.nextStep() },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) { Text("CONTINUE", color = Color.White) }
                 }
                 2 -> {
@@ -78,7 +79,7 @@ fun RecoveryScreen(
                             RadioButton(
                                 selected = state.trigger == trigger,
                                 onClick = { viewModel.updateTrigger(trigger) },
-                                colors = RadioButtonDefaults.colors(selectedColor = AppColors.Mint)
+                                colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(trigger, color = Color.White, modifier = Modifier.padding(top = 12.dp))
@@ -88,7 +89,7 @@ fun RecoveryScreen(
                     Button(
                         onClick = { viewModel.nextStep() },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) { Text("CONTINUE", color = Color.White) }
                 }
                 3 -> {
@@ -101,14 +102,14 @@ fun RecoveryScreen(
                         onClick = { viewModel.finishRecovery(resetStreak = false) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = AppColors.Surface)
-                    ) { Text("IT WAS JUST A LAPSE. KEEP MY STREAK.", color = AppColors.Mint) }
+                    ) { Text("IT WAS JUST A LAPSE. KEEP MY STREAK.", color = MaterialTheme.colorScheme.primary) }
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Button(
                         onClick = { viewModel.finishRecovery(resetStreak = true) },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) { Text("START A NEW QUIT ATTEMPT", color = Color.White) }
                 }
             }

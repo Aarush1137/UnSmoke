@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +32,7 @@ fun UnSmokeShareCard(
     modifier: Modifier = Modifier
 ) {
     val gradient = Brush.verticalGradient(
-        colors = listOf(AppColors.Teal, AppColors.Background)
+        colors = listOf(MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.background)
     )
 
     Box(
@@ -48,7 +49,7 @@ fun UnSmokeShareCard(
         ) {
             // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.Favorite, contentDescription = null, tint = AppColors.Mint)
+                Icon(Icons.Rounded.Favorite, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("UnSmoke", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
@@ -69,7 +70,7 @@ fun UnSmokeShareCard(
                 )
                 Text(
                     text = "SMOKE-FREE!",
-                    color = AppColors.Mint,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )

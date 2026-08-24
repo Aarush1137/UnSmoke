@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -47,12 +48,12 @@ fun CravingScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = AppColors.Background,
+                    containerColor = MaterialTheme.colorScheme.background,
                     titleContentColor = Color.White
                 )
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -78,7 +79,7 @@ private fun ColumnScope.IntensityStep(intensity: Int, onChange: (Int) -> Unit, o
     
     // Intensity color dynamically changes from Green to Red
     val intensityColor = when (intensity) {
-        in 1..3 -> AppColors.Mint
+        in 1..3 -> MaterialTheme.colorScheme.primary
         in 4..7 -> AppColors.Amber
         else -> Color(0xFFFF5252)
     }
@@ -115,7 +116,7 @@ private fun ColumnScope.IntensityStep(intensity: Int, onChange: (Int) -> Unit, o
     Button(
         onClick = onNext,
         modifier = Modifier.fillMaxWidth().height(60.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
         shape = RoundedCornerShape(16.dp)
     ) {
         Text("NEXT", fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -141,7 +142,7 @@ private fun ColumnScope.TriggerStep(selected: Set<String>, onToggle: (String) ->
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(24.dp))
-                    .background(if (isSelected) AppColors.Mint else Color(0xFF1E2625))
+                    .background(if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFF1E2625))
                     .clickable { onToggle(trigger) }
                     .padding(horizontal = 20.dp, vertical = 12.dp)
             ) {
@@ -159,7 +160,7 @@ private fun ColumnScope.TriggerStep(selected: Set<String>, onToggle: (String) ->
     Button(
         onClick = onNext,
         modifier = Modifier.fillMaxWidth().height(60.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
         shape = RoundedCornerShape(16.dp),
         enabled = selected.isNotEmpty()
     ) {
@@ -169,7 +170,7 @@ private fun ColumnScope.TriggerStep(selected: Set<String>, onToggle: (String) ->
 
 @Composable
 private fun ColumnScope.NeedStep(onNext: () -> Unit) {
-    Text("Protect the next 10 minutes.", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = AppColors.Mint, textAlign = TextAlign.Center)
+    Text("Protect the next 10 minutes.", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary, textAlign = TextAlign.Center)
     Spacer(Modifier.height(16.dp))
     Text("Cravings only last a few minutes. If you can beat the clock, you win.", fontSize = 16.sp, color = Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
     

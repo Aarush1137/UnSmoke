@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -105,10 +106,10 @@ fun CravingTimerScreen(
             TopAppBar(
                 title = { Text(if (isBreathingMode) "4-7-8 Breathing" else "Ride it out", color = Color.White) },
                 navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp),
@@ -137,9 +138,9 @@ fun CravingTimerScreen(
                     Column(Modifier.padding(16.dp)) {
                         Text("Urge Surfing toolkit:", fontWeight = FontWeight.SemiBold)
                         Spacer(Modifier.height(8.dp))
-                        Text("Ã¢â‚¬Â¢ Drink a glass of cold water slowly")
-                        Text("Ã¢â‚¬Â¢ Follow the breathing visualizer")
-                        Text("Ã¢â‚¬Â¢ Distract yourself for 5 minutes")
+                        Text("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Drink a glass of cold water slowly")
+                        Text("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Follow the breathing visualizer")
+                        Text("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ Distract yourself for 5 minutes")
                     }
                 }
             }
@@ -157,7 +158,7 @@ fun CravingTimerScreen(
 
             Button(
                 onClick = { viewModel.resolveCraving("DEFEATED", currentLat, currentLng) },
-                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 modifier = Modifier.fillMaxWidth().height(56.dp)
             ) {
                 Text("I got through it", fontSize = 18.sp, fontWeight = FontWeight.Bold)
@@ -183,6 +184,7 @@ fun BreathingWaveAnimation() {
         )
     )
 
+    val waveColor = MaterialTheme.colorScheme.secondary
     Canvas(modifier = Modifier.fillMaxWidth().height(100.dp)) {
         val path = Path()
         val width = size.width
@@ -195,6 +197,6 @@ fun BreathingWaveAnimation() {
             if (x == 0) path.moveTo(x.toFloat(), y)
             else path.lineTo(x.toFloat(), y)
         }
-        drawPath(path, color = AppColors.Teal, style = Stroke(width = 8f))
+        drawPath(path, color = waveColor, style = Stroke(width = 8f))
     }
 }

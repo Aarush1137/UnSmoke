@@ -144,6 +144,10 @@ fun OnboardingScreen(
                         onCigsChange = viewModel::updateCigarettesPerDay,
                         ciggPrice = state.packPrice,
                         onPriceChange = viewModel::updatePackPrice,
+                        substanceType = state.substanceType,
+                        onSubstanceChange = viewModel::updateSubstanceType,
+                        nicotineStrengthMg = state.nicotineStrengthMg,
+                        onNicotineChange = viewModel::updateNicotineStrength,
                         onNext = { viewModel.updateStep(4) }
                     )
                     4 -> ChoiceStep(
@@ -397,11 +401,15 @@ private fun BaselineStep(
     onCigsChange: (String) -> Unit,
     ciggPrice: String,
     onPriceChange: (String) -> Unit,
+    substanceType: String,
+    onSubstanceChange: (String) -> Unit,
+    nicotineStrengthMg: String,
+    onNicotineChange: (String) -> Unit,
     onNext: () -> Unit
 ) = ScrollableOnboardingColumn {
     Spacer(Modifier.height(24.dp))
     Text(
-        "Your smoking baseline",
+        "Your baseline",
         fontSize = 28.sp,
         fontWeight = FontWeight.Bold,
         color = Color.White
@@ -414,9 +422,32 @@ private fun BaselineStep(
     )
     Spacer(Modifier.height(32.dp))
 
-    DarkOutlinedField(cigsPerDay, onCigsChange, "Cigarettes per day", KeyboardType.Number)
-    Spacer(Modifier.height(16.dp))
-    DarkOutlinedField(ciggPrice, onPriceChange, "Cost of one cigarette (\u20B9)", KeyboardType.Decimal)
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        DateOptionButton(
+            label = "Cigarettes",
+            isSelected = substanceType == "CIGARETTE",
+            onClick = { onSubstanceChange("CIGARETTE") }
+        )
+        DateOptionButton(
+            label = "Vaping",
+            isSelected = substanceType == "VAPING",
+            onClick = { onSubstanceChange("VAPING") }
+        )
+    }
+    
+    Spacer(Modifier.height(32.dp))
+
+    if (substanceType == "CIGARETTE") {
+        DarkOutlinedField(cigsPerDay, onCigsChange, "Cigarettes per day", KeyboardType.Number)
+        Spacer(Modifier.height(16.dp))
+        DarkOutlinedField(ciggPrice, onPriceChange, "Cost of one cigarette (\u20B9)", KeyboardType.Decimal)
+    } else {
+        DarkOutlinedField(cigsPerDay, onCigsChange, "Pods/Vapes finished per week", KeyboardType.Number)
+        Spacer(Modifier.height(16.dp))
+        DarkOutlinedField(ciggPrice, onPriceChange, "Cost of one pod/vape (\u20B9)", KeyboardType.Decimal)
+        Spacer(Modifier.height(16.dp))
+        DarkOutlinedField(nicotineStrengthMg, onNicotineChange, "Nicotine Strength (mg/ml, optional)", KeyboardType.Decimal)
+    }
 
     val cigsNum = cigsPerDay.toDoubleOrNull() ?: 0.0
     val priceNum = ciggPrice.toDoubleOrNull() ?: 0.0
@@ -858,7 +889,7 @@ fun LungHealthStep(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(Icons.Rounded.Healing, contentDescription = null, tint = AppColors.Mint, modifier = Modifier.size(64.dp))
+        Icon(Icons.Rounded.Healing, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(64.dp))
         Spacer(Modifier.height(32.dp))
         Text(
             "Baseline Lung Health",
