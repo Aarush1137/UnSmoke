@@ -55,7 +55,7 @@ fun AiCoachScreen(
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
-            Column(Modifier.fillMaxSize().padding(padding)) {
+            Column(Modifier.fillMaxSize().padding(padding).imePadding()) {
                 LazyColumn(
                     state = listState,
                     modifier = Modifier.weight(1f).padding(horizontal = 16.dp),

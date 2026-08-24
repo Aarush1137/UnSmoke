@@ -26,16 +26,27 @@ class CompanionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            attemptRepo.getActiveAttempt().collect { attempt ->
-                if (attempt != null) {
-                    companionRepo.getCompanion(attempt.id).collect { companion ->
+            @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+            attemptRepo.getActiveAttempt()
+                .flatMapLatest { attempt ->
+                    if (attempt != null) {
+                        companionRepo.getCompanion(attempt.id).map { companion -> Pair(attempt, companion) }
+                    } else {
+                        flowOf(null)
+                    }
+                }
+                .collect { result ->
+                    if (result == null) {
+                        _uiState.update { it.copy(isLoading = false) }
+                    } else {
+                        val attempt = result.first
+                        val companion = result.second
                         if (companion == null) {
-                            // Adopt a new companion!
                             val newCompanion = CompanionEntity(
                                 quitAttemptId = attempt.id,
-                                name = "Lungie", // Default cute name
+                                name = "Lungie",
                                 health = 100,
-                                stage = 0, // Egg / Sprout
+                                stage = 0,
                                 lastInteractionTime = System.currentTimeMillis(),
                                 mood = "HAPPY"
                             )
@@ -44,10 +55,7 @@ class CompanionViewModel @Inject constructor(
                             _uiState.update { it.copy(companion = companion, isLoading = false) }
                         }
                     }
-                } else {
-                    _uiState.update { it.copy(isLoading = false) }
                 }
-            }
         }
     }
 

@@ -44,7 +44,7 @@ fun BuddyScreen(
                 val myProfile = state.myProfile
                 val buddyProfile = state.buddyProfile
 
-                                if (myProfile?.pendingBuddyRequestUid != null && myProfile.buddyUid == null) {
+                if (myProfile?.pendingBuddyRequestUid != null && myProfile.buddyUid == null) {
                     // Incoming Request
                     Spacer(Modifier.height(32.dp))
                     Surface(

@@ -1,4 +1,4 @@
-﻿package com.unsmoke.app.feature.journal
+package com.unsmoke.app.feature.journal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,15 +25,18 @@ class JournalViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            quitAttemptRepo.getActiveAttempt().collect { attempt ->
-                if (attempt != null) {
-                    checkInRepo.getAllCheckIns().collect { logs ->
-                        _uiState.update { it.copy(checkIns = logs, isLoading = false) }
+            @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+            quitAttemptRepo.getActiveAttempt()
+                .flatMapLatest { attempt ->
+                    if (attempt != null) {
+                        checkInRepo.getAllCheckIns()
+                    } else {
+                        flowOf(emptyList())
                     }
-                } else {
-                    _uiState.update { it.copy(isLoading = false) }
                 }
-            }
+                .collect { logs ->
+                    _uiState.update { it.copy(checkIns = logs, isLoading = false) }
+                }
         }
     }
 }
