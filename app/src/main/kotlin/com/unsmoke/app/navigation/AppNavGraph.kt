@@ -20,9 +20,11 @@ import com.unsmoke.app.feature.profile.ProfileScreen
 import com.unsmoke.app.feature.plan.PlanScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.insights.InsightsScreen
+import com.unsmoke.app.feature.insights.TriggerMapScreen
 import com.unsmoke.app.feature.analytics.AnalyticsScreen
 import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.settings.SettingsScreen
+import com.unsmoke.app.feature.rewards.RewardsScreen
 
 @Composable
 fun AppNavGraph(
@@ -49,7 +51,8 @@ fun AppNavGraph(
                 onNRTClick = { navController.navigate(Screen.NRT.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
                 onCheckInClick = { navController.navigate(Screen.Journal.route) },
-                onBuddyClick = { navController.navigate(Screen.Buddy.route) }
+                onBuddyClick = { navController.navigate(Screen.Buddy.route) },
+                onRewardsClick = { navController.navigate(Screen.Rewards.route) }
             )
         }
         composable(route = Screen.Onboarding.route) {
@@ -95,7 +98,8 @@ fun AppNavGraph(
         composable(route = Screen.NRT.route) {
             NRTDashboardScreen(onBack = { navController.popBackStack() })
         }
-                composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }) }
+                composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }, onMapClick = { navController.navigate(Screen.TriggerMap.route) }) }
+        composable(route = Screen.TriggerMap.route) { TriggerMapScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Analytics.route) { AnalyticsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Progress.route) {
             ProgressScreen(onInsightsClick = { navController.navigate(Screen.Insights.route) }, onAnalyticsClick = { navController.navigate(Screen.Analytics.route) }, onBack = { navController.popBackStack() })
@@ -110,6 +114,7 @@ fun AppNavGraph(
         composable(route = Screen.Plan.route) { PlanScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Achievements.route) { AchievementsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Buddy.route) { com.unsmoke.app.feature.buddy.BuddyScreen() }
+        composable(route = Screen.Rewards.route) { RewardsScreen(onNavigateBack = { navController.popBackStack() }) }
         composable(route = Screen.Settings.route) {
             SettingsScreen(
                 onBack = { navController.popBackStack() },

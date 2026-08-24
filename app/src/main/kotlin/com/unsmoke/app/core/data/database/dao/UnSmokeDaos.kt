@@ -67,3 +67,18 @@ interface UserProfileDao {
 }
 
 
+
+@Dao
+interface RewardGoalDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(goal: RewardGoalEntity)
+
+    @Query("SELECT * FROM reward_goal ORDER BY id ASC")
+    fun getAllGoals(): Flow<List<RewardGoalEntity>>
+
+    @Query("DELETE FROM reward_goal WHERE id = :goalId")
+    suspend fun deleteGoal(goalId: Long)
+
+    @Query("UPDATE reward_goal SET achieved = 1, achievedAt = :timestamp WHERE id = :goalId")
+    suspend fun markAchieved(goalId: Long, timestamp: Long)
+}

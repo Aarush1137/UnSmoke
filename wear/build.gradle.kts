@@ -12,8 +12,8 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 30
         targetSdk = 33
-        versionCode = 8
-        versionName = "1.3.1"
+        versionCode = 9
+        versionName = "1.4.0"
     }
 
     buildTypes {
@@ -35,8 +35,10 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.play.services.wearable)
+    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)

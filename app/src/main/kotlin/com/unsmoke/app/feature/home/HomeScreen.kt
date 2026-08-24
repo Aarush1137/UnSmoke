@@ -24,6 +24,7 @@ import com.unsmoke.app.core.designsystem.components.ProgressRing
 
 @Composable
 fun HomeScreen(
+    onRewardsClick: () -> Unit,
     onCravingClick: () -> Unit,
     onProgressClick: () -> Unit,
     onNRTClick: () -> Unit,
@@ -100,7 +101,7 @@ fun HomeScreen(
             // Two Metric Cards
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Card(
-                    modifier = Modifier.weight(1f).aspectRatio(1.2f),
+                    modifier = Modifier.weight(1f).aspectRatio(1.2f).clickable { onRewardsClick() },
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                 ) {
@@ -114,7 +115,7 @@ fun HomeScreen(
                 }
                 
                 Card(
-                    modifier = Modifier.weight(1f).aspectRatio(1.2f),
+                    modifier = Modifier.weight(1f).aspectRatio(1.2f).clickable { onProgressClick() },
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                 ) {

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 @Composable
 fun InsightsScreen(
     onNavigateBack: () -> Unit,
+    onMapClick: () -> Unit = {},
     viewModel: InsightsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -48,7 +49,12 @@ fun InsightsScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = AppColors.Background)
             )
         },
-        containerColor = AppColors.Background
+        containerColor = AppColors.Background,
+        floatingActionButton = {
+            FloatingActionButton(onClick = onMapClick, containerColor = AppColors.Mint, contentColor = AppColors.Background) {
+                Icon(Icons.Rounded.Map, contentDescription = "View Trigger Map")
+            }
+        }
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

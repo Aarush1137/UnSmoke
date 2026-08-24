@@ -24,7 +24,7 @@ data class SettingsUiState(
     val theme: String = "DARK",
     val currencySymbol: String = "\u20B9",
     val accentColor: String = "MINT",
-    val version: String = "1.2.2"
+    val version: String = com.unsmoke.app.BuildConfig.VERSION_NAME
 )
 
 @HiltViewModel

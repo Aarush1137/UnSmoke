@@ -21,8 +21,9 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             UnSmokeDatabase::class.java,
-            "unsmoke_db"
-        ).build()
+            "unsmoke_db")
+            .addMigrations(UnSmokeDatabase.MIGRATION_1_2, UnSmokeDatabase.MIGRATION_2_3)
+            .build()
     }
 
     @Provides
@@ -39,5 +40,9 @@ object DatabaseModule {
 
     @Provides
     fun provideUserProfileDao(db: UnSmokeDatabase): UserProfileDao = db.userProfileDao()
-}
 
+    @Provides
+    fun provideRewardGoalDao(database: UnSmokeDatabase): RewardGoalDao {
+        return database.rewardGoalDao()
+    }
+}

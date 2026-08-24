@@ -1,5 +1,10 @@
 package com.unsmoke.app.feature.craving
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -14,15 +19,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.unsmoke.app.core.designsystem.AppColors
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.tasks.await
 import kotlin.math.sin
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CravingTimerScreen(
@@ -34,6 +45,43 @@ fun CravingTimerScreen(
     val targetEndTime by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(System.currentTimeMillis() + 600_000L) }
     var timeLeft by remember { mutableStateOf(600) }
     var isBreathingMode by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    var currentLat by remember { mutableStateOf<Double?>(null) }
+    var currentLng by remember { mutableStateOf<Double?>(null) }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true || 
+                      permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        if (granted) {
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { loc ->
+                if (loc != null) {
+                    currentLat = loc.latitude
+                    currentLng = loc.longitude
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val hasFine = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val hasCoarse = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (hasFine || hasCoarse) {
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { loc ->
+                if (loc != null) {
+                    currentLat = loc.latitude
+                    currentLng = loc.longitude
+                }
+            }
+        } else {
+            locationPermissionLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+            )
+        }
+    }
 
     LaunchedEffect(targetEndTime) {
         while (true) {
@@ -69,118 +117,84 @@ fun CravingTimerScreen(
             Spacer(Modifier.height(16.dp))
             
             if (isBreathingMode) {
-                BreathingExercise(hapticManager = viewModel.hapticManager)
+                com.unsmoke.app.core.designsystem.components.BreathingOrb()
             } else {
-                // Urge Surfing Visualizer
-                Box(modifier = Modifier.fillMaxWidth().height(160.dp), contentAlignment = Alignment.Center) {
-                    UrgeSurfingWave(timeLeft)
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        val mins = timeLeft / 60
-                        val secs = timeLeft % 60
-                        Text(String.format("%02d:%02d", mins, secs), color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.Bold)
-                        Text("remaining", color = Color.LightGray, fontSize = 16.sp)
+                Text(
+                    text = String.format("%02d:%02d", timeLeft / 60, timeLeft % 60),
+                    fontSize = 72.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Spacer(Modifier.height(32.dp))
+                BreathingWaveAnimation()
+                Spacer(Modifier.height(48.dp))
+                
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        Text("Urge Surfing toolkit:", fontWeight = FontWeight.SemiBold)
+                        Spacer(Modifier.height(8.dp))
+                        Text("Ã¢â‚¬Â¢ Drink a glass of cold water slowly")
+                        Text("Ã¢â‚¬Â¢ Follow the breathing visualizer")
+                        Text("Ã¢â‚¬Â¢ Distract yourself for 5 minutes")
                     }
                 }
             }
-            
-            Spacer(Modifier.height(32.dp))
-            if (isBreathingMode) {
-                Text("Focus on the haptic pulses.", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Text("Inhale (4s), Hold (7s), Exhale (8s)", color = AppColors.Mint, fontSize = 16.sp)
-            } else {
-                Text("Cravings peak at 3 minutes, then fade.", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Text("You are surfing the urge.", color = AppColors.Mint, fontSize = 16.sp)
-            }
-            
-            Spacer(Modifier.height(32.dp))
-            
-            // The 4 D's Toolkit
-            Text("The 4 D's Toolkit", color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Start))
-            Spacer(Modifier.height(16.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                ToolkitItem(Icons.Rounded.Timer, "Delay", AppColors.Teal) { isBreathingMode = false }
-                ToolkitItem(Icons.Rounded.Air, "Breathe", AppColors.Mint) { isBreathingMode = true }
-                ToolkitItem(Icons.Rounded.LocalDrink, "Drink", AppColors.Amber) {}
-                ToolkitItem(Icons.Rounded.DirectionsRun, "Distract", AppColors.Teal) {}
-            }
-            
+
             Spacer(Modifier.weight(1f))
-            Button(
-                onClick = { viewModel.resolveCraving("DEFEATED") },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Mint)
-            ) {
-                Text("I BEAT THIS CRAVING", color = AppColors.Background, fontWeight = FontWeight.Bold)
-            }
             
+            Button(
+                onClick = { isBreathingMode = !isBreathingMode },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(if (isBreathingMode) "Stop Breathing Mode" else "Start 4-7-8 Breathing")
+            }
             Spacer(Modifier.height(16.dp))
-            TextButton(onClick = { viewModel.resolveCraving("SMOKED") }) {
-                Text("I SMOKED", color = Color.Gray)
+
+            Button(
+                onClick = { viewModel.resolveCraving("DEFEATED", currentLat, currentLng) },
+                colors = ButtonDefaults.buttonColors(containerColor = AppColors.Teal),
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            ) {
+                Text("I got through it", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
+            TextButton(onClick = { viewModel.resolveCraving("SMOKED", currentLat, currentLng) }) {
+                Text("I slipped up", color = Color.White.copy(alpha = 0.7f))
+            }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolkitItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, tint: Color, onClick: () -> Unit = {}) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Surface(
-            onClick = onClick,
-            shape = RoundedCornerShape(16.dp),
-            color = AppColors.Surface,
-            modifier = Modifier.size(64.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Icon(icon, contentDescription = label, tint = tint, modifier = Modifier.size(32.dp))
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        Text(label, color = Color.LightGray, fontSize = 12.sp)
-    }
-}
-
-@Composable
-fun UrgeSurfingWave(timeLeft: Int) {
-    // A craving lasts 10 mins (600s). Peaks between 90s (510) and 180s (420).
-    // We map elapsed time (600 - timeLeft) to an intensity multiplier.
-    val elapsed = 600 - timeLeft
-    val intensity = when {
-        elapsed < 90 -> elapsed / 90f // Ramp up
-        elapsed in 90..180 -> 1f // Peak
-        else -> 1f - ((elapsed - 180f) / 420f).coerceIn(0f, 1f) // Fade out
-    }
-    
+fun BreathingWaveAnimation() {
     val infiniteTransition = rememberInfiniteTransition()
     val phase by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 2f * Math.PI.toFloat(),
-        animationSpec = infiniteRepeatable(animation = tween(2000, easing = LinearEasing), repeatMode = RepeatMode.Restart)
+        animationSpec = infiniteRepeatable(
+            animation = tween(4000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
     )
 
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(modifier = Modifier.fillMaxWidth().height(100.dp)) {
+        val path = Path()
         val width = size.width
         val height = size.height
-        val centerY = height / 2f
-        val baseAmplitude = height * 0.15f
-        val currentAmplitude = baseAmplitude + (baseAmplitude * 1.5f * intensity)
-        
-        val path = Path()
-        path.moveTo(0f, centerY)
-        for (x in 0..width.toInt() step 5) {
-            // Wavelength
-            val frequency = 2f * Math.PI.toFloat() / width
-            val y = centerY + sin((x * frequency) + phase) * currentAmplitude
-            path.lineTo(x.toFloat(), y)
+        val centerY = height / 2
+
+        for (x in 0..width.toInt()) {
+            val normalizedX = x / width
+            val y = centerY + sin(normalizedX * 4 * Math.PI.toFloat() + phase) * 30f
+            if (x == 0) path.moveTo(x.toFloat(), y)
+            else path.lineTo(x.toFloat(), y)
         }
-        
-        val waveColor = androidx.compose.ui.graphics.lerp(AppColors.Teal, AppColors.Error, intensity * 0.5f)
-        
-        drawPath(
-            path = path,
-            color = waveColor.copy(alpha = 0.5f + (0.5f * intensity)),
-            style = Stroke(width = 4.dp.toPx())
-        )
+        drawPath(path, color = AppColors.Teal, style = Stroke(width = 8f))
     }
 }

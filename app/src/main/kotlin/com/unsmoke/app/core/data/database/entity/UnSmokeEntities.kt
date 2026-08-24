@@ -24,6 +24,8 @@ data class QuitAttemptEntity(
     val cigarettesPerDay: Double,
     val cigarettesPerPack: Int,
     val packPrice: Double,
+    val substanceType: String = "CIGARETTE",
+    val nicotineStrengthMg: Double? = null,
     val pricePerCigarette: Double,
     val timezone: String,
     val createdAt: Long
@@ -58,6 +60,8 @@ data class CravingEventEntity(
     val intensity: Int,
     val trigger: String?,
     val location: String?,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val intervention: String?,
     val outcome: String,
     val durationSeconds: Long?,
@@ -72,6 +76,8 @@ data class NRTProductEntity(
     val name: String,
     val nicotineStrengthMg: Double?,
     val packPrice: Double,
+    val substanceType: String = "CIGARETTE",
+    val nicotineStrengthMg: Double? = null,
     val unitsPerPack: Int,
     val pricePerUnit: Double,
     val isActive: Boolean = true

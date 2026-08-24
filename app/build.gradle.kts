@@ -25,11 +25,13 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.3.1"
+        versionCode = 9
+        versionName = "1.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
+        val mapsApiKey: String = project.findProperty("MAPS_API_KEY") as? String ?: "YOUR_API_KEY"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
     buildTypes {
         release {
@@ -49,6 +51,9 @@ android {
 
 
 dependencies {
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

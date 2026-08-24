@@ -53,7 +53,7 @@ class CravingViewModel @Inject constructor(
         _uiState.update { it.copy(step = CravingStep.TIMER, isTimerRunning = true) }
     }
 
-    fun resolveCraving(outcome: String) {
+    fun resolveCraving(outcome: String, latitude: Double? = null, longitude: Double? = null) {
         viewModelScope.launch {
             val state = _uiState.value
             val activeAttempt = quitRepo.getActiveAttempt().firstOrNull()
@@ -65,7 +65,9 @@ class CravingViewModel @Inject constructor(
                 timestamp = System.currentTimeMillis(),
                 intensity = state.intensity,
                 trigger = state.selectedTriggers.joinToString(","), 
-                location = null, 
+                location = null,
+                latitude = latitude,
+                longitude = longitude, 
                 intervention = null,
                 outcome = outcome,
                 durationSeconds = null, 
