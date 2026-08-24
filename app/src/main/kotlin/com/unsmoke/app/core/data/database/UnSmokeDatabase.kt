@@ -26,9 +26,10 @@ import com.unsmoke.app.core.data.database.entity.*
         NotificationPreferenceEntity::class,
         ImplementationIntentionEntity::class,
         TriggerLogEntity::class,
-        TitrationLogEntity::class
+        TitrationLogEntity::class,
+        CompanionEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class UnSmokeDatabase : RoomDatabase() {
@@ -49,6 +50,15 @@ abstract class UnSmokeDatabase : RoomDatabase() {
             }
         }
 
+                val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `virtual_companion` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `quitAttemptId` INTEGER NOT NULL, `name` TEXT NOT NULL, `health` INTEGER NOT NULL, `stage` INTEGER NOT NULL, `lastInteractionTime` INTEGER NOT NULL, `mood` TEXT NOT NULL, FOREIGN KEY(`quitAttemptId`) REFERENCES `quit_attempt`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )"
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_virtual_companion_quitAttemptId` ON `virtual_companion` (`quitAttemptId`)")
+            }
+        }
+
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE craving_event ADD COLUMN latitude REAL DEFAULT NULL")
@@ -56,6 +66,7 @@ abstract class UnSmokeDatabase : RoomDatabase() {
             }
         }
     }
+    abstract fun companionDao(): CompanionDao
     abstract fun titrationLogDao(): TitrationLogDao
     abstract fun quitAttemptDao(): QuitAttemptDao
     abstract fun cravingDao(): CravingDao

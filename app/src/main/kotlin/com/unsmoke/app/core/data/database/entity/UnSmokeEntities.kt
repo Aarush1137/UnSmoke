@@ -206,3 +206,24 @@ data class TitrationLogEntity(
     val timestamp: Long,
     val notes: String?
 )
+@Entity(
+    tableName = "virtual_companion",
+    foreignKeys = [
+        ForeignKey(
+            entity = QuitAttemptEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["quitAttemptId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["quitAttemptId"])]
+)
+data class CompanionEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val quitAttemptId: Long,
+    val name: String,
+    val health: Int,
+    val stage: Int,
+    val lastInteractionTime: Long,
+    val mood: String
+)
