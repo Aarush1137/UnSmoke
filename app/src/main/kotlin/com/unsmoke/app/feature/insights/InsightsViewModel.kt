@@ -89,5 +89,18 @@ class InsightsViewModel @Inject constructor(
             }
         }
     }
-}
 
+    fun logTitrationDrop(mg: Double) {
+        viewModelScope.launch {
+            val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
+            if (attempt != null) {
+                titrationRepo.insertLog(TitrationLogEntity(
+                    quitAttemptId = attempt.id,
+                    nicotineStrengthMg = mg,
+                    timestamp = System.currentTimeMillis(),
+                    notes = "Stepped down"
+                ))
+            }
+        }
+    }
+}
