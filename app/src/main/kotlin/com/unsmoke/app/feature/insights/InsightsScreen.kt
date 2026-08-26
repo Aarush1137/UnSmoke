@@ -6,7 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.TrendingDown
+import androidx.compose.material.icons.automirrored.rounded.DirectionsRun
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
@@ -51,7 +53,7 @@ fun InsightsScreen(
                 title = { Text("Insights & Recovery", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -174,7 +176,7 @@ fun InsightsScreen(
                         InsightCard(
                             title = "Craving Success Rate",
                             value = "${state.successRate}%",
-                            icon = Icons.Rounded.TrendingDown,
+                            icon = Icons.AutoMirrored.Rounded.TrendingDown,
                             description = "Percentage of cravings successfully defeated."
                         )
                     }
@@ -264,7 +266,7 @@ fun RecoveryTimeline(elapsedMs: Long, usesNRT: Boolean) {
             72 * 60 * 60 * 1000L, 
             Icons.Rounded.CheckCircle
         ),
-        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.Rounded.DirectionsRun)
+        HealthMilestone("2 Weeks", "Lung function and circulation improve.", 14 * 24 * 60 * 60 * 1000L, Icons.AutoMirrored.Rounded.DirectionsRun)
     )
 
     Column(modifier = Modifier.fillMaxWidth()) {

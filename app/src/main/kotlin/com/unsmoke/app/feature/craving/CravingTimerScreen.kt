@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -106,7 +107,7 @@ fun CravingTimerScreen(
         topBar = {
             TopAppBar(
                 title = { Text(if (isBreathingMode) "4-7-8 Breathing" else "Ride it out", color = Color.White) },
-                navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
+                navigationIcon = { IconButton(onClick = {}) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },

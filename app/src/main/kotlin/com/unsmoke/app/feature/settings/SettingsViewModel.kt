@@ -94,21 +94,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-        fun exportData(context: Context) {
-        viewModelScope.launch {
-            val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull() ?: return@launch
-            val uri = ExportEngine.generateExport(context, attempt.id, cravingRepo, nrtRepo)
-            if (uri != null) {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/csv"
-                    putExtra(Intent.EXTRA_STREAM, uri)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                val chooser = Intent.createChooser(intent, "Export Clinical Data")
-                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                ContextCompat.startActivity(context, chooser, null)
-            }
-        }
+    suspend fun generateExportUri(context: Context): android.net.Uri? {
+        val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull() ?: return null
+        return ExportEngine.generateExport(context, attempt.id, cravingRepo, nrtRepo)
     }
 
     fun wipeAllData(onComplete: () -> Unit) {

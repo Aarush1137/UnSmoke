@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -55,7 +55,7 @@ fun SettingsScreen(
                 title = { Text("Settings", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -197,7 +197,19 @@ fun SettingsScreen(
                     subtitle = "Generate a CSV of NRT logs and Cravings for your doctor",
                     icon = Icons.Rounded.Download,
                     onClick = {
-                        viewModel.exportData(context)
+                        scope.launch {
+                            val uri = viewModel.generateExportUri(context)
+                            if (uri != null) {
+                                val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                    type = "text/csv"
+                                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                }
+                                val chooser = android.content.Intent.createChooser(intent, "Export Clinical Data")
+                                chooser.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                context.startActivity(chooser)
+                            }
+                        }
                     }
                 )
             }
@@ -546,7 +558,7 @@ private fun SettingsClickableItem(
                     Text(subtitle, color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
                 }
             }
-            Icon(Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.Transparent, modifier = Modifier.size(16.dp))
+            Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null, tint = Color.Transparent, modifier = Modifier.size(16.dp))
         }
     }
 }

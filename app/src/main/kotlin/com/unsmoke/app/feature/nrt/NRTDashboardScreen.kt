@@ -10,7 +10,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.CheckCircle
 import com.unsmoke.app.feature.empty.EmptyStateCard
 import androidx.compose.material3.*
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import com.unsmoke.app.core.designsystem.AppColors
 import androidx.compose.runtime.*
 import androidx.compose.foundation.background
@@ -52,7 +52,7 @@ fun NRTDashboardScreen(
                 title = { Text("NRT Tracker", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)

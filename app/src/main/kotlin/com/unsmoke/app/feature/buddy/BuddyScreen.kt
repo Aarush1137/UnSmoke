@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,7 +22,7 @@ import com.unsmoke.app.core.domain.repository.BuddyProfile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BuddyScreen(
+fun BuddyScreen(onBack: () -> Unit,
     viewModel: BuddyViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,6 +31,7 @@ fun BuddyScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Quit Buddies", color = Color.White) },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back", tint = Color.White) } },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
