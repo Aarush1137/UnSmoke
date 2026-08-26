@@ -43,6 +43,12 @@ jobs:
           }
           EOF
 
+      - name: Inject API Keys into local.properties
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "GEMINI_API_KEY=\"$GEMINI_API_KEY\"" > local.properties
+
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
