@@ -6,14 +6,14 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import com.unsmoke.app.core.designsystem.unSmokeColors
+import com.google.maps.android.heatmaps.HeatmapTileProvider
+import com.google.maps.android.heatmaps.WeightedLatLng
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,10 +23,8 @@ fun TriggerMapScreen(
 ) {
     val cravings by viewModel.cravingsWithLocation.collectAsStateWithLifecycle()
     
-    // Default to a central position (e.g., center of US or a specific default)
-    // We'll update camera once we have data
     val defaultLocation = LatLng(37.7749, -122.4194)
-    var cameraPositionState = rememberCameraPositionState {
+    val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(defaultLocation, 10f)
     }
 
@@ -39,6 +37,20 @@ fun TriggerMapScreen(
                 )
             }
         }
+    }
+
+    val heatmapProvider = remember(cravings) {
+        val data = cravings.mapNotNull { craving ->
+            if (craving.latitude != null && craving.longitude != null) {
+                WeightedLatLng(LatLng(craving.latitude, craving.longitude), craving.intensity.toDouble())
+            } else null
+        }
+        if (data.isNotEmpty()) {
+            HeatmapTileProvider.Builder()
+                .weightedData(data)
+                .radius(50)
+                .build()
+        } else null
     }
 
     Scaffold(
@@ -62,14 +74,8 @@ fun TriggerMapScreen(
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapUiSettings(zoomControlsEnabled = false)
             ) {
-                cravings.forEach { craving ->
-                    if (craving.latitude != null && craving.longitude != null) {
-                        Marker(
-                            state = MarkerState(position = LatLng(craving.latitude, craving.longitude)),
-                            title = "Craving (Intensity: ${craving.intensity})",
-                            snippet = craving.trigger ?: "Unknown trigger"
-                        )
-                    }
+                if (heatmapProvider != null) {
+                    TileOverlay(tileProvider = heatmapProvider)
                 }
             }
         }
