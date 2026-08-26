@@ -46,6 +46,21 @@ fun BuddyScreen(onBack: () -> Unit,
                 modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+                if (state.isMockMode) {
+                    item {
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                        ) {
+                            Text(
+                                text = "Firebase Not Configured. Running in Offline Mock Mode.",
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
                 val myProfile = state.myProfile
                 
                 item {

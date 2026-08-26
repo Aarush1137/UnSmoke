@@ -5,7 +5,7 @@ service cloud.firestore {
       // Allow read if it's the user's own profile, OR if the reader is the paired buddy, OR if querying for pairing code
       allow read: if request.auth != null && (
         request.auth.uid == userId ||
-        (resource.data.buddyUid == request.auth.uid) ||
+        (request.auth.uid in resource.data.buddyUids) ||
         (request.query.limit <= 1) // basic protection for pairing code query
       );
       

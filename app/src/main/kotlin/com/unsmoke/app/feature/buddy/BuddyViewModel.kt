@@ -21,7 +21,8 @@ data class BuddyUiState(
     val buddyProfiles: List<BuddyProfile> = emptyList(),
     val pendingRequestProfiles: List<BuddyProfile> = emptyList(),
     val isLoading: Boolean = true,
-    val error: String? = null
+    val error: String? = null,
+    val isMockMode: Boolean = false
 )
 
 @HiltViewModel
@@ -39,6 +40,11 @@ class BuddyViewModel @Inject constructor(
     private var requestsJob: Job? = null
 
     init {
+        viewModelScope.launch {
+            buddyRepo.isUsingMockFlow.collect { isMock ->
+                _uiState.update { it.copy(isMockMode = isMock) }
+            }
+        }
         viewModelScope.launch {
             try {
                 val myUid = buddyRepo.signInAnonymously()

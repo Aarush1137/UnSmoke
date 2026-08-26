@@ -63,7 +63,14 @@ class MainActivity : FragmentActivity() {
                     Box(Modifier.fillMaxSize())
                 } else if (isUnlocked) {
                     UpdateDialogController()
-                    AppNavGraph()
+                    val deepLink = intent.getStringExtra("DEEP_LINK")
+                    val isSos = intent.getBooleanExtra("TRIGGER_SOS", false)
+                    val startDest = when {
+                        isSos -> "buddy"
+                        deepLink == "craving" -> "craving"
+                        else -> "splash"
+                    }
+                    AppNavGraph(startDestination = startDest)
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("App Locked")

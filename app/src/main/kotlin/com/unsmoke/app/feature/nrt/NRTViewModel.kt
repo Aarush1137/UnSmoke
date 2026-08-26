@@ -124,9 +124,17 @@ class NRTViewModel @Inject constructor(
     }
 
     private fun NRTSource.toUiState(showLogSheet: Boolean): NRTUiState {
-        val recommendation = attempt?.let { 
-            val days = com.unsmoke.app.core.domain.engine.CalculationEngine.smokeFreeDays(it.startEpochMillis)
-            com.unsmoke.app.core.domain.engine.NRTTaperingEngine.getNicotexGumPlan(days / 7, 2)
+        val recommendation = attempt?.let { att ->
+            product?.let { prod ->
+                val days = com.unsmoke.app.core.domain.engine.CalculationEngine.smokeFreeDays(att.startEpochMillis)
+                val weeks = (days / 7).toInt()
+                val strength = prod.nicotineStrengthMg ?: 2.0
+                when (prod.type) {
+                    "PATCH" -> com.unsmoke.app.core.domain.engine.NRTTaperingEngine.getPatchPlan(weeks, strength.toInt())
+                    "LOZENGE" -> com.unsmoke.app.core.domain.engine.NRTTaperingEngine.getNicotexLozengePlan(weeks, strength.toInt())
+                    else -> com.unsmoke.app.core.domain.engine.NRTTaperingEngine.getNicotexGumPlan(weeks, strength.toInt())
+                }
+            }
         }
         val startOfToday = ZonedDateTime.now().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val today = usages.filter { it.timestamp >= startOfToday }

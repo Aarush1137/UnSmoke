@@ -30,6 +30,7 @@ class BuddyRepository @Inject constructor() {
     private val firestore = FirebaseFirestore.getInstance()
     private val profilesCollection = firestore.collection("profiles")
 
+    var isUsingMockFlow = kotlinx.coroutines.flow.MutableStateFlow(false)
     private var isUsingMock = false
     private val mockProfiles = MutableStateFlow<Map<String, BuddyProfile>>(emptyMap())
     private val mockMyUid = "mock-uid-12345"
@@ -49,10 +50,12 @@ class BuddyRepository @Inject constructor() {
                 profilesCollection.document(uid).set(BuddyProfile(uid = uid, pairingCode = code)).await()
             }
             isUsingMock = false
+            isUsingMockFlow.value = false
             uid
         } catch (e: Exception) {
             e.printStackTrace()
             isUsingMock = true
+            isUsingMockFlow.value = true
             val currentMap = mockProfiles.value.toMutableMap()
             if (!currentMap.containsKey(mockMyUid)) {
                 currentMap[mockMyUid] = BuddyProfile(uid = mockMyUid, pairingCode = "123456")

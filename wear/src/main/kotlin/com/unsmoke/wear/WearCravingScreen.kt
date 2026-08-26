@@ -1,3 +1,5 @@
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 package com.unsmoke.wear
 
 import android.os.Build
@@ -26,6 +28,17 @@ fun WearCravingScreen(onBack: () -> Unit) {
     var phase by remember { mutableStateOf("Ready") }
     var scale by remember { mutableFloatStateOf(1f) }
     
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val nodes = com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes.kotlinx.coroutines.tasks.await()
+                nodes.forEach { node ->
+                    com.google.android.gms.wearable.Wearable.getMessageClient(context).sendMessage(node.id, "/log_craving", ByteArray(0)).kotlinx.coroutines.tasks.await()
+                }
+            } catch(e: Exception) { e.printStackTrace() }
+        }
+    }
+
     val infiniteTransition = rememberInfiniteTransition(label = "breathe")
     val animatedScale by infiniteTransition.animateFloat(
         initialValue = 0.8f,

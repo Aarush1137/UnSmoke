@@ -51,7 +51,9 @@ class RecoveryViewModel @Inject constructor(
                         packPrice = attempt.packPrice,
                         timezone = ZoneId.systemDefault().id,
                         createdAt = System.currentTimeMillis(),
-                        pricePerCigarette = attempt.pricePerCigarette
+                        pricePerCigarette = attempt.pricePerCigarette,
+                        substanceType = attempt.substanceType,
+                        nicotineStrengthMg = attempt.nicotineStrengthMg
                     )
                     val newId = quitAttemptRepo.insertAttempt(newAttempt)
                     

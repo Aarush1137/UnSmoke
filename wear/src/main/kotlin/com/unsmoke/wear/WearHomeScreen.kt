@@ -13,7 +13,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 
 @Composable
-fun WearHomeScreen(startEpoch: Long?, onBreatheClick: () -> Unit, modifier: Modifier = Modifier) {
+fun WearHomeScreen(startEpoch: Long?, onBreatheClick: () -> Unit, onSosClick: () -> Unit, modifier: Modifier = Modifier) {
     ScalingLazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(top = 28.dp, bottom = 28.dp),
@@ -44,7 +44,7 @@ fun WearHomeScreen(startEpoch: Long?, onBreatheClick: () -> Unit, modifier: Modi
         
         item {
             Button(
-                onClick = { /* TODO: Sync SOS to Mobile */ },
+                onClick = onSosClick,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
                 colors = androidx.wear.compose.material.ButtonDefaults.primaryButtonColors(backgroundColor = androidx.compose.ui.graphics.Color(0xFFE57373))
             ) {
@@ -82,7 +82,7 @@ fun WearLiveTimer(startEpoch: Long) {
     val minutes = (totalSeconds % 3600) / 60
     
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(bottom = 16.dp)) {
-        Text(text = "d h m", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(text = "${days}d ${hours}h ${minutes}m", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Text(text = "Smoke Free", fontSize = 12.sp, color = androidx.compose.ui.graphics.Color.LightGray)
     }
 }

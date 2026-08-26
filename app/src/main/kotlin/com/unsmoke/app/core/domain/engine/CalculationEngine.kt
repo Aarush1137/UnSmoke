@@ -64,9 +64,9 @@ object CalculationEngine {
         val hours = duration.toHours() % 24
         val minutes = duration.toMinutes() % 60
         return when {
-            days >= 1 -> "d h"
-            hours >= 1 -> "h m"
-            else -> "m"
+            days >= 1 -> "${days}d ${hours}h"
+            hours >= 1 -> "${hours}h ${minutes}m"
+            else -> "${minutes}m"
         }
     }
 }

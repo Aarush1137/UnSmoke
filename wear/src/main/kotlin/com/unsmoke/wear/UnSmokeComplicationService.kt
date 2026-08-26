@@ -18,13 +18,17 @@ class UnSmokeComplicationService : SuspendingComplicationDataSourceService() {
         var startEpochMillis: Long? = null
         try {
             val dataItems = dataClient.dataItems.await()
-            for (item in dataItems) {
-                if (item.uri.path == "/quit_status") {
-                    val dataMapItem = com.google.android.gms.wearable.DataMapItem.fromDataItem(item)
-                    val epoch = dataMapItem.dataMap.getLong("START_EPOCH", -1L)
-                    if (epoch != -1L) startEpochMillis = epoch
-                    break
+            try {
+                for (item in dataItems) {
+                    if (item.uri.path == "/quit_status") {
+                        val dataMapItem = com.google.android.gms.wearable.DataMapItem.fromDataItem(item)
+                        val epoch = dataMapItem.dataMap.getLong("START_EPOCH", -1L)
+                        if (epoch != -1L) startEpochMillis = epoch
+                        break
+                    }
                 }
+            } finally {
+                dataItems.release()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -40,7 +44,7 @@ class UnSmokeComplicationService : SuspendingComplicationDataSourceService() {
         val title = "Smoke Free"
 
         val tapIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         val tapPendingIntent = PendingIntent.getActivity(
             this, 0, tapIntent,
