@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>UnSmoke 🚭</h1>
+  <h1>🚭 UnSmoke</h1>
   <p><b>The Evidence-Based, Gamified Quit Smoking Companion</b></p>
 </div>
 
@@ -19,57 +19,75 @@ UnSmoke is an advanced Android application designed to help users quit smoking t
 
 ## 🌟 In-Depth Features
 
-### ⏱️ 1. Live Ticking Quit Timer (New in v1.3.1)
+### ⏱️ 1. Live Ticking Quit Timer
 The Home screen features a dynamic, real-time ticking timer that tracks the exact days, hours, minutes, and seconds since your quit date. The timer automatically resets if a relapse is logged, keeping you accountable down to the exact second.
 
-### ⌚ 2. Wear OS Companion App & Data Sync (New in v1.3.1)
-UnSmoke includes a native Wear OS application built with Compose for Wear OS. 
-- Log cravings directly from your wrist.
-- Real-time DataClient syncing to your phone so cravings logged on the watch appear immediately in your Heatmap.
-- Beautiful, glanceable UI with the same clinical CBT timer protocols.
+### ⌚ 2. Wear OS Companion App & Data Sync
+UnSmoke comes with a fully native smartwatch app! 
+- **Live Sync:** The Data Layer automatically syncs your active quit attempt from your phone to your wrist.
+- **Wrist Dashboard:** View your live ticking timer directly on your smartwatch.
+- **Haptic Breathing:** Trigger the "Breathe" function on your watch to launch a visually expanding orb synchronized with physical haptic vibrations to guide you through a 4-7-8 breathing exercise without ever touching your phone.
+- **Emergency SOS:** Send immediate alerts from your wrist when a craving peaks.
 
-### 📱 3. Gemini AI Recovery Coach
-An embedded, on-device AI coach powered by Google's Gemini Flash. 
-- Ask for immediate psychological support during severe cravings.
-- Dynamic prompts ("I feel like giving up", "I'm stressed") adjust based on your current quit phase.
+### ☁️ 3. Cloud Backup & Firestore Sync
+Never lose your progress! UnSmoke automatically links your anonymous identity to Google Cloud Firestore.
+- **Auto-Sync:** Cravings, NRT usages, and Quit Attempts are safely backed up to the cloud.
+- **30-Day Auto Delete:** To protect your privacy and reduce server costs, inactive accounts (no app launches for 30 days) are automatically purged via Firestore TTL (Time-To-Live) policies.
 
-### 👥 4. Multi-Buddy Accountability System (New in v2.1.0)
-You are no longer alone. You can now pair with a network of quit-buddies using real-time Firebase syncing.
-- **Connect with Multiple Friends**: Share your code to link with multiple people in your support network.
-- **Live Stats**: See exactly how many days your buddies have been smoke-free and how much NRT they've used.
-- **SOS Broadcasting**: Hit the SOS button to instantly alert all of your connected buddies if you are about to relapse.
+### 🤖 4. AI Coach & Insight Analytics
+Powered by Google's latest gemini-flash-latest model.
+- **CBT Chat:** Chat with an empathetic AI therapist specializing in urge surfing and grounding techniques.
+- **Relapse Predictions:** The AI analyzes your craving logs (intensity, time of day, triggers) to predict high-risk periods and provide actionable interventions.
 
-### 🧠 5. Advanced Craving Heatmaps & Location Tracking
-Uses Fused Location Provider and Google Maps SDK.
-- The app automatically logs the latitude/longitude of every craving you experience.
-- The **Trigger Map** visually renders a heatmap of your city so you can see geographically where you are most vulnerable (e.g., specific bars, work, stressful commutes).
+### 🏄 5. Urge Surfing & The 4 D's Protocol
+When a craving hits, launch the **Craving Timer**. It features a visual "breathing wave" animation that mimics the physiological curve of a craving (which usually peaks and subsides within 3-5 minutes). 
+While the timer runs, the app provides the **4 D's Toolkit**:
+- **Delay:** Wait 5 minutes.
+- **Deep Breathe:** Follow the animated visualizer.
+- **Drink Water:** Distract the oral fixation.
+- **Do Something Else:** Suggests random, healthy distractions.
 
-### 🧬 6. NRT Tapering Algorithms
-Unlike other apps that just track days, UnSmoke mathematically calculates your NRT absorption.
-- Log Patches, Gum, or Lozenges.
-- Calculates your live Nicotine plasma levels and guides you through clinical step-down protocols.
+### 💊 6. NRT (Nicotine Replacement Therapy) Tracker
+Unlike most apps that just track cold-turkey days, UnSmoke acknowledges that clinical cessation often involves NRT (patches, gums, lozenges).
+- Users can log usage of NRT products.
+- The app calculates the **Net Money Saved** (Gross savings from avoided cigarettes minus the cost of NRT products purchased).
+- Over time, the app provides a **tapering schedule** to step down NRT doses safely.
 
-### 🛡️ 7. Bio-Metric Lock
-Lock your recovery journal and private stats behind Android's Biometric Prompt (Fingerprint/Face Unlock).
+### 💸 7. Localized Cost Tracking
+Designed for global users, the onboarding flow asks for the exact average cost of *one* cigarette rather than assuming standard 20-pack sizes. This allows users who buy loose cigarettes or smaller packs (highly common in India and other regions) to get perfectly accurate daily and yearly savings calculations.
 
-### 🏆 8. Interactive Achievements Grid
-Gamified milestones that unlock beautiful Badges as you hit 24 hours, 7 days, 1 month, etc. 
+---
 
-## 🛠️ Tech Stack & Architecture
-- **Language**: Kotlin 2.0.0
-- **UI**: Jetpack Compose (Material 3) + Compose for Wear OS
-- **Architecture**: MVI / MVVM Clean Architecture
-- **Dependency Injection**: Hilt / Dagger
-- **Local Database**: Room DB (Offline First)
-- **Live Sync**: Firebase Firestore (Anonymous Auth)
-- **Location & Mapping**: Google Maps SDK, FusedLocationProviderClient
-- **AI Engine**: Generative AI SDK (Gemini)
+## 🛠️ Architecture & Tech Stack
 
-## 📥 Getting Started
-1. Clone the repository: git clone https://github.com/Aarush1137/UnSmoke.git
-2. Add your **Gemini API Key** and **Google Maps API Key** to local.properties:
+UnSmoke follows **Modern Android Development (MAD)** guidelines:
+
+- **UI:** Jetpack Compose (Material 3)
+- **Architecture:** Clean Architecture + MVVM (Model-View-ViewModel)
+- **Dependency Injection:** Hilt (Dagger)
+- **Local Database:** Room Database
+- **Remote Database:** Firebase Firestore & Firebase Auth (Anonymous)
+- **AI Integration:** Google Generative AI SDK (gemini-flash-latest)
+- **Wearables:** Wear OS Data Layer API
+- **Concurrency:** Kotlin Coroutines & Flows
+- **CI/CD:** GitHub Actions (Automated APK builds with Secure Secret Injection)
+
+## 📦 Building from Source
+
+To build UnSmoke locally:
+
+1. Clone the repository.
+2. Ensure you are using **JDK 21**.
+3. Set up your local properties:
+   Create a local.properties file in the root directory and add:
    `properties
-   GEMINI_API_KEY="your_ai_studio_key"
-   MAPS_API_KEY="your_google_cloud_maps_key"
+   MAPS_API_KEY=your_google_maps_key_here
+   GEMINI_API_KEY=your_gemini_api_key_here
    `
-3. Sync Gradle and run on a physical device or emulator.
+4. Build the project using Gradle:
+   `ash
+   ./gradlew :app:assembleDebug
+   ./gradlew :wear:assembleDebug
+   `
+
+*(Note: The GitHub Actions CI/CD pipeline will automatically inject the Gemini API key from GitHub Secrets for release builds!)*
