@@ -41,7 +41,7 @@ class AiInsightsRepository @Inject constructor() {
             )
             emit(response.text ?: "I'm here to support you, but I couldn't analyze your data right now.")
         } catch (e: Exception) {
-            emit("Analysis temporarily unavailable. Stay strong!")
+            emit("Analysis temporarily unavailable: ${e.message}")
         }
     }
 
@@ -104,7 +104,7 @@ class AiInsightsRepository @Inject constructor() {
             )
             emit(response.text ?: "I couldn't analyze your data right now. Stay strong!")
         } catch (e: Exception) {
-            emit("Analysis temporarily unavailable. Keep pushing forward!")
+            emit("Analysis temporarily unavailable: ${e.message}")
         }
     }
 }
