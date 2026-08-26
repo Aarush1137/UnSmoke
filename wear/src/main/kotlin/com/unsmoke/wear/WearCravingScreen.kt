@@ -1,6 +1,6 @@
+package com.unsmoke.wear
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-package com.unsmoke.wear
 
 import android.os.Build
 import android.os.VibrationEffect
@@ -31,9 +31,9 @@ fun WearCravingScreen(onBack: () -> Unit) {
     LaunchedEffect(Unit) {
         kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
-                val nodes = com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes.kotlinx.coroutines.tasks.await()
+                val nodes = com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes.await()
                 nodes.forEach { node ->
-                    com.google.android.gms.wearable.Wearable.getMessageClient(context).sendMessage(node.id, "/log_craving", ByteArray(0)).kotlinx.coroutines.tasks.await()
+                    com.google.android.gms.wearable.Wearable.getMessageClient(context).sendMessage(node.id, "/log_craving", ByteArray(0)).await()
                 }
             } catch(e: Exception) { e.printStackTrace() }
         }

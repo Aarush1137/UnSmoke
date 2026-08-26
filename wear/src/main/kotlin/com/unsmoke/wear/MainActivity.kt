@@ -1,5 +1,6 @@
-import kotlinx.coroutines.tasks.await
 package com.unsmoke.wear
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.launch
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
                             onBreatheClick = { currentScreen = "craving" },
                             onSosClick = {
                                 kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                                    val nodes = Wearable.getNodeClient(this@MainActivity).connectedNodes.kotlinx.coroutines.tasks.await()
+                                    val nodes = Wearable.getNodeClient(this@MainActivity).connectedNodes.await()
                                     nodes.forEach { node ->
                                         Wearable.getMessageClient(this@MainActivity).sendMessage(node.id, "/sos_alert", ByteArray(0)).await()
                                     }
