@@ -46,8 +46,15 @@ class HomeViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
     private val aiRepo: AiInsightsRepository,
     private val dataStore: UserPreferencesDataStore,
-    private val wearSyncManager: com.unsmoke.app.core.device.WearSyncManager
+    private val wearSyncManager: com.unsmoke.app.core.device.WearSyncManager,
+    private val cloudBackupEngine: com.unsmoke.app.core.domain.engine.CloudBackupEngine
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            cloudBackupEngine.syncLocalDataToCloud()
+        }
+    }
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 

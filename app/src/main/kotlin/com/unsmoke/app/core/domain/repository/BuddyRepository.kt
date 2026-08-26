@@ -21,7 +21,8 @@ data class BuddyProfile(
     val pendingBuddyRequestUids: List<String> = emptyList(),
     val name: String = "Buddy",
     val quitStartEpochMillis: Long? = null,
-    val totalNrtConsumed: Int = 0
+    val totalNrtConsumed: Int = 0,
+    val expireAt: java.util.Date? = null
 )
 
 @Singleton
