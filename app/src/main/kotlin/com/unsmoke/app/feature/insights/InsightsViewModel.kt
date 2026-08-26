@@ -28,6 +28,7 @@ data class InsightsUiState(
 )
 
 @HiltViewModel
+@kotlin.OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class InsightsViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
     private val quitAttemptRepo: QuitAttemptRepository,
@@ -39,57 +40,58 @@ class InsightsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            quitAttemptRepo.getActiveAttempt().collect { attempt ->
-                if (attempt != null) {
+            quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
+                if (attempt == null) {
+                    flowOf(InsightsUiState(isLoading = false))
+                } else {
                     val currentElapsed = System.currentTimeMillis() - attempt.startEpochMillis
-                    val nrtUsages = nrtRepo.getUsage(attempt.id).firstOrNull() ?: emptyList()
-                    val hasNRT = nrtUsages.isNotEmpty()
-                    
-                    launch {
-                        titrationRepo.getLogsForAttempt(attempt.id).collect { logs ->
-                            val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
-                            _uiState.update { it.copy(
-                                elapsedMillis = currentElapsed,
-                                isVaping = attempt.substanceType == "VAPING",
-                                currentNicotineStrengthMg = currentMg,
-                                titrationLogs = logs
-                            ) }
-                        }
-                    }
-                    launch {
-                        cravingRepo.getCravings(attempt.id).collect { cravings ->
+                    val isVaping = attempt.substanceType == "VAPING"
+
+                    combine(
+                        nrtRepo.getUsage(attempt.id),
+                        titrationRepo.getLogsForAttempt(attempt.id),
+                        cravingRepo.getCravings(attempt.id)
+                    ) { nrtUsages, logs, cravings ->
+                        val hasNRT = nrtUsages.isNotEmpty()
+                        val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
+
                         if (cravings.isNotEmpty()) {
-                            // Calculate Top Trigger
                             val triggers = cravings.mapNotNull { it.trigger }.flatMap { it.split(",") }.filter { it.isNotBlank() }
                             val topTrigger = triggers.groupingBy { it.trim() }.eachCount().maxByOrNull { it.value }?.key ?: "Unknown"
-                            
-                            // High Risk Time
                             val highRiskTime = PersonalizationEngine.getHighRiskTimeWindow(cravings) ?: "Not enough data"
-                            
-                            // Coping Strategy
                             val bestStrategy = PersonalizationEngine.getRankedCopingStrategies(cravings).firstOrNull() ?: "None logged yet"
                             
-                            // Success Rate
                             val defeated = cravings.count { it.outcome == "DEFEATED" }
                             val rate = ((defeated.toDouble() / cravings.size) * 100).toInt()
-                            
-                            _uiState.update { 
-                                it.copy(
-                                    usesNRT = hasNRT,
-                                    topTrigger = topTrigger,
-                                    highRiskTime = highRiskTime,
-                                    bestCopingStrategy = bestStrategy,
-                                    successRate = rate,
-                                    isLoading = false,
-                                    hasData = true
-                                )
-                            }
+
+                            InsightsUiState(
+                                usesNRT = hasNRT,
+                                topTrigger = topTrigger,
+                                highRiskTime = highRiskTime,
+                                bestCopingStrategy = bestStrategy,
+                                successRate = rate,
+                                isLoading = false,
+                                hasData = true,
+                                isVaping = isVaping,
+                                currentNicotineStrengthMg = currentMg,
+                                titrationLogs = logs,
+                                elapsedMillis = currentElapsed
+                            )
                         } else {
-                            _uiState.update { it.copy(isLoading = false, usesNRT = hasNRT) }
+                            InsightsUiState(
+                                isLoading = false,
+                                usesNRT = hasNRT,
+                                hasData = false,
+                                isVaping = isVaping,
+                                currentNicotineStrengthMg = currentMg,
+                                titrationLogs = logs,
+                                elapsedMillis = currentElapsed
+                            )
                         }
                     }
-                    }
                 }
+            }.collect { newState ->
+                _uiState.value = newState
             }
         }
     }
