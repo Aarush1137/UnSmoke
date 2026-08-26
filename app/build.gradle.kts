@@ -30,7 +30,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
-        val mapsApiKey: String = project.findProperty("MAPS_API_KEY") as? String ?: "YOUR_API_KEY"
+        val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY")?.replace("\"", "") ?: "YOUR_API_KEY"
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
     buildTypes {
