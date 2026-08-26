@@ -51,7 +51,7 @@ class AiInsightsRepository @Inject constructor() {
         daysSmokeFree: Int,
         usesNRT: Boolean
     ): Chat {
-        val systemInstruction = buildString {
+        val systemInstructionText = buildString {
             append("You are 'UnSmoke Coach', an empathetic, expert addiction recovery AI therapist.\n")
             append("The user's name is $userName. They have been smoke-free for $daysSmokeFree days.\n")
             if (usesNRT) append("They are currently using Nicotine Replacement Therapy or vaping to step down.\n")
@@ -63,12 +63,13 @@ class AiInsightsRepository @Inject constructor() {
             append("Keep responses extremely concise (1-3 sentences max) and conversational. Focus on CBT (Cognitive Behavioral Therapy) grounding techniques and urge surfing. Never break character.")
         }
 
-        val initialHistory = listOf(
-            content(role = "user") { text(systemInstruction) },
-            content(role = "model") { text("Understood. I am ready to help $userName. What's on their mind?") }
+        val sessionModel = GenerativeModel(
+            modelName = "gemini-1.5-flash",
+            apiKey = com.unsmoke.app.BuildConfig.GEMINI_API_KEY,
+            systemInstruction = content { text(systemInstructionText) }
         )
 
-        return generativeModel.startChat(history = initialHistory)
+        return sessionModel.startChat()
     }
     fun generateComprehensiveInsight(
         cravings: List<CravingEventEntity>,
