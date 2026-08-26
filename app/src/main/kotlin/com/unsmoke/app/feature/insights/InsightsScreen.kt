@@ -106,6 +106,33 @@ fun InsightsScreen(
                 
                 item { Spacer(modifier = Modifier.height(16.dp)) }
 
+                if (state.isAiLoading || state.aiInsight != null) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(20.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Rounded.AutoAwesome, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                                    Spacer(Modifier.width(12.dp))
+                                    Text("Gemini Insight", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer, fontSize = 18.sp)
+                                }
+                                Spacer(Modifier.height(16.dp))
+                                if (state.isAiLoading) {
+                                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                    Spacer(Modifier.height(8.dp))
+                                    Text("Analyzing your recovery logs...", color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f))
+                                } else {
+                                    Text(state.aiInsight ?: "", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(16.dp))
+                    }
+                }
+
                 if (!state.hasData) {
                     item {
                         EmptyStateCard(icon = Icons.Rounded.AutoGraph, title = "Not Enough Data", message = "Log more cravings to see your personal patterns.")

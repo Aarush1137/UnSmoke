@@ -70,4 +70,40 @@ class AiInsightsRepository @Inject constructor() {
 
         return generativeModel.startChat(history = initialHistory)
     }
+    fun generateComprehensiveInsight(
+        cravings: List<CravingEventEntity>,
+        nrtUsages: List<com.unsmoke.app.core.data.database.entity.NRTUsageEntity>,
+        daysSmokeFree: Int
+    ): Flow<String> = flow {
+        if (cravings.isEmpty() && nrtUsages.isEmpty()) {
+            emit("Log some cravings or NRT usage so I can analyze your progress!")
+            return@flow
+        }
+
+        val prompt = buildString {
+            append("You are an expert addiction recovery AI coach analyzing a user's quit-smoking data.\n")
+            append("The user has been smoke-free for $daysSmokeFree days.\n\n")
+            append("Here is their recent craving log (Intensity out of 10, Trigger, Outcome):\n")
+            cravings.takeLast(20).forEach { craving ->
+                append("- Intensity: ${craving.intensity}/10, Trigger: ${craving.trigger}, Outcome: ${craving.outcome}\n")
+            }
+            append("\nHere is their recent Nicotine Replacement Therapy (NRT) usage log:\n")
+            nrtUsages.takeLast(20).forEach { nrt ->
+                append("- Product ID: ${nrt.productId}, Quantity: ${nrt.quantity}\n")
+            }
+            append("\nBased on this data, please provide:\n")
+            append("1. A rating on how their quit journey is going (e.g. Excellent, Struggling, On Track).\n")
+            append("2. A personalized suggestion or CBT coping mechanism specifically targeting their triggers or NRT patterns.\n")
+            append("Keep it concise, empathetic, and under 4 sentences.")
+        }
+
+        try {
+            val response = generativeModel.generateContent(
+                content { text(prompt) }
+            )
+            emit(response.text ?: "I couldn't analyze your data right now. Stay strong!")
+        } catch (e: Exception) {
+            emit("Analysis temporarily unavailable. Keep pushing forward!")
+        }
+    }
 }

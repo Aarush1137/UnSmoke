@@ -8,6 +8,7 @@ import com.unsmoke.app.core.domain.repository.QuitAttemptRepository
 import com.unsmoke.app.core.domain.repository.NRTRepository
 import com.unsmoke.app.core.data.repository.TitrationRepository
 import com.unsmoke.app.core.data.database.entity.TitrationLogEntity
+import com.unsmoke.app.core.domain.repository.AiInsightsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,7 +25,9 @@ data class InsightsUiState(
     val isVaping: Boolean = false,
     val currentNicotineStrengthMg: Double? = null,
     val titrationLogs: List<TitrationLogEntity> = emptyList(),
-    val elapsedMillis: Long = 0L
+    val elapsedMillis: Long = 0L,
+    val aiInsight: String? = null,
+    val isAiLoading: Boolean = false
 )
 
 @HiltViewModel
@@ -33,10 +36,13 @@ class InsightsViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
     private val quitAttemptRepo: QuitAttemptRepository,
     private val nrtRepo: NRTRepository,
-    private val titrationRepo: TitrationRepository
+    private val titrationRepo: TitrationRepository,
+    private val aiRepo: AiInsightsRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(InsightsUiState())
     val uiState: StateFlow<InsightsUiState> = _uiState.asStateFlow()
+
+    private var aiGeneratedForCurrentData = false
 
     init {
         viewModelScope.launch {
@@ -54,6 +60,12 @@ class InsightsViewModel @Inject constructor(
                     ) { nrtUsages, logs, cravings ->
                         val hasNRT = nrtUsages.isNotEmpty()
                         val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
+
+                        // Trigger AI Generation ONCE
+                        if (!aiGeneratedForCurrentData && (cravings.isNotEmpty() || hasNRT)) {
+                            aiGeneratedForCurrentData = true
+                            generateAiInsight(cravings, nrtUsages, (currentElapsed / (1000 * 60 * 60 * 24)).toInt())
+                        }
 
                         if (cravings.isNotEmpty()) {
                             val triggers = cravings.mapNotNull { it.trigger }.flatMap { it.split(",") }.filter { it.isNotBlank() }
@@ -75,7 +87,9 @@ class InsightsViewModel @Inject constructor(
                                 isVaping = isVaping,
                                 currentNicotineStrengthMg = currentMg,
                                 titrationLogs = logs,
-                                elapsedMillis = currentElapsed
+                                elapsedMillis = currentElapsed,
+                                aiInsight = _uiState.value.aiInsight,
+                                isAiLoading = _uiState.value.isAiLoading
                             )
                         } else {
                             InsightsUiState(
@@ -85,13 +99,28 @@ class InsightsViewModel @Inject constructor(
                                 isVaping = isVaping,
                                 currentNicotineStrengthMg = currentMg,
                                 titrationLogs = logs,
-                                elapsedMillis = currentElapsed
+                                elapsedMillis = currentElapsed,
+                                aiInsight = _uiState.value.aiInsight,
+                                isAiLoading = _uiState.value.isAiLoading
                             )
                         }
                     }
                 }
             }.collect { newState ->
                 _uiState.value = newState
+            }
+        }
+    }
+
+    private fun generateAiInsight(
+        cravings: List<com.unsmoke.app.core.data.database.entity.CravingEventEntity>,
+        nrtUsages: List<com.unsmoke.app.core.data.database.entity.NRTUsageEntity>,
+        daysSmokeFree: Int
+    ) {
+        _uiState.update { it.copy(isAiLoading = true) }
+        viewModelScope.launch {
+            aiRepo.generateComprehensiveInsight(cravings, nrtUsages, daysSmokeFree).collect { insight ->
+                _uiState.update { it.copy(aiInsight = insight, isAiLoading = false) }
             }
         }
     }
