@@ -97,7 +97,7 @@ fun AnalyticsScreen(
                             Text("Physiological Recovery", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondaryContainer)
                             Spacer(Modifier.height(8.dp))
                             if (state.averageHeartRate != null) {
-                                Text("7-Day Avg Resting Heart Rate:  BPM", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                                Text("7-Day Avg Resting Heart Rate: ${state.averageHeartRate} BPM", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
                                 Text("Tracking your physical recovery against cravings.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
                             } else {
                                 Text("Health Connect is available but no heart rate data found in the last 7 days. Ensure permissions are granted.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))

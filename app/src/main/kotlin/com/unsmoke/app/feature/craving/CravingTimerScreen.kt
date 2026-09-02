@@ -39,6 +39,7 @@ import kotlin.math.sin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CravingTimerScreen(
+    onBack: () -> Unit,
     onDefeated: () -> Unit,
     onSmoked: () -> Unit,
     onChatWithCoach: () -> Unit,
@@ -107,7 +108,7 @@ fun CravingTimerScreen(
         topBar = {
             TopAppBar(
                 title = { Text(if (isBreathingMode) "4-7-8 Breathing" else "Ride it out", color = Color.White) },
-                navigationIcon = { IconButton(onClick = {}) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, tint = Color.White, contentDescription = null) } },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
@@ -137,7 +138,7 @@ fun CravingTimerScreen(
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                                        Column(Modifier.padding(16.dp)) {
+                    Column(Modifier.padding(16.dp)) {
                         Text("Urge Surfing toolkit:", fontWeight = FontWeight.SemiBold)
                         Spacer(Modifier.height(8.dp))
                         Text("- Drink a glass of cold water slowly")

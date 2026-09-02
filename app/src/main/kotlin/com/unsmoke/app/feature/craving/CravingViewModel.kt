@@ -58,7 +58,10 @@ class CravingViewModel @Inject constructor(
             val state = _uiState.value
             val activeAttempt = quitRepo.getActiveAttempt().firstOrNull()
             
-            val quitId = activeAttempt?.id ?: 1L // Fallback if no attempt
+            val quitId = activeAttempt?.id ?: run {
+                // No active quit attempt — cannot log craving safely
+                return@launch
+            }
 
             val event = CravingEventEntity(
                 quitAttemptId = quitId, 

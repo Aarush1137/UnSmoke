@@ -12,6 +12,7 @@ class QuitAttemptRepositoryImpl @Inject constructor(
     private val dao: QuitAttemptDao
 ) : QuitAttemptRepository {
     override suspend fun insertAttempt(attempt: QuitAttemptEntity) = dao.insert(attempt)
+    override suspend fun insertSmokingEvent(event: SmokingEventEntity) = dao.insertSmokingEvent(event)
     override fun getActiveAttempt(): Flow<QuitAttemptEntity?> = dao.getActiveAttempt()
     override fun getAllAttempts(): Flow<List<QuitAttemptEntity>> = dao.getAllAttempts()
 }

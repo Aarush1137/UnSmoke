@@ -11,6 +11,18 @@ service cloud.firestore {
       
       // Allow create/update only for their own profile
       allow write: if request.auth != null && request.auth.uid == userId;
+
+      // Buddy requests sub-collection: anyone authenticated can create a request,
+      // but only the profile owner can read/delete them
+      match /buddy_requests/{requestId} {
+        allow read, delete: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.fromUid;
+      }
+    }
+
+    match /backups/{userId} {
+      // Only the owner can read/write their own backup
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
 }

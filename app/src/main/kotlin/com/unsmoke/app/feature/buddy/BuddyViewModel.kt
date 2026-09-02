@@ -49,7 +49,10 @@ class BuddyViewModel @Inject constructor(
             try {
                 val myUid = buddyRepo.signInAnonymously()
                 observeMyProfile(myUid)
+                observePendingRequestsFromSubCollection(myUid)
                 startStatsSyncLoop(myUid)
+                // Process any pending accepted requests
+                buddyRepo.processAcceptedRequests(myUid)
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
@@ -91,8 +94,17 @@ class BuddyViewModel @Inject constructor(
                 
                 if (profile != null) {
                     observeBuddyProfiles(profile.buddyUids)
-                    observePendingRequests(profile.pendingBuddyRequestUids)
                 }
+            }
+        }
+    }
+
+    /** Observe pending requests from the buddy_requests sub-collection */
+    private fun observePendingRequestsFromSubCollection(myUid: String) {
+        requestsJob?.cancel()
+        requestsJob = viewModelScope.launch {
+            buddyRepo.observePendingRequests(myUid).collect { profiles ->
+                _uiState.update { it.copy(pendingRequestProfiles = profiles) }
             }
         }
     }
@@ -109,26 +121,17 @@ class BuddyViewModel @Inject constructor(
             }
         }
     }
-    
-    private fun observePendingRequests(uids: List<String>) {
-        requestsJob?.cancel()
-        if (uids.isEmpty()) {
-            _uiState.update { it.copy(pendingRequestProfiles = emptyList()) }
-            return
-        }
-        requestsJob = viewModelScope.launch {
-            buddyRepo.observeBuddyProfiles(uids).collect { profiles ->
-                _uiState.update { it.copy(pendingRequestProfiles = profiles) }
-            }
-        }
-    }
 
     fun sendBuddyRequest(code: String) {
         val myUid = _uiState.value.myProfile?.uid ?: return
         viewModelScope.launch {
-            val success = buddyRepo.sendBuddyRequest(myUid, code)
-            if (!success) {
-                _uiState.update { it.copy(error = "Invalid pairing code") }
+            try {
+                val success = buddyRepo.sendBuddyRequest(myUid, code)
+                if (!success) {
+                    _uiState.update { it.copy(error = "Invalid pairing code") }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message ?: "Failed to send request") }
             }
         }
     }

@@ -37,6 +37,20 @@ class RecoveryViewModel @Inject constructor(
         viewModelScope.launch {
             val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
             if (attempt != null) {
+                val state = _uiState.value
+
+                // Always record the smoking event so lapse data isn't lost
+                val smokingEvent = SmokingEventEntity(
+                    quitAttemptId = attempt.id,
+                    timestamp = System.currentTimeMillis(),
+                    cigaretteCount = state.cigarettesSmoked,
+                    trigger = state.trigger.ifBlank { null },
+                    mood = null,
+                    notes = state.emotion.ifBlank { null },
+                    eventType = if (resetStreak) "RELAPSE" else "LAPSE"
+                )
+                quitAttemptRepo.insertSmokingEvent(smokingEvent)
+
                 if (resetStreak) {
                     val updated = attempt.copy(status = "RELAPSED", endEpochMillis = System.currentTimeMillis())
                     quitAttemptRepo.insertAttempt(updated)

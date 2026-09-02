@@ -15,6 +15,9 @@ data class CheckInUiState(
     val mood: Int = 3, // 1-5
     val sleepQuality: Int = 3, // 1-5
     val stressLevel: Int = 3, // 1-5
+    val cravingLevel: Int = 3, // 1-5
+    val smoked: Boolean = false,
+    val topHelper: String? = null,
     val weightKg: Double? = null,
     val notes: String = ""
 )
@@ -30,6 +33,9 @@ class CheckInViewModel @Inject constructor(
     fun updateMood(mood: Int) = _uiState.update { it.copy(mood = mood) }
     fun updateSleep(sleep: Int) = _uiState.update { it.copy(sleepQuality = sleep) }
     fun updateStress(stress: Int) = _uiState.update { it.copy(stressLevel = stress) }
+    fun updateCravingLevel(level: Int) = _uiState.update { it.copy(cravingLevel = level) }
+    fun updateSmoked(smoked: Boolean) = _uiState.update { it.copy(smoked = smoked) }
+    fun updateTopHelper(helper: String?) = _uiState.update { it.copy(topHelper = helper) }
     fun updateNotes(notes: String) = _uiState.update { it.copy(notes = notes) }
 
     fun submitCheckIn(onSuccess: () -> Unit) {
@@ -49,9 +55,9 @@ class CheckInViewModel @Inject constructor(
             val checkIn = DailyCheckInEntity(
                 datestamp = LocalDate.now().toString(),
                 dayRating = rating,
-                smoked = false,
-                cravingLevel = state.stressLevel,
-                topHelper = null,
+                smoked = state.smoked,
+                cravingLevel = state.cravingLevel,
+                topHelper = state.topHelper,
                 tomorrowFocus = state.notes,
                 timestamp = System.currentTimeMillis()
             )

@@ -16,10 +16,10 @@ import javax.inject.Singleton
 class CloudBackupEngine @Inject constructor(
     private val quitAttemptRepo: QuitAttemptRepository,
     private val cravingRepo: CravingRepository,
-    private val nrtRepo: NRTRepository
+    private val nrtRepo: NRTRepository,
+    private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
 ) {
-    private val auth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
 
     suspend fun syncLocalDataToCloud() {
         val uid = auth.currentUser?.uid ?: return

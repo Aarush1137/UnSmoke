@@ -23,7 +23,6 @@ import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.insights.InsightsScreen
 import com.unsmoke.app.feature.insights.TriggerMapScreen
 import com.unsmoke.app.feature.analytics.AnalyticsScreen
-import com.unsmoke.app.feature.achievements.AchievementsScreen
 import com.unsmoke.app.feature.settings.SettingsScreen
 import com.unsmoke.app.feature.rewards.RewardsScreen
 
@@ -74,6 +73,7 @@ fun AppNavGraph(
         }
         composable(route = "craving_timer") {
             CravingTimerScreen(
+                onBack = { navController.popBackStack() },
                 onDefeated = { navController.navigate("craving_outcome") },
                 onSmoked = { navController.navigate("recovery") },
                 onChatWithCoach = { navController.navigate(Screen.AiCoach.route) }
@@ -101,7 +101,7 @@ fun AppNavGraph(
         composable(route = Screen.NRT.route) {
             NRTDashboardScreen(onBack = { navController.popBackStack() })
         }
-                composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }, onMapClick = { navController.navigate(Screen.TriggerMap.route) }) }
+        composable(route = Screen.Insights.route) { InsightsScreen(onNavigateBack = { navController.popBackStack() }, onMapClick = { navController.navigate(Screen.TriggerMap.route) }) }
         composable(route = Screen.TriggerMap.route) { TriggerMapScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Analytics.route) { AnalyticsScreen(onBack = { navController.popBackStack() }) }
         composable(route = Screen.Progress.route) {
@@ -138,7 +138,3 @@ fun AppNavGraph(
         }
     }
 }
-
-
-
-

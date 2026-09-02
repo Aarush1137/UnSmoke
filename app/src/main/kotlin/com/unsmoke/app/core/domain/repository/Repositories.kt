@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuitAttemptRepository {
     suspend fun insertAttempt(attempt: QuitAttemptEntity): Long
+    suspend fun insertSmokingEvent(event: SmokingEventEntity): Long
     fun getActiveAttempt(): Flow<QuitAttemptEntity?>
     fun getAllAttempts(): Flow<List<QuitAttemptEntity>>
 }

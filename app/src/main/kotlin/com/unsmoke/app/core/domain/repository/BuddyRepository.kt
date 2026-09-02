@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,9 +29,10 @@ data class BuddyProfile(
 )
 
 @Singleton
-class BuddyRepository @Inject constructor() {
-    private val auth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+class BuddyRepository @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
+) {
     private val profilesCollection = firestore.collection("profiles")
 
     var isUsingMockFlow = kotlinx.coroutines.flow.MutableStateFlow(false)
@@ -82,7 +86,19 @@ class BuddyRepository @Inject constructor() {
         if (snapshot.isEmpty) return false
         
         val targetUid = snapshot.documents.first().id
-        profilesCollection.document(targetUid).update("pendingBuddyRequestUids", FieldValue.arrayUnion(myUid)).await()
+        if (targetUid == myUid) return false // Can't add yourself
+
+        // Write to the target user's buddy_requests sub-collection (allowed by Firestore rules)
+        val requestData = mapOf(
+            "fromUid" to myUid,
+            "timestamp" to System.currentTimeMillis()
+        )
+        profilesCollection.document(targetUid)
+            .collection("buddy_requests")
+            .document(myUid)
+            .set(requestData)
+            .await()
+
         return true
     }
 
@@ -104,11 +120,67 @@ class BuddyRepository @Inject constructor() {
             return
         }
 
-        profilesCollection.document(myUid).update(
-            "buddyUids", FieldValue.arrayUnion(requesterUid),
-            "pendingBuddyRequestUids", FieldValue.arrayRemove(requesterUid)
-        ).await()
-        profilesCollection.document(requesterUid).update("buddyUids", FieldValue.arrayUnion(myUid)).await()
+        // Use a batch write: update own profile + write acceptance into requester's sub-collection
+        val batch = firestore.batch()
+
+        // 1. Add requester to my buddyUids
+        batch.update(profilesCollection.document(myUid),
+            "buddyUids", FieldValue.arrayUnion(requesterUid)
+        )
+
+        // 2. Remove the request doc from my buddy_requests sub-collection
+        batch.delete(
+            profilesCollection.document(myUid)
+                .collection("buddy_requests")
+                .document(requesterUid)
+        )
+
+        // 3. Write an acceptance doc into the requester's buddy_requests so their client picks it up
+        //    Actually, we write directly to their profile since we need arrayUnion.
+        //    Instead, we write an "accepted" doc that their client processes.
+        val acceptData = mapOf(
+            "fromUid" to myUid,
+            "type" to "ACCEPTED",
+            "timestamp" to System.currentTimeMillis()
+        )
+        batch.set(
+            profilesCollection.document(requesterUid)
+                .collection("buddy_requests")
+                .document("accepted_$myUid"),
+            acceptData
+        )
+
+        batch.commit().await()
+
+        // Also update our own buddyUids (already done in batch) - now process the acceptance on requester side
+        // The requester's client will observe their buddy_requests and call processAcceptance
+    }
+
+    /** Called by the client when it detects an "ACCEPTED" buddy_request for itself */
+    suspend fun processAcceptedRequests(myUid: String) {
+        if (isUsingMock) return
+
+        try {
+            val acceptedDocs = profilesCollection.document(myUid)
+                .collection("buddy_requests")
+                .get().await()
+
+            for (doc in acceptedDocs.documents) {
+                val type = doc.getString("type")
+                val fromUid = doc.getString("fromUid") ?: continue
+
+                if (type == "ACCEPTED") {
+                    // Add the accepter to my buddyUids
+                    profilesCollection.document(myUid)
+                        .update("buddyUids", FieldValue.arrayUnion(fromUid))
+                        .await()
+                    // Delete the processed acceptance doc
+                    doc.reference.delete().await()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     suspend fun updateMyStats(myUid: String, name: String, quitStartEpochMillis: Long?, totalNrtConsumed: Int) {
@@ -146,7 +218,12 @@ class BuddyRepository @Inject constructor() {
             return
         }
 
-        profilesCollection.document(myUid).update("pendingBuddyRequestUids", FieldValue.arrayRemove(requesterUid)).await()
+        // Delete the request from the buddy_requests sub-collection
+        profilesCollection.document(myUid)
+            .collection("buddy_requests")
+            .document(requesterUid)
+            .delete()
+            .await()
     }
 
     fun observeMyProfile(myUid: String): Flow<BuddyProfile?> {
@@ -160,28 +237,86 @@ class BuddyRepository @Inject constructor() {
             awaitClose { registration.remove() }
         }
     }
-    
-    fun observeBuddyProfiles(uids: List<String>): Flow<List<BuddyProfile>> {
-        if (uids.isEmpty()) return kotlinx.coroutines.flow.flowOf(emptyList())
-        if (isUsingMock) return mockProfiles.map { map -> uids.mapNotNull { map[it] } }
-        
-        return callbackFlow {
-            // Watch all docs where FieldPath.documentId() in uids
-            // Note: Firestore 'in' queries are limited to 10 items
-            if (uids.size > 10) {
-                trySend(emptyList())
-                return@callbackFlow
+
+    /** Observe pending buddy requests from the sub-collection */
+    fun observePendingRequests(myUid: String): Flow<List<BuddyProfile>> {
+        if (isUsingMock) {
+            return mockProfiles.map { map ->
+                val myProfile = map[myUid] ?: return@map emptyList()
+                myProfile.pendingBuddyRequestUids.mapNotNull { map[it] }
             }
-            val registration = profilesCollection.whereIn(com.google.firebase.firestore.FieldPath.documentId(), uids)
+        }
+        return callbackFlow {
+            val registration = profilesCollection.document(myUid)
+                .collection("buddy_requests")
                 .addSnapshotListener { snapshot, _ ->
                     if (snapshot != null) {
-                        val profiles = snapshot.documents.mapNotNull { it.toObject(BuddyProfile::class.java) }
-                        trySend(profiles)
+                        val requestUids = snapshot.documents
+                            .filter { it.getString("type") != "ACCEPTED" }
+                            .mapNotNull { it.getString("fromUid") }
+                        
+                        // For each request UID, fetch their profile
+                        if (requestUids.isEmpty()) {
+                            trySend(emptyList())
+                        } else {
+                            // Use the callbackFlow's coroutine scope
+                            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                                try {
+                                    val profiles = fetchProfilesByUids(requestUids)
+                                    trySend(profiles)
+                                } catch (e: Exception) {
+                                    trySend(emptyList())
+                                }
+                            }
+                        }
                     } else {
                         trySend(emptyList())
                     }
                 }
             awaitClose { registration.remove() }
+        }
+    }
+
+    /** Fetch profiles by UIDs with chunking to handle Firestore's 10-item whereIn limit */
+    private suspend fun fetchProfilesByUids(uids: List<String>): List<BuddyProfile> {
+        if (uids.isEmpty()) return emptyList()
+        val results = mutableListOf<BuddyProfile>()
+        for (chunk in uids.chunked(10)) {
+            val snapshot = profilesCollection
+                .whereIn(com.google.firebase.firestore.FieldPath.documentId(), chunk)
+                .get()
+                .await()
+            results.addAll(snapshot.documents.mapNotNull { it.toObject(BuddyProfile::class.java) })
+        }
+        return results
+    }
+    
+    fun observeBuddyProfiles(uids: List<String>): Flow<List<BuddyProfile>> {
+        if (uids.isEmpty()) return kotlinx.coroutines.flow.flowOf(emptyList())
+        if (isUsingMock) return mockProfiles.map { map -> uids.mapNotNull { map[it] } }
+        
+        // Handle >10 buddies by chunking and combining flows
+        val chunks = uids.chunked(10)
+        val flows = chunks.map { chunk ->
+            callbackFlow {
+                val registration = profilesCollection
+                    .whereIn(com.google.firebase.firestore.FieldPath.documentId(), chunk)
+                    .addSnapshotListener { snapshot, _ ->
+                        if (snapshot != null) {
+                            val profiles = snapshot.documents.mapNotNull { it.toObject(BuddyProfile::class.java) }
+                            trySend(profiles)
+                        } else {
+                            trySend(emptyList())
+                        }
+                    }
+                awaitClose { registration.remove() }
+            }
+        }
+
+        return if (flows.size == 1) {
+            flows.first()
+        } else {
+            combine(flows) { arrays -> arrays.flatMap { it.toList() } }
         }
     }
 

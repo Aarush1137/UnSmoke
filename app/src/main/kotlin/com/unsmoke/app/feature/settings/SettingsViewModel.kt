@@ -6,6 +6,7 @@ import com.unsmoke.app.core.data.database.UnSmokeDatabase
 import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
 import com.unsmoke.app.core.domain.repository.*
 import com.unsmoke.app.core.domain.engine.ExportEngine
+import com.unsmoke.app.core.domain.engine.CloudBackupEngine
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
@@ -24,7 +25,9 @@ data class SettingsUiState(
     val theme: String = "DARK",
     val currencySymbol: String = "\u20B9",
     val accentColor: String = "MINT",
-    val version: String = com.unsmoke.app.BuildConfig.VERSION_NAME
+    val version: String = com.unsmoke.app.BuildConfig.VERSION_NAME,
+    val isBackingUp: Boolean = false,
+    val backupMessage: String? = null
 )
 
 @HiltViewModel
@@ -33,7 +36,8 @@ class SettingsViewModel @Inject constructor(
     private val cravingRepo: CravingRepository,
     private val nrtRepo: NRTRepository,
     private val quitAttemptRepo: QuitAttemptRepository,
-    private val database: UnSmokeDatabase
+    private val database: UnSmokeDatabase,
+    private val cloudBackupEngine: CloudBackupEngine
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = combine(
@@ -99,6 +103,23 @@ class SettingsViewModel @Inject constructor(
         return ExportEngine.generateExport(context, attempt.id, cravingRepo, nrtRepo)
     }
 
+    fun syncToCloud() {
+        viewModelScope.launch {
+            _backupState.value = true
+            try {
+                cloudBackupEngine.syncLocalDataToCloud()
+                _backupMessage.value = "Backup complete!"
+            } catch (e: Exception) {
+                _backupMessage.value = "Backup failed: ${e.message}"
+            } finally {
+                _backupState.value = false
+            }
+        }
+    }
+
+    private val _backupState = MutableStateFlow(false)
+    private val _backupMessage = MutableStateFlow<String?>(null)
+
     fun wipeAllData(onComplete: () -> Unit) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -109,4 +130,3 @@ class SettingsViewModel @Inject constructor(
         }
     }
 }
-

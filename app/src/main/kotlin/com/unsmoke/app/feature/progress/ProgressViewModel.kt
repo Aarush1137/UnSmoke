@@ -33,7 +33,7 @@ data class ProgressUiState(
     val moneySaved: Double = 0.0,
     val cravingsDefeated: Int = 0,
     val nrtLogged: Int = 0,
-    val timeFilter: String = "7 Days",
+    val timeFilter: String = "All",
     val baselineBreathHold: Int = 0,
     val currentBreathHold: Int = 0,
     val currencySymbol: String = "$",
@@ -50,6 +50,13 @@ class ProgressViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ProgressUiState())
     val uiState: StateFlow<ProgressUiState> = _uiState.asStateFlow()
 
+    // Cache raw data for filtering
+    private var cachedStartEpochMillis: Long = 0L
+    private var cachedCigarettesPerDay: Double = 0.0
+    private var cachedPricePerCigarette: Double = 0.0
+    private var cachedCravingsDefeated: Int = 0
+    private var cachedNrtLogged: Int = 0
+
     init {
         viewModelScope.launch {
             combine(
@@ -60,6 +67,11 @@ class ProgressViewModel @Inject constructor(
                 dataStore.lastCheckInDate
             ) { attempt, currency, baseline, current, lastCheckIn ->
                 if (attempt != null) {
+                    // Cache raw values for time filter recalculation
+                    cachedStartEpochMillis = attempt.startEpochMillis
+                    cachedCigarettesPerDay = attempt.cigarettesPerDay
+                    cachedPricePerCigarette = attempt.pricePerCigarette
+
                     val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
                     val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay).toInt()
                     val saved = CalculationEngine.grossMoneySaved(avoided.toDouble(), attempt.pricePerCigarette)
@@ -72,7 +84,7 @@ class ProgressViewModel @Inject constructor(
                             currencySymbol = currency ?: "$",
                             baselineBreathHold = baseline,
                             currentBreathHold = current,
-                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, attempt?.startEpochMillis ?: System.currentTimeMillis())
+                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, attempt.startEpochMillis)
                         )
                     }
                 } else {
@@ -80,14 +92,34 @@ class ProgressViewModel @Inject constructor(
                         it.copy(currencySymbol = currency ?: "$",
                             baselineBreathHold = baseline,
                             currentBreathHold = current,
-                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, attempt?.startEpochMillis ?: System.currentTimeMillis()))
+                            showCheckInPrompt = shouldShowPrompt(lastCheckIn, System.currentTimeMillis()))
                     }
                 }
             }.collect {}
         }
+
+        // Observe cravings and NRT for counts
+        viewModelScope.launch {
+            quitAttemptRepo.getActiveAttempt().collect { attempt ->
+                if (attempt != null) {
+                    launch {
+                        cravingRepo.getCravings(attempt.id).collect { cravings ->
+                            cachedCravingsDefeated = cravings.count { it.outcome == "DEFEATED" || it.outcome == "SURVIVED" }
+                            recalculateForFilter(_uiState.value.timeFilter, cravings = cravings)
+                        }
+                    }
+                    launch {
+                        nrtRepo.getUsage(attempt.id).collect { usages ->
+                            cachedNrtLogged = usages.sumOf { it.quantity }
+                            _uiState.update { it.copy(nrtLogged = cachedNrtLogged) }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-        fun shareMilestone(context: Context, currency: String) {
+    fun shareMilestone(context: Context, currency: String) {
         val days = uiState.value.smokeFreeDays
         val money = uiState.value.moneySaved
         val uri = ShareEngine.generateShareImage(context, days, money, currency)
@@ -105,7 +137,44 @@ class ProgressViewModel @Inject constructor(
 
     fun setTimeFilter(filter: String) {
         _uiState.update { it.copy(timeFilter = filter) }
-        // TODO: filter metrics based on time window
+        viewModelScope.launch {
+            recalculateForFilter(filter)
+        }
+    }
+
+    private fun recalculateForFilter(
+        filter: String,
+        cravings: List<com.unsmoke.app.core.data.database.entity.CravingEventEntity>? = null
+    ) {
+        if (cachedStartEpochMillis == 0L) return
+
+        val now = System.currentTimeMillis()
+        val filterStartMillis = when (filter) {
+            "7 Days" -> now - 7L * 24 * 60 * 60 * 1000
+            "30 Days" -> now - 30L * 24 * 60 * 60 * 1000
+            else -> cachedStartEpochMillis // "All"
+        }
+
+        // Effective start is the later of quit start and filter start
+        val effectiveStart = maxOf(cachedStartEpochMillis, filterStartMillis)
+
+        val days = CalculationEngine.smokeFreeDuration(effectiveStart).toDays().toInt()
+        val avoided = CalculationEngine.cigarettesAvoided(effectiveStart, cachedCigarettesPerDay).toInt()
+        val saved = CalculationEngine.grossMoneySaved(avoided.toDouble(), cachedPricePerCigarette)
+
+        // Filter cravings by time window if available
+        val filteredDefeated = cravings?.count {
+            it.timestamp >= filterStartMillis && (it.outcome == "DEFEATED" || it.outcome == "SURVIVED")
+        } ?: cachedCravingsDefeated
+
+        _uiState.update {
+            it.copy(
+                smokeFreeDays = days,
+                cigarettesAvoided = avoided,
+                moneySaved = saved,
+                cravingsDefeated = filteredDefeated
+            )
+        }
     }
 
     private fun shouldShowPrompt(lastCheckIn: String, quitStartMillis: Long): Boolean {

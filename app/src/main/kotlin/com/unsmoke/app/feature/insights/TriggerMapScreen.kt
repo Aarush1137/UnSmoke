@@ -29,13 +29,11 @@ fun TriggerMapScreen(
     }
 
     LaunchedEffect(cravings) {
-        if (cravings.isNotEmpty()) {
-            val first = cravings.first()
-            if (first.latitude != null && first.longitude != null) {
-                cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                    LatLng(first.latitude, first.longitude), 12f
-                )
-            }
+        val target = cravings.firstOrNull { it.latitude != null && it.longitude != null }
+        if (target != null) {
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                LatLng(target.latitude!!, target.longitude!!), 12f
+            )
         }
     }
 

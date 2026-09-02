@@ -14,6 +14,9 @@ interface QuitAttemptDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(attempt: QuitAttemptEntity): Long
 
+    @Insert
+    suspend fun insertSmokingEvent(event: SmokingEventEntity): Long
+
     @Query("SELECT * FROM quit_attempt ORDER BY startEpochMillis DESC")
     fun getAllAttempts(): Flow<List<QuitAttemptEntity>>
 
@@ -65,8 +68,6 @@ interface UserProfileDao {
     @Query("SELECT * FROM user_profile WHERE id = 1")
     fun getProfile(): Flow<UserProfileEntity?>
 }
-
-
 
 @Dao
 interface RewardGoalDao {
