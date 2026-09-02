@@ -27,27 +27,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Create mock google-services.json
+      - name: Inject google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          cat << 'EOF' > app/google-services.json
-          {
-            "project_info": { "project_number": "0000", "project_id": "mock" },
-            "client": [{
-              "client_info": {
-                "mobilesdk_app_id": "1:0000:android:0000",
-                "android_client_info": { "package_name": "com.unsmoke.app" }
-              },
-              "api_key": [{ "current_key": "mock" }]
-            }],
-            "configuration_version": "1"
-          }
-          EOF
+          echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
       - name: Inject API Keys into local.properties
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
         run: |
           echo "GEMINI_API_KEY=\"$GEMINI_API_KEY\"" > local.properties
+          echo "MAPS_API_KEY=\"$MAPS_API_KEY\"" >> local.properties
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
