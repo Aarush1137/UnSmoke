@@ -86,7 +86,7 @@ fun RewardsScreen(
                     Text("Total Money Saved", color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "\\",
+                        text = "${uiState.currencySymbol}${String.format("%.2f", uiState.netMoneySaved)}",
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -114,7 +114,8 @@ fun RewardsScreen(
                             goal = goal,
                             currentSavings = uiState.netMoneySaved,
                             currencySymbol = uiState.currencySymbol,
-                            onDelete = { viewModel.deleteGoal(goal.id) }
+                            onDelete = { viewModel.deleteGoal(goal.id) },
+                            onToggleAchieved = { viewModel.toggleGoalAchieved(goal) }
                         )
                     }
                 }
@@ -136,18 +137,22 @@ fun RewardsScreen(
 
 @Composable
 fun RewardGoalCard(
-    goal: RewardGoalEntity,
+    goal: com.unsmoke.app.core.data.database.entity.RewardGoalEntity,
     currentSavings: Double,
     currencySymbol: String,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onToggleAchieved: () -> Unit
 ) {
-    val progress = (currentSavings / goal.targetAmount).coerceIn(0.0, 1.0)
-    val isAchieved = progress >= 1.0
+    // If the user already marked it as achieved, it stays 100%
+    val rawProgress = if (goal.achieved) 1.0 else (currentSavings / goal.targetAmount)
+    val progress = rawProgress.coerceIn(0.0, 1.0)
+    val isFullyFunded = progress >= 1.0
+    val isClaimed = goal.achieved
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = if (isClaimed) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isClaimed) 0.dp else 2.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -156,64 +161,86 @@ fun RewardGoalCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     Box(
                         modifier = Modifier
                             .size(40.dp)
                             .clip(CircleShape)
-                            .background(if (isAchieved) MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                            .background(if (isFullyFunded) MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = if (isAchieved) Icons.Rounded.Check else Icons.Rounded.Star,
+                            imageVector = if (isClaimed) Icons.Rounded.Check else Icons.Rounded.Star,
                             contentDescription = null,
-                            tint = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                            tint = if (isFullyFunded) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(Modifier.width(16.dp))
                     Column {
-                        Text(goal.name, fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onBackground)
                         Text(
-                            text = "\\",
+                            text = goal.name, 
+                            fontWeight = FontWeight.SemiBold, 
+                            fontSize = 18.sp, 
+                            color = if (isClaimed) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "${currencySymbol}${String.format("%.2f", goal.targetAmount)}",
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            color = if (isClaimed) MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         )
                     }
                 }
+                
+                if (isFullyFunded && !isClaimed) {
+                    Button(onClick = onToggleAchieved, modifier = Modifier.padding(end = 8.dp)) {
+                        Text("Claim")
+                    }
+                } else if (isClaimed) {
+                    TextButton(onClick = onToggleAchieved) {
+                        Text("Undo", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    }
+                }
+                
                 IconButton(onClick = onDelete) {
                     Icon(Icons.Rounded.Delete, contentDescription = "Delete", tint = Color.Red.copy(alpha = 0.7f))
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            if (!isClaimed) {
+                Spacer(Modifier.height(16.dp))
 
-            // Progress bar
-            LinearProgressIndicator(
-                progress = { progress.toFloat() },
-                modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
-                color = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
-            )
-            
-            Spacer(Modifier.height(8.dp))
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = if (isAchieved) "Fully Funded!" else "% Funded",
-                    fontSize = 12.sp,
-                    color = if (isAchieved) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
+                // Progress bar
+                val animatedProgress by androidx.compose.animation.core.animateFloatAsState(
+                    targetValue = progress.toFloat(),
+                    animationSpec = androidx.compose.animation.core.tween(durationMillis = 1000)
                 )
-                if (!isAchieved) {
-                    val remaining = goal.targetAmount - currentSavings
+                LinearProgressIndicator(
+                    progress = { animatedProgress },
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                    color = if (isFullyFunded) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
+                )
+                
+                Spacer(Modifier.height(8.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(
-                        text = "\\ left",
+                        text = if (isFullyFunded) "Fully Funded!" else "${(progress * 100).toInt()}% Funded",
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                        color = if (isFullyFunded) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
                     )
+                    if (!isFullyFunded) {
+                        val remaining = goal.targetAmount - currentSavings
+                        Text(
+                            text = "${currencySymbol}${String.format("%.2f", remaining)} left",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                        )
+                    }
                 }
             }
         }
@@ -246,7 +273,7 @@ fun AddGoalDialog(
                 OutlinedTextField(
                     value = amountStr,
                     onValueChange = { amountStr = it },
-                    label = { Text("Target Amount ($)") },
+                    label = { Text("Target Amount (${currencySymbol})") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true

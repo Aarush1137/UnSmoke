@@ -71,6 +71,12 @@ class RewardsViewModel @Inject constructor(
         }
     }
 
+    fun toggleGoalAchieved(goal: RewardGoalEntity) {
+        viewModelScope.launch {
+            rewardRepository.insertGoal(goal.copy(achieved = !goal.achieved, achievedAt = if (!goal.achieved) System.currentTimeMillis() else null))
+        }
+    }
+
     fun deleteGoal(goalId: Long) {
         viewModelScope.launch {
             rewardRepository.deleteGoal(goalId)
