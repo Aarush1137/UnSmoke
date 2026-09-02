@@ -34,7 +34,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 10
-        versionName = "3.0.7"
+        versionName = "3.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
