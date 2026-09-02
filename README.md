@@ -35,7 +35,7 @@ Never lose your progress! UnSmoke automatically links your anonymous identity to
 - **30-Day Auto Delete:** To protect your privacy and reduce server costs, inactive accounts (no app launches for 30 days) are automatically purged via Firestore TTL (Time-To-Live) policies.
 
 ### 🤖 4. AI Coach & Insight Analytics
-Powered by Google's latest gemini-flash-latest model.
+Powered by Google's latest `gemini-flash-latest` model.
 - **CBT Chat:** Chat with an empathetic AI therapist specializing in urge surfing and grounding techniques.
 - **Relapse Predictions:** The AI analyzes your craving logs (intensity, time of day, triggers) to predict high-risk periods and provide actionable interventions.
 
@@ -67,7 +67,7 @@ UnSmoke follows **Modern Android Development (MAD)** guidelines:
 - **Dependency Injection:** Hilt (Dagger)
 - **Local Database:** Room Database
 - **Remote Database:** Firebase Firestore & Firebase Auth (Anonymous)
-- **AI Integration:** Google Generative AI SDK (gemini-flash-latest)
+- **AI Integration:** Google Generative AI SDK (`gemini-flash-latest`)
 - **Wearables:** Wear OS Data Layer API
 - **Concurrency:** Kotlin Coroutines & Flows
 - **CI/CD:** GitHub Actions (Automated APK builds with Secure Secret Injection)
@@ -79,15 +79,15 @@ To build UnSmoke locally:
 1. Clone the repository.
 2. Ensure you are using **JDK 21**.
 3. Set up your local properties:
-   Create a local.properties file in the root directory and add:
-   `properties
+   Create a `local.properties` file in the root directory and add:
+   ```properties
    MAPS_API_KEY=your_google_maps_key_here
    GEMINI_API_KEY=your_gemini_api_key_here
-   `
+   ```
 4. Build the project using Gradle:
-   `ash
+   ```bash
    ./gradlew :app:assembleDebug
    ./gradlew :wear:assembleDebug
-   `
+   ```
 
 *(Note: The GitHub Actions CI/CD pipeline will automatically inject the Gemini API key from GitHub Secrets for release builds!)*

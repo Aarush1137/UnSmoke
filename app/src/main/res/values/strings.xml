@@ -2,5 +2,5 @@
     <string name="app_name">UnSmoke</string>
     <string name="widget_streak_description">Shows your smoke-free streak and a quick craving button</string>
     <string name="widget_dashboard_description">Full UnSmoke dashboard with all key metrics</string>
-    <string name="widget_craving_description">Emergency craving support — one tap to get help</string>
+    <string name="widget_craving_description">Emergency craving support â€” one tap to get help</string>
 </resources>

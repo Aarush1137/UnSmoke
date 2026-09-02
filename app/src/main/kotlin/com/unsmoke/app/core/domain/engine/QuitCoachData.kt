@@ -8,7 +8,7 @@ object QuitCoachData {
         "Day 3: The Dopamine Drop. Your brain is wondering where its free dopamine went. Stay distracted and drink ice-cold water.",
         "Day 4: Senses Returning. Notice anything different? Your sense of smell and taste are beginning to repair themselves.",
         "Day 5: Habit Loops. You aren't just fighting physical withdrawal, you're fighting routines. Change your morning coffee routine to trick your brain.",
-        "Day 6: Lung Repair. The cilia (tiny hairs) in your lungs are regrowing and sweeping out debris. You might cough more—this is a good sign!",
+        "Day 6: Lung Repair. The cilia (tiny hairs) in your lungs are regrowing and sweeping out debris. You might cough moreâ€”this is a good sign!",
         "Day 7: ONE WEEK! You have survived the absolute hardest part of quitting. Reward yourself with something you bought using your saved money.",
         "Day 8: Psychological Cravings. The physical nicotine is gone. Every craving from now on is purely a psychological ghost.",
         "Day 9: Blood Circulation. Your blood circulation is improving rapidly. Walking and exercising will start feeling noticeably easier.",
