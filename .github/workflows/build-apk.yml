@@ -34,18 +34,18 @@ jobs:
           if [ -z "$GOOGLE_SERVICES_JSON" ]; then
             echo "GOOGLE_SERVICES_JSON secret is empty. Using mock json."
             cat << 'EOF' > app/google-services.json
-            {
-              "project_info": { "project_number": "0000", "project_id": "mock" },
-              "client": [{
-                "client_info": {
-                  "mobilesdk_app_id": "1:0000:android:0000",
-                  "android_client_info": { "package_name": "com.unsmoke.app" }
-                },
-                "api_key": [{ "current_key": "mock" }]
-              }],
-              "configuration_version": "1"
-            }
-            EOF
+{
+  "project_info": { "project_number": "0000", "project_id": "mock" },
+  "client": [{
+    "client_info": {
+      "mobilesdk_app_id": "1:0000:android:0000",
+      "android_client_info": { "package_name": "com.unsmoke.app" }
+    },
+    "api_key": [{ "current_key": "mock" }]
+  }],
+  "configuration_version": "1"
+}
+EOF
           else
             echo "Injecting real google-services.json from secrets."
             echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
