@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +27,9 @@ class MainActivity : FragmentActivity() {
     
     @Inject
     lateinit var dataStore: UserPreferencesDataStore
+
+    @Inject
+    lateinit var errorManager: com.unsmoke.app.core.util.ErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,22 +62,37 @@ class MainActivity : FragmentActivity() {
             }
 
             UnSmokeTheme(darkTheme = darkTheme, accentName = selectedAccent) {
-                if (isChecking) {
-                    // Empty loading state while checking biometrics
-                    Box(Modifier.fillMaxSize())
-                } else if (isUnlocked) {
-                    UpdateDialogController()
-                    val deepLink = intent.getStringExtra("DEEP_LINK")
-                    val isSos = intent.getBooleanExtra("TRIGGER_SOS", false)
-                    val startDest = when {
-                        isSos -> "buddy"
-                        deepLink == "craving" -> "craving"
-                        else -> "splash"
+                val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+                
+                LaunchedEffect(Unit) {
+                    errorManager.errors.collect { message ->
+                        snackbarHostState.showSnackbar(message)
                     }
-                    AppNavGraph(startDestination = startDest)
-                } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("App Locked")
+                }
+                
+                androidx.compose.material3.Scaffold(
+                    snackbarHost = { androidx.compose.material3.SnackbarHost(snackbarHostState) },
+                    contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0, 0, 0, 0)
+                ) { innerPadding ->
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                        if (isChecking) {
+                            // Empty loading state while checking biometrics
+                            Box(Modifier.fillMaxSize())
+                        } else if (isUnlocked) {
+                            UpdateDialogController()
+                            val deepLink = intent.getStringExtra("DEEP_LINK")
+                            val isSos = intent.getBooleanExtra("TRIGGER_SOS", false)
+                            val startDest = when {
+                                isSos -> "buddy"
+                                deepLink == "craving" -> "craving"
+                                else -> "splash"
+                            }
+                            AppNavGraph(startDestination = startDest)
+                        } else {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Text("App Locked")
+                            }
+                        }
                     }
                 }
             }

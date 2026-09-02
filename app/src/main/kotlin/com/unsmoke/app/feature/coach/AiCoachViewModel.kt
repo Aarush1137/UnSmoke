@@ -33,7 +33,8 @@ class AiCoachViewModel @Inject constructor(
     private val quitAttemptRepo: QuitAttemptRepository,
     private val cravingRepo: CravingRepository,
     private val nrtRepo: NRTRepository,
-    private val dataStore: UserPreferencesDataStore
+    private val dataStore: UserPreferencesDataStore,
+    private val errorManager: com.unsmoke.app.core.util.ErrorManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AiCoachUiState())
@@ -78,10 +79,11 @@ class AiCoachViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
+                errorManager.emitError("Connection failed: Could not reach the AI Coach.")
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        messages = listOf(ChatMessage(text = "Error connecting to AI Coach. Please check your internet.", isUser = false, isError = true))
+                        messages = listOf(ChatMessage(text = "Error connecting to AI Coach. Please check your internet connection and try again.", isUser = false, isError = true))
                     ) 
                 }
             }
@@ -107,8 +109,9 @@ class AiCoachViewModel @Inject constructor(
                     isTyping = false
                 ) }
             } catch (e: Exception) {
+                errorManager.emitError("Failed to send message: ${e.localizedMessage}")
                 _uiState.update { it.copy(
-                    messages = it.messages + ChatMessage(text = "Failed to send message.", isUser = false, isError = true),
+                    messages = it.messages + ChatMessage(text = "Failed to send message. Let's take a deep breath and try again later.", isUser = false, isError = true),
                     isTyping = false
                 ) }
             }
