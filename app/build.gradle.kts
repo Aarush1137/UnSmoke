@@ -19,18 +19,25 @@ android {
     if (localPropertiesFile.exists()) {
         localProperties.load(localPropertiesFile.inputStream())
     }
-    val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: "\"\""
+    
+    val secretsProperties = Properties()
+    val secretsPropertiesFile = rootProject.file("secrets.properties")
+    if (secretsPropertiesFile.exists()) {
+        secretsProperties.load(secretsPropertiesFile.inputStream())
+    }
+    
+    val geminiApiKey = secretsProperties.getProperty("GEMINI_API_KEY") ?: localProperties.getProperty("GEMINI_API_KEY") ?: "\"\""
+    val mapsApiKey = secretsProperties.getProperty("MAPS_API_KEY")?.replace("\"", "") ?: localProperties.getProperty("MAPS_API_KEY")?.replace("\"", "") ?: "YOUR_API_KEY"
 
     defaultConfig {
         applicationId = "com.unsmoke.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "3.0.0"
+        versionCode = 5
+        versionName = "3.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
-        val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY")?.replace("\"", "") ?: "YOUR_API_KEY"
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
     buildTypes {
