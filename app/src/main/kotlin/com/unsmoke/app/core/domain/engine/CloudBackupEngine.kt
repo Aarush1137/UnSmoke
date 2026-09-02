@@ -22,7 +22,16 @@ class CloudBackupEngine @Inject constructor(
 ) {
 
     suspend fun syncLocalDataToCloud() {
-        val uid = auth.currentUser?.uid ?: return
+        var uid = auth.currentUser?.uid
+        if (uid == null) {
+            try {
+                val result = auth.signInAnonymously().await()
+                uid = result.user?.uid
+            } catch (e: Exception) {
+                return
+            }
+        }
+        if (uid == null) return
         
         try {
             val userRef = firestore.collection("profiles").document(uid)
