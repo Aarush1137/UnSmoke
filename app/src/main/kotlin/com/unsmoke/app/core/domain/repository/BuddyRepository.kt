@@ -37,6 +37,7 @@ class BuddyRepository @Inject constructor(
     private val profilesCollection = firestore.collection("profiles")
 
     var isUsingMockFlow = kotlinx.coroutines.flow.MutableStateFlow(false)
+    var mockReasonFlow = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
     private var isUsingMock = false
     private val mockProfiles = MutableStateFlow<Map<String, BuddyProfile>>(emptyMap())
     private val mockMyUid = "mock-uid-12345"
@@ -59,11 +60,13 @@ class BuddyRepository @Inject constructor(
             }
             isUsingMock = false
             isUsingMockFlow.value = false
+            mockReasonFlow.value = null
             uid
         } catch (e: Exception) {
             e.printStackTrace()
             isUsingMock = true
             isUsingMockFlow.value = true
+            mockReasonFlow.value = e.localizedMessage ?: e.message ?: "Authentication/Firestore connection failed"
             val currentMap = mockProfiles.value.toMutableMap()
             if (!currentMap.containsKey(mockMyUid)) {
                 currentMap[mockMyUid] = BuddyProfile(uid = mockMyUid, pairingCode = "123456")

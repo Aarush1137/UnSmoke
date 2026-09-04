@@ -288,3 +288,27 @@
 * **Description:** Clicking the Streak home screen widget had no action.
 * **Fix Applied:** Added `android:id="@+id/widget_streak_root"` to layout and wired `setOnClickPendingIntent` to launch `MainActivity`.
 * **Status:** ✅ RESOLVED
+
+### BUG-042: Onboarding Single Cigarette / Unit Price Confusion
+* **File:** [`OnboardingViewModel.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/onboarding/OnboardingViewModel.kt)
+* **Description:** The onboarding UI prompts for "Cost of one cigarette (₹)" or "Cost of one pod/vape (₹)". The ViewModel erroneously divided this entered value by 20, resulting in severely deflated savings (~₹49 instead of ~₹989).
+* **Fix Applied:** Kept `pricePerCigarette = unitPriceDouble` directly (no division) and computed `packPrice = unitPriceDouble * perPackInt`.
+* **Status:** ✅ RESOLVED
+
+### BUG-043: HomeScreen "Cigs avoided" Metric Display Bug
+* **Files:** [`HomeScreen.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/home/HomeScreen.kt), [`HomeViewModel.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/home/HomeViewModel.kt)
+* **Description:** HomeScreen rendered `uiState.smokeFreeDays.toString()` under the "Cigs avoided" label instead of avoided cigarette count.
+* **Fix Applied:** Added `cigarettesAvoided: Int = 0` to `HomeUiState` populated with `avoided.roundToInt()`, and updated `HomeScreen.kt` to display `uiState.cigarettesAvoided.toString()`.
+* **Status:** ✅ RESOLVED
+
+### BUG-044: Active Attempt Database Self-Healing
+* **File:** [`HomeViewModel.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/home/HomeViewModel.kt)
+* **Description:** Existing active attempts created under previous buggy onboarding had deflated `pricePerCigarette` values, requiring users to wipe or recreate setups.
+* **Fix Applied:** Added self-healing logic in `HomeViewModel.kt`: if `attempt.pricePerCigarette < 5.0 && attempt.packPrice >= 10.0`, `effectivePrice` heals to `attempt.packPrice` immediately and persists the corrected attempt to Room, propagating to all screens without re-onboarding.
+* **Status:** ✅ RESOLVED
+
+### BUG-045: AI Coach & Buddy Error Diagnostics & Model Identifier
+* **Files:** [`AiCoachViewModel.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/coach/AiCoachViewModel.kt), [`AiInsightsRepository.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/core/domain/repository/AiInsightsRepository.kt), [`BuddyRepository.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/core/domain/repository/BuddyRepository.kt), [`BuddyViewModel.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/buddy/BuddyViewModel.kt), [`BuddyScreen.kt`](file:///e:/Projects/Unsmoke/app/src/main/kotlin/com/unsmoke/app/feature/buddy/BuddyScreen.kt)
+* **Description:** Silent failures in AI Coach ("Failed to send message") masked invalid API key issues, and Buddy mode silently entered mock mode without exposing why Firebase auth or Firestore failed.
+* **Fix Applied:** Unmasked exact exception messages in the UI for AI Coach chat and Buddy mock mode card, provided a "Retry Connection" button, and standardized the Gemini model name to `"gemini-1.5-flash"`.
+* **Status:** ✅ RESOLVED

@@ -125,7 +125,7 @@ fun HomeScreen(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Icon(Icons.Rounded.Block, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
                         Spacer(Modifier.weight(1f))
-                        Text(uiState.smokeFreeDays.toString(), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                        Text(uiState.cigarettesAvoided.toString(), fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(Modifier.height(4.dp))
                         Text("Cigs avoided", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }

@@ -33,8 +33,8 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
-        versionName = "3.2.0"
+        versionCode = 12
+        versionName = "3.2.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)

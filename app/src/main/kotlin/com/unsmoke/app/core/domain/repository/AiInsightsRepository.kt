@@ -14,7 +14,7 @@ class AiInsightsRepository @Inject constructor() {
 
     // Fetched securely from local.properties via BuildConfig
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-flash-latest",
+        modelName = "gemini-1.5-flash",
         apiKey = com.unsmoke.app.BuildConfig.GEMINI_API_KEY
     )
 
@@ -64,7 +64,7 @@ class AiInsightsRepository @Inject constructor() {
         }
 
         val sessionModel = GenerativeModel(
-            modelName = "gemini-flash-latest",
+            modelName = "gemini-1.5-flash",
             apiKey = com.unsmoke.app.BuildConfig.GEMINI_API_KEY,
             systemInstruction = content { text(systemInstructionText) }
         )

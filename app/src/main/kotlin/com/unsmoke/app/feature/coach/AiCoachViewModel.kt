@@ -79,11 +79,12 @@ class AiCoachViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                errorManager.emitError("Connection failed: Could not reach the AI Coach.")
+                val errorDetails = e.localizedMessage ?: e.message ?: "Could not reach AI Coach"
+                errorManager.emitError("Connection failed: $errorDetails")
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        messages = it.messages + ChatMessage(text = "Error connecting to AI Coach. Please check your internet connection and try again.", isUser = false, isError = true)
+                        messages = it.messages + ChatMessage(text = "Error connecting to AI Coach: $errorDetails. Please check your Gemini API key or connection.", isUser = false, isError = true)
                     ) 
                 }
             }
@@ -109,9 +110,10 @@ class AiCoachViewModel @Inject constructor(
                     isTyping = false
                 ) }
             } catch (e: Exception) {
-                errorManager.emitError("Failed to send message: ${e.localizedMessage}")
+                val errorDetails = e.localizedMessage ?: e.message ?: "Unknown error"
+                errorManager.emitError("Failed to send message: $errorDetails")
                 _uiState.update { it.copy(
-                    messages = it.messages + ChatMessage(text = "Failed to send message. Let's take a deep breath and try again later.", isUser = false, isError = true),
+                    messages = it.messages + ChatMessage(text = "Failed to send message: $errorDetails. Let's take a deep breath and try again later.", isUser = false, isError = true),
                     isTyping = false
                 ) }
             }

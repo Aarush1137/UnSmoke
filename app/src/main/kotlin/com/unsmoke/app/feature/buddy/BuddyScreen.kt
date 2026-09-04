@@ -52,12 +52,29 @@ fun BuddyScreen(onBack: () -> Unit,
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                             modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
                         ) {
-                            Text(
-                                text = "Firebase Not Configured. Running in Offline Mock Mode.",
-                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = "Firebase Not Configured. Running in Offline Mock Mode.",
+                                    color = MaterialTheme.colorScheme.onErrorContainer,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                state.mockReason?.let { reason ->
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        text = "Details: $reason",
+                                        color = MaterialTheme.colorScheme.onErrorContainer,
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                                Spacer(Modifier.height(12.dp))
+                                Button(
+                                    onClick = { viewModel.retryConnection() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                                ) {
+                                    Text("Retry Connection", color = MaterialTheme.colorScheme.onError)
+                                }
+                            }
                         }
                     }
                 }

@@ -48,11 +48,16 @@
 | **BUG-039** | 🟢 LOW | BreathingOrb Recomposes Every Frame (60fps) | ✅ Verified | Memoized instruction string with `remember { derivedStateOf { ... } }` in `BreathingOrb.kt`. |
 | **BUG-040** | 🟢 LOW | Location Permission Dialog During Acute Craving | ✅ Verified | Changed location check to passive check in `CravingTimerScreen.kt` without interrupting users in acute craving with a permission dialog. |
 | **BUG-041** | 🟢 LOW | Streak Widget Has No Click Action | ✅ Verified | Added `android:id="@+id/widget_streak_root"` in `widget_streak.xml` and wired `setOnClickPendingIntent` to launch `MainActivity` in `StreakWidgetReceiver.kt`. |
+| **BUG-042** | 🔴 CRITICAL | Onboarding Unit Price Division Error | ✅ Verified | Set `pricePerCigarette = unitPriceDouble` and computed `packPrice = unitPriceDouble * perPackInt` since onboarding UI explicitly asks for cost of one cigarette/pod. |
+| **BUG-043** | 🔴 CRITICAL | HomeScreen Cigs Avoided Display Bug | ✅ Verified | Added `cigarettesAvoided: Int` to `HomeUiState` populated with `avoided.roundToInt()`, and updated `HomeScreen.kt` to display `uiState.cigarettesAvoided.toString()` instead of `uiState.smokeFreeDays`. |
+| **BUG-044** | 🟠 HIGH | Active Attempt Database Self-Healing | ✅ Verified | Implemented active attempt self-healing in `HomeViewModel.kt` for `pricePerCigarette < 5.0 && packPrice >= 10.0` to heal database records in-place so current setups reflect true savings and avoided counts. |
+| **BUG-045** | 🟡 MEDIUM | AI Coach & Buddy Error Diagnostics & Retry | ✅ Verified | Exposed detailed exception messages in `AiCoachViewModel.kt` and `BuddyScreen.kt`, added Retry Connection action in Buddy mode, and updated Gemini model to `gemini-1.5-flash`. |
 
 ---
 
 ## 🔍 Verification Summary
 
+- **Total Bugs Resolved:** 45 / 45 (100% resolved)
 - **Automated Tests:** `./gradlew testDebugUnitTest` executed and completed with `BUILD SUCCESSFUL` (all unit tests passed 100%).
 - **Compilation Check:** Both `:app:compileDebugKotlin`, `:app:compileDebugUnitTestKotlin`, and `:wear:compileDebugKotlin` compiled cleanly with 0 errors.
 - **Unresolved Bugs:** 0

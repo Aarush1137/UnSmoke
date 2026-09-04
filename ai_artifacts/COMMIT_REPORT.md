@@ -1,25 +1,25 @@
-# UnSmoke v3.2.0 — Final Commit & Release Report
+# UnSmoke v3.2.1 — Commit & Release Report
 
 **Project:** UnSmoke (The Evidence-Based Quit Smoking Companion)  
-**Release Version:** `3.2.0`  
-**Build Number:** `versionCode 11`  
+**Release Version:** `3.2.1`  
+**Build Number:** `versionCode 12`  
 **Date:** September 4, 2026  
-**Scope:** Full-Codebase Audit, Security Remediation, Concurrency Fixes, Navigation Overhaul, and 41-Bug Comprehensive Resolution.
+**Scope:** Financial & Metrics Corrections, Active Attempt Database Self-Healing, AI Coach Diagnostics & Upgrade, Quit Buddy Retry Networking, and 45-Bug Comprehensive Resolution.
 
 ---
 
 ## 📊 Executive Summary
 
-This release elevates UnSmoke to **v3.2.0 (versionCode 11)** following an exhaustive audit across 5 core domains:
-1. **Security & Secrets Hygiene** (Zero API keys in version control, sanitized configuration templates, Play Store policy compliance).
-2. **AI & Cloud Backend** (Active `gemini-flash-latest` SDK integration, Firestore security rules update, atomic buddy pairing).
-3. **Reactive Concurrency & Lifecycle** (Elimination of side-effects in `combine()`, cancellation of stale collectors via `flatMapLatest`, coroutine leak fixes on Wear OS and WorkManager).
-4. **Data Integrity & Persistence** (Room DB migration v6 with unique indices, `try-catch` guards on database writes, negative date clamping, division-by-zero guards).
-5. **UI & Navigation Robustness** (Scoped ViewModel across craving flows, single-top home navigation, deep link backstack preservation, 60fps text recomposition optimization).
+This release elevates UnSmoke to **v3.2.1 (versionCode 12)** following targeted remediation of financial calculations, user metric accuracy, AI Coach diagnostic transparency, and Buddy network connection resilience:
+1. **Financial & Metrics Accuracy** (Single cigarette unit price calculation fix in Onboarding; Cigs Avoided counter on HomeScreen restored).
+2. **Database Self-Healing** (Active attempts corrupted by prior onboarding unit-price division automatically heal in Room DB, restoring true ₹989+ savings and ~40 cigs avoided without losing streak).
+3. **AI & Cloud Backend Diagnostics** (Standardized Gemini model identifier to `"gemini-1.5-flash"`; surfaced raw exception details in chat bubbles for rapid troubleshooting).
+4. **Buddy Network Resilience** (Exposed Firebase auth/Firestore exception reasons in mock card; added interactive "Retry Connection" button).
+5. **Quality Assurance** (Passed 100% of unit tests with `BUILD SUCCESSFUL` across all modules).
 
 ---
 
-## 🛠️ Summary of All 41 Resolved Bugs
+## 🛠️ Summary of All 45 Resolved Bugs
 
 ### 🔴 CRITICAL (7 / 7 Fixed)
 | Bug ID | Component | Summary & Solution Applied |
@@ -77,6 +77,10 @@ This release elevates UnSmoke to **v3.2.0 (versionCode 11)** following an exhaus
 | **BUG-039** | Design System | Memoized animated breathing text with `derivedStateOf` in `BreathingOrb.kt` to eliminate 60fps recompositions. |
 | **BUG-040** | UX / Location | Removed disruptive runtime location dialog during acute craving timer in `CravingTimerScreen.kt`. |
 | **BUG-041** | AppWidget | Added view ID and click PendingIntent in `StreakWidgetReceiver.kt` to launch dashboard on widget tap. |
+| **BUG-042** | Onboarding | Fixed unit cost division in `OnboardingViewModel.kt`: set `pricePerCigarette = unitPriceDouble` and `packPrice = unitPriceDouble * perPackInt`. |
+| **BUG-043** | Home Metric | Added `cigarettesAvoided: Int` in `HomeUiState` and updated `HomeScreen.kt` to display actual avoided count instead of smoke-free days. |
+| **BUG-044** | Self-Healing | Implemented active attempt DB self-healing in `HomeViewModel.kt` for `pricePerCigarette < 5.0 && packPrice >= 10.0` to restore accurate savings without re-onboarding. |
+| **BUG-045** | Diagnostics | Unmasked raw exceptions in `AiCoachViewModel.kt` & `BuddyScreen.kt`, added Retry Connection button, and standardized model to `gemini-1.5-flash`. |
 
 ---
 
@@ -86,5 +90,5 @@ This release elevates UnSmoke to **v3.2.0 (versionCode 11)** following an exhaus
 - **Code Compilation:** Both `:app:compileDebugKotlin`, `:app:compileDebugUnitTestKotlin`, and `:wear:compileDebugKotlin` compiled with 0 errors.
 - **Git Security Audit:** Confirmed `secrets.properties` and `app/google-services.json` are untracked and strictly excluded by `.gitignore`.
 - **Version Stamp:**
-  - Phone App: `versionCode = 11`, `versionName = "3.2.0"`
-  - Wear OS: `versionCode = 11`, `versionName = "3.2.0"`
+  - Phone App: `versionCode = 12`, `versionName = "3.2.1"`
+  - Wear OS: `versionCode = 12`, `versionName = "3.2.1"`

@@ -94,12 +94,13 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             val state = _uiState.value
             val perPackInt = state.cigarettesPerPack.toIntOrNull() ?: 20
-            val packPriceDouble = state.packPrice.toDoubleOrNull() ?: 0.0
+            val unitPriceDouble = state.packPrice.toDoubleOrNull() ?: 0.0
             
             val rawConsumption = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0
             val dailyRate = if (state.substanceType == "VAPING") rawConsumption / 7.0 else rawConsumption
             
-            val pricePerCig = if (perPackInt > 0) packPriceDouble / perPackInt else 0.0
+            val pricePerCig = unitPriceDouble
+            val calculatedPackPrice = unitPriceDouble * perPackInt
             val startEpoch = if (state.quitDate.isEqual(LocalDate.now())) {
                 System.currentTimeMillis()
             } else {
@@ -113,7 +114,7 @@ class OnboardingViewModel @Inject constructor(
                     endEpochMillis = null,
                     status = "ACTIVE",
                     cigarettesPerPack = perPackInt,
-                    packPrice = packPriceDouble,
+                    packPrice = calculatedPackPrice,
                     substanceType = state.substanceType,
                     nicotineStrengthMg = state.nicotineStrengthMg.toDoubleOrNull(),
                     pricePerCigarette = pricePerCig,

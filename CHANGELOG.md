@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.2.1] - 2026-09-04
+
+### 🚀 Financial & Metrics Corrections, Self-Healing & Cloud Diagnostics
+- **Financial & Metrics Calculations:**
+  - Fixed Onboarding unit price calculation in `OnboardingViewModel.kt`: unit cost is saved directly to `pricePerCigarette` without erroneous 20-fold division, and `packPrice` is correctly computed as `unitPrice * perPack`.
+  - Added `cigarettesAvoided: Int` to `HomeUiState` populated with `avoided.roundToInt()`.
+  - Fixed `HomeScreen.kt` to render `uiState.cigarettesAvoided.toString()` instead of `uiState.smokeFreeDays.toString()` under the "Cigs avoided" card.
+- **Active Attempt Database Self-Healing:**
+  - Added automatic self-healing in `HomeViewModel.kt` for existing attempts with `pricePerCigarette < 5.0 && packPrice >= 10.0`. Corrects the active attempt in Room DB in-place, instantly updating savings to the true amount (~₹989) and avoided cigarettes (~40) without requiring users to reset their streak or re-onboard.
+- **AI Coach & Diagnostics:**
+  - Standardized Gemini model identifier to `"gemini-1.5-flash"`.
+  - Exposed raw exception messages in `AiCoachViewModel.kt` chat bubble and error notification for transparent debugging when API keys or network fail.
+- **Quit Buddy Network Diagnostics & Retry:**
+  - Exposed underlying Firebase auth/Firestore exception messages in `BuddyRepository.kt` and `BuddyViewModel.kt`.
+  - Displayed error details on the Buddy mock mode warning card in `BuddyScreen.kt` alongside an interactive **Retry Connection** button.
+
 ## [3.2.0] - 2026-09-04
 
 ### 🚀 Major Audit & Comprehensive Remediation (41 Bugs Resolved)

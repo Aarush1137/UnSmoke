@@ -2,8 +2,8 @@
   <h1>UnSmoke</h1>
   <p><b>The Evidence-Based, Gamified Quit Smoking Companion</b></p>
   <p>
-    <img src="https://img.shields.io/badge/version-3.2.0-blue.svg" alt="Version 3.2.0" />
-    <img src="https://img.shields.io/badge/build-versionCode%2011-success.svg" alt="Build 11" />
+    <img src="https://img.shields.io/badge/version-3.2.1-blue.svg" alt="Version 3.2.1" />
+    <img src="https://img.shields.io/badge/build-versionCode%2012-success.svg" alt="Build 12" />
     <img src="https://img.shields.io/badge/platform-Android%20%7C%20Wear%20OS-brightgreen.svg" alt="Platforms" />
     <img src="https://img.shields.io/badge/tests-100%25%20passing-brightgreen.svg" alt="Unit Tests Passing" />
   </p>
@@ -23,16 +23,17 @@ UnSmoke is an advanced, clinical-grade Android and Wear OS application designed 
 
 ---
 
-## 🚀 What's New in v3.2.0 (Comprehensive Remediation Release)
+## 🚀 What's New in v3.2.1 (Calculations & Cloud Resilience Update)
 
-Version 3.2.0 represents a complete, deep-code audit and remediation cycle across the entire stack — resolving all **41 identified bugs** across Security, CI/CD, Room Database, ViewModels, Navigation, Wear OS, and Domain Engines.
+Version 3.2.1 resolves financial and metrics calculation anomalies, delivers automated active-attempt database self-healing, provides full diagnostic transparency for AI Coach, and adds interactive connection retry for Quit Buddy networking.
 
-| Severity | Total | Status | Key Highlights |
+| Feature / Fix | Severity | Status | Key Highlights |
 |---|:---:|:---:|---|
-| 🔴 **CRITICAL** | **7** | ✅ Resolved | API secrets protected in gitignore; CI/CD release APK signing enabled; Firestore pairing query permissions granted; Play Store policy compliance; Gemini model migrated to active `gemini-flash-latest`; Cloud backup pairing race fixed; live buddy acceptance snapshot listener wired. |
-| 🟠 **HIGH** | **17** | ✅ Resolved | WorkManager startup crash removed; ProGuard/R8 rules added; WearMessageListenerService coroutine persistence guaranteed; WorkManager Hilt KSP compiler applied; reactive flows isolated (pure `combine`); cloud backup UI added; scoped `CravingViewModel` across backstack; duplicate NRT product creation prevented. |
-| 🟡 **MEDIUM** | **11** | ✅ Resolved | CalculationEngine division by zero guarded; Room DB v6 unique check-in index migration; QuoteEngine categories populated; single-top navigation backstack preservation; deep link navigation backstack restored; AI Coach chat history preserved on error; Achievements context leak removed; CompanionScreen back button added; lung test routing fixed. |
-| 🟢 **LOW** | **6** | ✅ Resolved | GitHub update stream resource leak closed; negative quit date weeks clamped in NRT tapering; duplicate Gradle mavenLocal removed; BreathingOrb 60fps recomposition eliminated via `derivedStateOf`; passive location check in craving timer; Streak widget tap action wired. |
+| **Onboarding Unit Price** | 🔴 **CRITICAL** | ✅ Resolved | Onboarding explicitly prompts for unit piece cost (e.g. ₹25/cig or pod); fixed erroneous 20-fold division so `pricePerCigarette` correctly stores true piece price and `packPrice` computes as `unitPrice * perPack`. |
+| **Cigs Avoided Metric Display** | 🔴 **CRITICAL** | ✅ Resolved | Added `cigarettesAvoided` to `HomeUiState`; `HomeScreen.kt` now displays actual avoided cigarettes count rather than days smoke-free. |
+| **Active Attempt DB Self-Healing** | 🟠 **HIGH** | ✅ Resolved | Automatically detects and repairs existing Room DB attempts where `pricePerCigarette < 5.0 && packPrice >= 10.0`, immediately restoring accurate money saved (~₹989) and avoided counts (~40) without re-onboarding. |
+| **AI Coach Diagnostics & Upgrade** | 🟡 **MEDIUM** | ✅ Resolved | Standardized model identifier to `gemini-1.5-flash`; surfaces actual API/connection error messages directly in chat bubbles for instant troubleshooting. |
+| **Buddy Network Diagnostics & Retry** | 🟡 **MEDIUM** | ✅ Resolved | Unmasked underlying Firebase auth/Firestore exception reasons in mock card; added an interactive **Retry Connection** button. |
 
 > Detailed technical documentation and line-by-line verification diffs are available in [ai_artifacts/BUG_FIX_ANALYSIS.md](ai_artifacts/BUG_FIX_ANALYSIS.md) and [ai_artifacts/BUG_FIX_PROGRESS.md](ai_artifacts/BUG_FIX_PROGRESS.md).
 

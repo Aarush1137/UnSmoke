@@ -25,9 +25,12 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+import kotlin.math.roundToInt
+
 data class HomeUiState(
     val userName: String = "User",
     val smokeFreeDays: Int = 0,
+    val cigarettesAvoided: Int = 0,
     val startEpochMillis: Long? = null,
     val quitDateDisplay: String = "Loading...",
     val netMoneySaved: Double = 0.0,
@@ -66,6 +69,22 @@ class HomeViewModel @Inject constructor(
                         HomeUiState(userName = name, currencySymbol = currency ?: "$")
                     }
                 } else {
+                    val effectivePrice = if (attempt.pricePerCigarette < 5.0 && attempt.packPrice >= 10.0) {
+                        val healedPrice = attempt.packPrice
+                        val healedPackPrice = attempt.packPrice * attempt.cigarettesPerPack
+                        launch {
+                            quitAttemptRepo.insertAttempt(
+                                attempt.copy(
+                                    pricePerCigarette = healedPrice,
+                                    packPrice = healedPackPrice
+                                )
+                            )
+                        }
+                        healedPrice
+                    } else {
+                        attempt.pricePerCigarette
+                    }
+
                     combine(
                         nrtRepo.getUsage(attempt.id),
                         nrtRepo.getProducts(),
@@ -74,7 +93,7 @@ class HomeViewModel @Inject constructor(
                     ) { usages, products, name, currency ->
                         val days = CalculationEngine.smokeFreeDuration(attempt.startEpochMillis).toDays().toInt()
                         val avoided = CalculationEngine.cigarettesAvoided(attempt.startEpochMillis, attempt.cigarettesPerDay)
-                        val grossSaved = CalculationEngine.grossMoneySaved(avoided, attempt.pricePerCigarette)
+                        val grossSaved = CalculationEngine.grossMoneySaved(avoided, effectivePrice)
                         
                         val nrtCost = usages.sumOf { usage ->
                             val product = products.find { it.id == usage.productId }
@@ -89,6 +108,7 @@ class HomeViewModel @Inject constructor(
                         HomeUiState(
                             userName = name,
                             smokeFreeDays = days,
+                            cigarettesAvoided = avoided.roundToInt(),
                             startEpochMillis = attempt.startEpochMillis,
                             quitDateDisplay = dateStr,
                             netMoneySaved = saved,
