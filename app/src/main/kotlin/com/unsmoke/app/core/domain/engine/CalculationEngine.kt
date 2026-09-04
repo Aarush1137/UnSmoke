@@ -35,6 +35,7 @@ object CalculationEngine {
 
     /** Whole cigarette packs avoided */
     fun packsAvoided(cigarettesAvoided: Double, cigarettesPerPack: Int): Double {
+        if (cigarettesPerPack <= 0) return 0.0
         return cigarettesAvoided / cigarettesPerPack
     }
 

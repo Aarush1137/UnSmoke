@@ -26,7 +26,7 @@ object UpdateChecker {
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json")
 
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                val response = connection.inputStream.bufferedReader().readText()
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
                 val json = JSONObject(response)
                 
                 val tagName = json.getString("tag_name").removePrefix("v")

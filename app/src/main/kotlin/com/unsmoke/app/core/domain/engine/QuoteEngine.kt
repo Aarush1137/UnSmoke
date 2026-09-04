@@ -28,6 +28,37 @@ object QuoteEngine {
         QuoteCategory.AFTER_LAPSE to listOf(
             "Study the moment, not the mistake.",
             "The cigarette isn't solving stress. It's training your brain."
+        ),
+        QuoteCategory.FIRST_WEEK to listOf(
+            "The physical nicotine is nearly out of your system. You are through the toughest part.",
+            "Seven days smoke-free. Your taste and smell are already returning.",
+            "Every day this week has made your lungs a little cleaner and your will a little stronger.",
+            "You are breaking decades of habit, one smoke-free hour at a time."
+        ),
+        QuoteCategory.MILESTONE to listOf(
+            "Every milestone is a testament to your discipline and resilience.",
+            "Look back at how far you've come. The cravings that felt impossible are in your past.",
+            "Celebrate this victory â€” you've earned every breath of clean air.",
+            "You didn't just quit smoking. You took back control of your health and future."
+        ),
+        QuoteCategory.MORNING to listOf(
+            "Start your morning with a deep breath of fresh air. Your body thanks you.",
+            "A brand new smoke-free day ahead. You have the power to protect your streak.",
+            "Morning cravings pass quickly. Sip some water, breathe deep, and begin strong.",
+            "Waking up smoke-free is the greatest gift you give yourself every morning."
+        ),
+        QuoteCategory.EVENING to listOf(
+            "You made it through another day smoke-free. Rest easy tonight.",
+            "Tonight, your lungs are healing as you sleep. Be proud of your choices today.",
+            "Another day conquered. Tomorrow will be even easier.",
+            "Reflect on the urges you conquered today. You are building unbreakable mental strength."
+        ),
+        QuoteCategory.GENERAL to listOf(
+            "The secret of getting ahead is getting started.",
+            "Freedom from smoking isn't deprivation â€” it's liberation.",
+            "Your body is capable of amazing healing. Give it the clean air it deserves.",
+            "Every time you resist a craving, your brain physically rewires itself toward freedom.",
+            "Small daily victories compound into lifelong health."
         )
     )
 

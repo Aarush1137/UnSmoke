@@ -40,11 +40,16 @@ class SettingsViewModel @Inject constructor(
     private val cloudBackupEngine: CloudBackupEngine
 ) : ViewModel() {
 
+    private val _backupState = MutableStateFlow(false)
+    private val _backupMessage = MutableStateFlow<String?>(null)
+
     val uiState: StateFlow<SettingsUiState> = combine(
         combine(dataStore.userName, dataStore.notificationsEnabled, dataStore.notificationStyle, ::Triple),
         combine(dataStore.appLockEnabled, dataStore.theme, dataStore.currencySymbol, ::Triple),
-        dataStore.accentColor
-    ) { (name, notifEnabled, notifStyle), (lockEnabled, theme, currency), accent ->
+        dataStore.accentColor,
+        _backupState,
+        _backupMessage
+    ) { (name, notifEnabled, notifStyle), (lockEnabled, theme, currency), accent, isBackingUp, backupMsg ->
         SettingsUiState(
             userName = name,
             notificationsEnabled = notifEnabled,
@@ -52,7 +57,9 @@ class SettingsViewModel @Inject constructor(
             appLockEnabled = lockEnabled,
             theme = theme,
             currencySymbol = currency,
-            accentColor = accent
+            accentColor = accent,
+            isBackingUp = isBackingUp,
+            backupMessage = backupMsg
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
 
@@ -116,9 +123,6 @@ class SettingsViewModel @Inject constructor(
             }
         }
     }
-
-    private val _backupState = MutableStateFlow(false)
-    private val _backupMessage = MutableStateFlow<String?>(null)
 
     fun wipeAllData(onComplete: () -> Unit) {
         viewModelScope.launch {

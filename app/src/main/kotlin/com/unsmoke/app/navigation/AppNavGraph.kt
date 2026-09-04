@@ -1,6 +1,9 @@
 package com.unsmoke.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.unsmoke.app.feature.craving.CravingViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -50,7 +53,7 @@ fun AppNavGraph(
                 onProgressClick = { navController.navigate(Screen.Progress.route) },
                 onNRTClick = { navController.navigate(Screen.NRT.route) },
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
-                onCheckInClick = { navController.navigate(Screen.Journal.route) },
+                onCheckInClick = { navController.navigate(Screen.CheckIn.route) },
                 onBuddyClick = { navController.navigate(Screen.Buddy.route) },
                 onCompanionClick = { navController.navigate(Screen.Companion.route) },
                 onRewardsClick = { navController.navigate(Screen.Rewards.route) }
@@ -65,25 +68,37 @@ fun AppNavGraph(
                 }
             )
         }
-        composable(route = Screen.Craving.route) {
+        composable(route = Screen.Craving.route) { backStackEntry ->
+            val cravingViewModel: CravingViewModel = hiltViewModel(backStackEntry)
             CravingScreen(
                 onTimerStart = { navController.navigate("craving_timer") },
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                viewModel = cravingViewModel
             )
         }
-        composable(route = "craving_timer") {
+        composable(route = "craving_timer") { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                try {
+                    navController.getBackStackEntry(Screen.Craving.route)
+                } catch (e: Exception) {
+                    backStackEntry
+                }
+            }
+            val cravingViewModel: CravingViewModel = hiltViewModel(parentEntry)
             CravingTimerScreen(
                 onBack = { navController.popBackStack() },
                 onDefeated = { navController.navigate("craving_outcome") },
                 onSmoked = { navController.navigate("recovery") },
-                onChatWithCoach = { navController.navigate(Screen.AiCoach.route) }
+                onChatWithCoach = { navController.navigate(Screen.AiCoach.route) },
+                viewModel = cravingViewModel
             )
         }
         composable(route = "craving_outcome") {
             CravingOutcomeScreen(
                 onContinue = {
                     navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
+                        popUpTo(Screen.Home.route) { inclusive = false }
+                        launchSingleTop = true
                     }
                 }
             )
@@ -92,7 +107,8 @@ fun AppNavGraph(
             RecoveryScreen(
                 onComplete = {
                     navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
+                        popUpTo(Screen.Home.route) { inclusive = false }
+                        launchSingleTop = true
                     }
                 },
                 onBack = { navController.popBackStack() }

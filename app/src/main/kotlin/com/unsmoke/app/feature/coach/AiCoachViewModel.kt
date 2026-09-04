@@ -83,7 +83,7 @@ class AiCoachViewModel @Inject constructor(
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
-                        messages = listOf(ChatMessage(text = "Error connecting to AI Coach. Please check your internet connection and try again.", isUser = false, isError = true))
+                        messages = it.messages + ChatMessage(text = "Error connecting to AI Coach. Please check your internet connection and try again.", isUser = false, isError = true)
                     ) 
                 }
             }

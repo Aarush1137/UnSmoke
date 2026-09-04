@@ -83,13 +83,10 @@ class HomeViewModel @Inject constructor(
                         
                         val saved = CalculationEngine.netMoneySaved(grossSaved, nrtCost)
                         
-                        // Sync to Wear OS
-                        viewModelScope.launch { wearSyncManager.syncQuitStatus(attempt.startEpochMillis) }
-                        
                         val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
                         val dateStr = formatter.format(Instant.ofEpochMilli(attempt.startEpochMillis))
                         
-                        _uiState.value.copy(
+                        HomeUiState(
                             userName = name,
                             smokeFreeDays = days,
                             startEpochMillis = attempt.startEpochMillis,
@@ -101,11 +98,17 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }.collect { state ->
-                // Preserve AI insight when other state updates
-                _uiState.value = state.copy(
-                    aiInsight = _uiState.value.aiInsight,
-                    isAiLoading = _uiState.value.isAiLoading
-                )
+                state.startEpochMillis?.let { epoch ->
+                    wearSyncManager.syncQuitStatus(epoch)
+                }
+                // Preserve AI insight and quotes when other state updates
+                _uiState.update { current ->
+                    state.copy(
+                        aiInsight = current.aiInsight,
+                        isAiLoading = current.isAiLoading,
+                        currentQuote = current.currentQuote
+                    )
+                }
             }
         }
     }

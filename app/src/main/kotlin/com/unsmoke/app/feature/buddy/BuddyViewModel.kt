@@ -82,7 +82,11 @@ class BuddyViewModel @Inject constructor(
                     flowOf(Triple(name, quitStart, 0))
                 }
             }.collect { tuple ->
-                buddyRepo.updateMyStats(myUid, tuple.first, tuple.second, tuple.third)
+                try {
+                    buddyRepo.updateMyStats(myUid, tuple.first, tuple.second, tuple.third)
+                } catch (e: Exception) {
+                    // Prevent network blips from terminating the stats sync loop
+                }
             }
         }
     }
@@ -94,6 +98,9 @@ class BuddyViewModel @Inject constructor(
                 
                 if (profile != null) {
                     observeBuddyProfiles(profile.buddyUids)
+                } else {
+                    buddiesJob?.cancel()
+                    _uiState.update { it.copy(buddyProfiles = emptyList()) }
                 }
             }
         }

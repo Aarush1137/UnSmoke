@@ -115,7 +115,7 @@ data class MoodEntryEntity(
     val notes: String?
 )
 
-@Entity(tableName = "daily_checkin")
+@Entity(tableName = "daily_checkin", indices = [Index(value = ["datestamp"], unique = true)])
 data class DailyCheckInEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val datestamp: String,

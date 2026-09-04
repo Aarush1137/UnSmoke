@@ -83,4 +83,14 @@ class CalculationEngineTest {
         val packs = CalculationEngine.packsAvoided(avoided, 20)
         assertThat(packs).isWithin(0.01).of(7.5)
     }
+
+    @Test
+    fun packsAvoided_handlesZeroOrNegativePackSize() {
+        val avoided = 150.0
+        val packsZero = CalculationEngine.packsAvoided(avoided, 0)
+        assertThat(packsZero).isEqualTo(0.0)
+
+        val packsNegative = CalculationEngine.packsAvoided(avoided, -1)
+        assertThat(packsNegative).isEqualTo(0.0)
+    }
 }

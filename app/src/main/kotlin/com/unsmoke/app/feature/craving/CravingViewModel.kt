@@ -77,7 +77,11 @@ class CravingViewModel @Inject constructor(
                 nrtUsedBefore = false, 
                 mood = null
             )
-            cravingRepo.logCraving(event)
+            try {
+                cravingRepo.logCraving(event)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             
             if (outcome == "DEFEATED") {
                 _uiState.update { it.copy(step = CravingStep.OUTCOME) }

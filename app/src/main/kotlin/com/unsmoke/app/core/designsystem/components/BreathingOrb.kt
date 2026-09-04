@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -78,11 +80,15 @@ fun BreathingOrb(
         ),
         label = "phase"
     )
-    val instruction = when {
-        breathPhase < 4000 -> "Breathe in"
-        breathPhase < 5000 -> "Hold"
-        breathPhase < 11000 -> "Breathe out"
-        else -> ""
+    val instruction by remember {
+        derivedStateOf {
+            when {
+                breathPhase < 4000 -> "Breathe in"
+                breathPhase < 5000 -> "Hold"
+                breathPhase < 11000 -> "Breathe out"
+                else -> ""
+            }
+        }
     }
     
     Column(

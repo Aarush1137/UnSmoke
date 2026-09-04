@@ -29,7 +29,7 @@ import com.unsmoke.app.core.data.database.entity.*
         TitrationLogEntity::class,
         CompanionEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class UnSmokeDatabase : RoomDatabase() {
@@ -63,6 +63,12 @@ abstract class UnSmokeDatabase : RoomDatabase() {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE craving_event ADD COLUMN latitude REAL DEFAULT NULL")
                 db.execSQL("ALTER TABLE craving_event ADD COLUMN longitude REAL DEFAULT NULL")
+            }
+        }
+
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_daily_checkin_datestamp` ON `daily_checkin` (`datestamp`)")
             }
         }
     }

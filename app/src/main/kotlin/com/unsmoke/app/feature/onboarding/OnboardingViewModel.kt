@@ -99,7 +99,7 @@ class OnboardingViewModel @Inject constructor(
             val rawConsumption = state.cigarettesPerDay.toDoubleOrNull() ?: 0.0
             val dailyRate = if (state.substanceType == "VAPING") rawConsumption / 7.0 else rawConsumption
             
-            val pricePerCig = packPriceDouble // For vaping, this is price per pod
+            val pricePerCig = if (perPackInt > 0) packPriceDouble / perPackInt else 0.0
             val startEpoch = if (state.quitDate.isEqual(LocalDate.now())) {
                 System.currentTimeMillis()
             } else {

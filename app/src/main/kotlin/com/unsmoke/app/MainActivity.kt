@@ -18,12 +18,22 @@ import com.unsmoke.app.core.data.datastore.UserPreferencesDataStore
 import com.unsmoke.app.core.designsystem.UnSmokeTheme
 import com.unsmoke.app.feature.update.UpdateDialogController
 import com.unsmoke.app.navigation.AppNavGraph
+import com.unsmoke.app.navigation.Screen
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+
+    private val pendingIntentFlow = kotlinx.coroutines.flow.MutableStateFlow<android.content.Intent?>(null)
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        pendingIntentFlow.value = intent
+    }
     
     @Inject
     lateinit var dataStore: UserPreferencesDataStore
@@ -80,14 +90,27 @@ class MainActivity : FragmentActivity() {
                             Box(Modifier.fillMaxSize())
                         } else if (isUnlocked) {
                             UpdateDialogController()
-                            val deepLink = intent.getStringExtra("DEEP_LINK")
-                            val isSos = intent.getBooleanExtra("TRIGGER_SOS", false)
-                            val startDest = when {
-                                isSos -> "buddy"
-                                deepLink == "craving" -> "craving"
-                                else -> "splash"
+                            val navController = rememberNavController()
+                            val currentIntent by pendingIntentFlow.collectAsState()
+                            
+                            LaunchedEffect(currentIntent) {
+                                val activeIntent = currentIntent ?: intent
+                                val isSos = activeIntent.getBooleanExtra("TRIGGER_SOS", false)
+                                val deepLink = activeIntent.getStringExtra("DEEP_LINK")
+                                val target = when {
+                                    isSos -> Screen.Buddy.route
+                                    deepLink == "craving" -> Screen.Craving.route
+                                    else -> null
+                                }
+                                if (target != null) {
+                                    activeIntent.removeExtra("TRIGGER_SOS")
+                                    activeIntent.removeExtra("DEEP_LINK")
+                                    navController.navigate(target) {
+                                        launchSingleTop = true
+                                    }
+                                }
                             }
-                            AppNavGraph(startDestination = startDest)
+                            AppNavGraph(navController = navController, startDestination = "splash")
                         } else {
                             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                 Text("App Locked")

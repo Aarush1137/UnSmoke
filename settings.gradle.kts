@@ -4,7 +4,6 @@ pluginManagement {
         mavenCentral()
         mavenLocal()
         gradlePluginPortal()
-        mavenLocal()
     }
 }
 dependencyResolutionManagement {

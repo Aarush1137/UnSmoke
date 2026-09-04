@@ -11,7 +11,8 @@ object NRTTaperingEngine {
     )
 
     fun getNicotexGumPlan(weeksSmokeFree: Int, initialDosageMg: Int): TaperingRecommendation {
-        return when (weeksSmokeFree) {
+        val weeks = weeksSmokeFree.coerceAtLeast(0)
+        return when (weeks) {
             in 0..6 -> TaperingRecommendation(
                 weekNumber = weeksSmokeFree + 1,
                 dosage = "${initialDosageMg}mg",
@@ -44,7 +45,8 @@ object NRTTaperingEngine {
     }
 
     fun getPatchPlan(weeksSmokeFree: Int, initialDosageMg: Int): TaperingRecommendation {
-        return when (weeksSmokeFree) {
+        val weeks = weeksSmokeFree.coerceAtLeast(0)
+        return when (weeks) {
             in 0..6 -> TaperingRecommendation(
                 weekNumber = weeksSmokeFree + 1,
                 dosage = "Step 1 (21mg or ${initialDosageMg}mg)",
@@ -77,7 +79,8 @@ object NRTTaperingEngine {
     }
 
     fun getNicotexLozengePlan(weeksSmokeFree: Int, initialDosageMg: Int): TaperingRecommendation {
-        return when (weeksSmokeFree) {
+        val weeks = weeksSmokeFree.coerceAtLeast(0)
+        return when (weeks) {
             in 0..6 -> TaperingRecommendation(
                 weekNumber = weeksSmokeFree + 1,
                 dosage = "${initialDosageMg}mg",

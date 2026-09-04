@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,6 +42,7 @@ data class ProgressUiState(
     val showCheckInPrompt: Boolean = false
 )
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ProgressViewModel @Inject constructor(
     private val quitAttemptRepo: QuitAttemptRepository,
@@ -98,23 +101,24 @@ class ProgressViewModel @Inject constructor(
             }.collect {}
         }
 
-        // Observe cravings and NRT for counts
+        // Observe cravings and NRT for counts using flatMapLatest to cancel child collectors
         viewModelScope.launch {
-            quitAttemptRepo.getActiveAttempt().collect { attempt ->
-                if (attempt != null) {
-                    launch {
-                        cravingRepo.getCravings(attempt.id).collect { cravings ->
-                            cachedCravingsDefeated = cravings.count { it.outcome == "DEFEATED" || it.outcome == "SURVIVED" }
-                            recalculateForFilter(_uiState.value.timeFilter, cravings = cravings)
-                        }
-                    }
-                    launch {
-                        nrtRepo.getUsage(attempt.id).collect { usages ->
-                            cachedNrtLogged = usages.sumOf { it.quantity }
-                            _uiState.update { it.copy(nrtLogged = cachedNrtLogged) }
-                        }
+            quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
+                if (attempt == null) {
+                    kotlinx.coroutines.flow.flowOf(emptyList<com.unsmoke.app.core.data.database.entity.CravingEventEntity>() to emptyList<com.unsmoke.app.core.data.database.entity.NRTUsageEntity>())
+                } else {
+                    combine(
+                        cravingRepo.getCravings(attempt.id),
+                        nrtRepo.getUsage(attempt.id)
+                    ) { cravings, usages ->
+                        cravings to usages
                     }
                 }
+            }.collect { (cravings, usages) ->
+                cachedCravingsDefeated = cravings.count { it.outcome == "DEFEATED" || it.outcome == "SURVIVED" }
+                cachedNrtLogged = usages.sumOf { it.quantity }
+                _uiState.update { it.copy(nrtLogged = cachedNrtLogged) }
+                recalculateForFilter(_uiState.value.timeFilter, cravings = cravings)
             }
         }
     }

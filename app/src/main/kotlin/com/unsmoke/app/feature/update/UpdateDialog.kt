@@ -64,18 +64,14 @@ fun UpdateDialogController() {
 }
 
 private fun startDownload(context: Context, url: String, version: String) {
-    Toast.makeText(context, "Downloading UnSmoke v${version}...", Toast.LENGTH_LONG).show()
-    val request = DownloadManager.Request(Uri.parse(url))
-        .setTitle("UnSmoke Update v${version}")
-        .setDescription("Downloading latest version")
-        .setMimeType("application/vnd.android.package-archive")
-        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "UnSmoke_v${version}.apk")
-        .setAllowedOverMetered(true)
-        .setAllowedOverRoaming(true)
-
-    val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-    manager.enqueue(request)
+    try {
+        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url)).apply {
+            flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        Toast.makeText(context, "Could not open update link.", Toast.LENGTH_SHORT).show()
+    }
 }
 
 

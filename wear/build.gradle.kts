@@ -12,8 +12,8 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 30
         targetSdk = 33
-        versionCode = 10
-        versionName = "1.6.1"
+        versionCode = 11
+        versionName = "3.2.0"
     }
 
     buildTypes {

@@ -48,10 +48,11 @@ class InsightsViewModel @Inject constructor(
         viewModelScope.launch {
             quitAttemptRepo.getActiveAttempt().flatMapLatest { attempt ->
                 if (attempt == null) {
-                    flowOf(InsightsUiState(isLoading = false))
+                    flowOf(Triple(InsightsUiState(isLoading = false), emptyList(), emptyList<com.unsmoke.app.core.data.database.entity.NRTUsageEntity>() to 0))
                 } else {
                     val currentElapsed = System.currentTimeMillis() - attempt.startEpochMillis
                     val isVaping = attempt.substanceType == "VAPING"
+                    val daysSmokeFree = (currentElapsed / (1000 * 60 * 60 * 24)).toInt()
 
                     combine(
                         nrtRepo.getUsage(attempt.id),
@@ -61,13 +62,7 @@ class InsightsViewModel @Inject constructor(
                         val hasNRT = nrtUsages.isNotEmpty()
                         val currentMg = logs.lastOrNull()?.nicotineStrengthMg ?: attempt.nicotineStrengthMg
 
-                        // Trigger AI Generation ONCE
-                        if (!aiGeneratedForCurrentData && (cravings.isNotEmpty() || hasNRT)) {
-                            aiGeneratedForCurrentData = true
-                            generateAiInsight(cravings, nrtUsages, (currentElapsed / (1000 * 60 * 60 * 24)).toInt())
-                        }
-
-                        if (cravings.isNotEmpty()) {
+                        val state = if (cravings.isNotEmpty()) {
                             val triggers = cravings.mapNotNull { it.trigger }.flatMap { it.split(",") }.filter { it.isNotBlank() }
                             val topTrigger = triggers.groupingBy { it.trim() }.eachCount().maxByOrNull { it.value }?.key ?: "Unknown"
                             val highRiskTime = PersonalizationEngine.getHighRiskTimeWindow(cravings) ?: "Not enough data"
@@ -87,9 +82,7 @@ class InsightsViewModel @Inject constructor(
                                 isVaping = isVaping,
                                 currentNicotineStrengthMg = currentMg,
                                 titrationLogs = logs,
-                                elapsedMillis = currentElapsed,
-                                aiInsight = _uiState.value.aiInsight,
-                                isAiLoading = _uiState.value.isAiLoading
+                                elapsedMillis = currentElapsed
                             )
                         } else {
                             InsightsUiState(
@@ -99,15 +92,24 @@ class InsightsViewModel @Inject constructor(
                                 isVaping = isVaping,
                                 currentNicotineStrengthMg = currentMg,
                                 titrationLogs = logs,
-                                elapsedMillis = currentElapsed,
-                                aiInsight = _uiState.value.aiInsight,
-                                isAiLoading = _uiState.value.isAiLoading
+                                elapsedMillis = currentElapsed
                             )
                         }
+                        Triple(state, cravings, nrtUsages to daysSmokeFree)
                     }
                 }
-            }.collect { newState ->
-                _uiState.value = newState
+            }.collect { (state, cravings, nrtAndDays) ->
+                _uiState.update { current ->
+                    state.copy(
+                        aiInsight = current.aiInsight,
+                        isAiLoading = current.isAiLoading
+                    )
+                }
+                val (nrtUsages, daysSmokeFree) = nrtAndDays
+                if (!aiGeneratedForCurrentData && (cravings.isNotEmpty() || nrtUsages.isNotEmpty())) {
+                    aiGeneratedForCurrentData = true
+                    generateAiInsight(cravings, nrtUsages, daysSmokeFree)
+                }
             }
         }
     }

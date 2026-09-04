@@ -3,6 +3,7 @@ package com.unsmoke.app.core.domain.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -50,9 +51,11 @@ class BuddyRepository @Inject constructor(
             val uid = user?.uid ?: throw Exception("Auth failed")
             
             val doc = profilesCollection.document(uid).get().await()
-            if (!doc.exists()) {
+            val profile = if (doc.exists()) doc.toObject(BuddyProfile::class.java) else null
+            if (!doc.exists() || profile?.pairingCode.isNullOrBlank()) {
                 val code = (100000..999999).random().toString()
-                profilesCollection.document(uid).set(BuddyProfile(uid = uid, pairingCode = code)).await()
+                val initialProfile = (profile ?: BuddyProfile(uid = uid)).copy(uid = uid, pairingCode = code)
+                profilesCollection.document(uid).set(initialProfile, SetOptions.merge()).await()
             }
             isUsingMock = false
             isUsingMockFlow.value = false
@@ -82,7 +85,7 @@ class BuddyRepository @Inject constructor(
             return true
         }
 
-        val snapshot = profilesCollection.whereEqualTo("pairingCode", buddyCode).get().await()
+        val snapshot = profilesCollection.whereEqualTo("pairingCode", buddyCode).limit(1).get().await()
         if (snapshot.isEmpty) return false
         
         val targetUid = snapshot.documents.first().id
@@ -255,12 +258,18 @@ class BuddyRepository @Inject constructor(
                             .filter { it.getString("type") != "ACCEPTED" }
                             .mapNotNull { it.getString("fromUid") }
                         
+                        val hasAccepted = snapshot.documents.any { it.getString("type") == "ACCEPTED" }
+                        if (hasAccepted) {
+                            this@callbackFlow.launch(Dispatchers.IO) {
+                                processAcceptedRequests(myUid)
+                            }
+                        }
+
                         // For each request UID, fetch their profile
                         if (requestUids.isEmpty()) {
                             trySend(emptyList())
                         } else {
-                            // Use the callbackFlow's coroutine scope
-                            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                            this@callbackFlow.launch(Dispatchers.IO) {
                                 try {
                                     val profiles = fetchProfilesByUids(requestUids)
                                     trySend(profiles)

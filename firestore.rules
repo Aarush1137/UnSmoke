@@ -2,12 +2,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /profiles/{userId} {
-      // Allow read if it's the user's own profile, OR if the reader is the paired buddy, OR if querying for pairing code
-      allow read: if request.auth != null && (
-        request.auth.uid == userId ||
-        (request.auth.uid in resource.data.buddyUids) ||
-        (request.query.limit <= 1) // basic protection for pairing code query
-      );
+      // Allow authenticated users to read profiles (name, pairing code, buddy list, stats)
+      allow read: if request.auth != null;
       
       // Allow create/update only for their own profile
       allow write: if request.auth != null && request.auth.uid == userId;

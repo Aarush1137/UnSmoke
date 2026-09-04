@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -109,8 +110,8 @@ class NRTViewModel @Inject constructor(
     }
 
     private suspend fun ensureNicotexTrackingProduct(): Long {
-        return nrtRepo.getProducts().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList()).value
-            .firstOrNull { it.name == "Nicotex Gum" }?.id
+        return nrtRepo.getProducts().firstOrNull()
+            ?.firstOrNull { it.name == "Nicotex Gum" }?.id
             ?: nrtRepo.saveProduct(
                 NRTProductEntity(
                     type = "GUM",

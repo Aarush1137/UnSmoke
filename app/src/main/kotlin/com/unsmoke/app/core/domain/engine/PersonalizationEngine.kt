@@ -29,10 +29,10 @@ object PersonalizationEngine {
         fun formatHour(h: Int): String {
             val amPm = if (h < 12) "AM" else "PM"
             val displayHour = if (h % 12 == 0) 12 else h % 12
-            return " "
+            return "$displayHour $amPm"
         }
 
-        return " - "
+        return "${formatHour(peakHour)} - ${formatHour(nextHour)}"
     }
 
     /**

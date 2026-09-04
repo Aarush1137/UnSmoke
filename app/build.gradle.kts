@@ -33,8 +33,8 @@ android {
         applicationId = "com.unsmoke.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "3.1.0"
+        versionCode = 11
+        versionName = "3.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         buildConfigField("String", "GEMINI_API_KEY", geminiApiKey)
@@ -43,6 +43,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -98,7 +99,7 @@ dependencies {
     // WorkManager
     implementation(libs.workmanager.ktx)
     implementation(libs.workmanager.hilt)
-    ksp(libs.hilt.compiler) // for hilt-work
+    ksp(libs.androidx.hilt.compiler) // for hilt-work
     
     // Kotlin
     implementation(libs.bundles.coroutines)

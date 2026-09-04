@@ -29,6 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.platform.LocalContext
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat
+import com.unsmoke.app.core.domain.engine.ShareEngine
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,12 +88,26 @@ fun AchievementsScreen(
                     AchievementBadge(
                         achievement = achievement,
                         onShare = {
-                            viewModel.shareAchievement(context, achievement, "$")
+                            shareAchievementIntent(context, achievement)
                         }
                     )
                 }
             }
         }
+    }
+}
+
+private fun shareAchievementIntent(context: Context, achievement: AchievementUiModel) {
+    val uri = ShareEngine.generateShareImage(context, achievement.title, achievement.description)
+    if (uri != null) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/jpeg"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        val chooser = Intent.createChooser(intent, "Share Achievement")
+        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        ContextCompat.startActivity(context, chooser, null)
     }
 }
 

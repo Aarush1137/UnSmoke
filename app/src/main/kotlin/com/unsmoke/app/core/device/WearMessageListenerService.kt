@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.tasks.await
@@ -34,7 +35,7 @@ class WearMessageListenerService : WearableListenerService() {
         super.onMessageReceived(messageEvent)
         when (messageEvent.path) {
             "/log_craving" -> {
-                scope.launch {
+                runBlocking(Dispatchers.IO) {
                     val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
                     if (attempt != null) {
                         // Try to fetch the phone's current location for the heatmap

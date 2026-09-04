@@ -35,55 +35,59 @@ class RecoveryViewModel @Inject constructor(
 
     fun finishRecovery(resetStreak: Boolean) {
         viewModelScope.launch {
-            val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
-            if (attempt != null) {
-                val state = _uiState.value
+            try {
+                val attempt = quitAttemptRepo.getActiveAttempt().firstOrNull()
+                if (attempt != null) {
+                    val state = _uiState.value
 
-                // Always record the smoking event so lapse data isn't lost
-                val smokingEvent = SmokingEventEntity(
-                    quitAttemptId = attempt.id,
-                    timestamp = System.currentTimeMillis(),
-                    cigaretteCount = state.cigarettesSmoked,
-                    trigger = state.trigger.ifBlank { null },
-                    mood = null,
-                    notes = state.emotion.ifBlank { null },
-                    eventType = if (resetStreak) "RELAPSE" else "LAPSE"
-                )
-                quitAttemptRepo.insertSmokingEvent(smokingEvent)
-
-                if (resetStreak) {
-                    val updated = attempt.copy(status = "RELAPSED", endEpochMillis = System.currentTimeMillis())
-                    quitAttemptRepo.insertAttempt(updated)
-                    
-                    // Create a new quit attempt starting now
-                    val newAttempt = QuitAttemptEntity(
-                        startEpochMillis = System.currentTimeMillis(),
-                        cigarettesPerDay = attempt.cigarettesPerDay,
-                        endEpochMillis = null,
-                        status = "ACTIVE",
-                        cigarettesPerPack = attempt.cigarettesPerPack,
-                        packPrice = attempt.packPrice,
-                        timezone = ZoneId.systemDefault().id,
-                        createdAt = System.currentTimeMillis(),
-                        pricePerCigarette = attempt.pricePerCigarette,
-                        substanceType = attempt.substanceType,
-                        nicotineStrengthMg = attempt.nicotineStrengthMg
+                    // Always record the smoking event so lapse data isn't lost
+                    val smokingEvent = SmokingEventEntity(
+                        quitAttemptId = attempt.id,
+                        timestamp = System.currentTimeMillis(),
+                        cigaretteCount = state.cigarettesSmoked,
+                        trigger = state.trigger.ifBlank { null },
+                        mood = null,
+                        notes = state.emotion.ifBlank { null },
+                        eventType = if (resetStreak) "RELAPSE" else "LAPSE"
                     )
-                    val newId = quitAttemptRepo.insertAttempt(newAttempt)
-                    
-                    companionRepo.getCompanion(attempt.id).firstOrNull()?.let { oldComp ->
-                        val newHealth = (oldComp.health - 25).coerceAtLeast(0)
-                        val damagedComp = oldComp.copy(
-                            id = 0, // Generate new row
-                            quitAttemptId = newId,
-                            health = newHealth,
-                            mood = if (newHealth < 50) "SAD" else "NEUTRAL"
+                    quitAttemptRepo.insertSmokingEvent(smokingEvent)
+
+                    if (resetStreak) {
+                        val updated = attempt.copy(status = "RELAPSED", endEpochMillis = System.currentTimeMillis())
+                        quitAttemptRepo.insertAttempt(updated)
+                        
+                        // Create a new quit attempt starting now
+                        val newAttempt = QuitAttemptEntity(
+                            startEpochMillis = System.currentTimeMillis(),
+                            cigarettesPerDay = attempt.cigarettesPerDay,
+                            endEpochMillis = null,
+                            status = "ACTIVE",
+                            cigarettesPerPack = attempt.cigarettesPerPack,
+                            packPrice = attempt.packPrice,
+                            timezone = ZoneId.systemDefault().id,
+                            createdAt = System.currentTimeMillis(),
+                            pricePerCigarette = attempt.pricePerCigarette,
+                            substanceType = attempt.substanceType,
+                            nicotineStrengthMg = attempt.nicotineStrengthMg
                         )
-                        companionRepo.insertCompanion(damagedComp)
+                        val newId = quitAttemptRepo.insertAttempt(newAttempt)
+                        
+                        companionRepo.getCompanion(attempt.id).firstOrNull()?.let { oldComp ->
+                            val newHealth = (oldComp.health - 25).coerceAtLeast(0)
+                            val damagedComp = oldComp.copy(
+                                id = 0, // Generate new row
+                                quitAttemptId = newId,
+                                health = newHealth,
+                                mood = if (newHealth < 50) "SAD" else "NEUTRAL"
+                            )
+                            companionRepo.insertCompanion(damagedComp)
+                        }
                     }
                 }
+                _uiState.update { it.copy(isComplete = true) }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            _uiState.update { it.copy(isComplete = true) }
         }
     }
 }

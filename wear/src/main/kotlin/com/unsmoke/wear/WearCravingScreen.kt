@@ -29,7 +29,7 @@ fun WearCravingScreen(onBack: () -> Unit) {
     var scale by remember { mutableFloatStateOf(1f) }
     
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             try {
                 val nodes = com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes.await()
                 nodes.forEach { node ->

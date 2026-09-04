@@ -28,12 +28,13 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
                 ) {
                     var currentScreen by remember { mutableStateOf("home") }
                     
+                    val scope = rememberCoroutineScope()
                     if (currentScreen == "home") {
                         WearHomeScreen(
                             startEpoch = startEpochState,
                             onBreatheClick = { currentScreen = "craving" },
                             onSosClick = {
-                                kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                                scope.launch(kotlinx.coroutines.Dispatchers.IO) {
                                     val nodes = Wearable.getNodeClient(this@MainActivity).connectedNodes.await()
                                     nodes.forEach { node ->
                                         Wearable.getMessageClient(this@MainActivity).sendMessage(node.id, "/sos_alert", ByteArray(0)).await()

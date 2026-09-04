@@ -49,6 +49,12 @@ fun SettingsScreen(
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var isCheckingUpdates by remember { mutableStateOf(false) }
 
+    LaunchedEffect(state.backupMessage) {
+        state.backupMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -190,6 +196,14 @@ fun SettingsScreen(
             item {
                 Spacer(Modifier.height(8.dp))
                 SettingsSectionHeader("Data Management", color = Color(0xFFFF5252))
+            }
+            item {
+                SettingsClickableItem(
+                    title = "Cloud Backup & Sync",
+                    subtitle = if (state.isBackingUp) "Backing up to cloud..." else (state.backupMessage ?: "Sync encrypted recovery progress to cloud"),
+                    icon = Icons.Rounded.CloudUpload,
+                    onClick = { viewModel.syncToCloud() }
+                )
             }
             item {
                 SettingsClickableItem(

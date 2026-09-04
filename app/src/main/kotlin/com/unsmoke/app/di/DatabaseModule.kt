@@ -22,7 +22,8 @@ object DatabaseModule {
             context,
             UnSmokeDatabase::class.java,
             "unsmoke_db")
-            .addMigrations(UnSmokeDatabase.MIGRATION_1_2, UnSmokeDatabase.MIGRATION_2_3, UnSmokeDatabase.MIGRATION_3_4, UnSmokeDatabase.MIGRATION_4_5)
+            .addMigrations(UnSmokeDatabase.MIGRATION_1_2, UnSmokeDatabase.MIGRATION_2_3, UnSmokeDatabase.MIGRATION_3_4, UnSmokeDatabase.MIGRATION_4_5, UnSmokeDatabase.MIGRATION_5_6)
+            .fallbackToDestructiveMigration()
             .build()
     }
 

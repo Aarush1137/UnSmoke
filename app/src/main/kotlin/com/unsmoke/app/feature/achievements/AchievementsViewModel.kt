@@ -50,7 +50,7 @@ class AchievementsViewModel @Inject constructor(
                     cravingRepo.getCravings(attempt.id).map { attemptCravings ->
                         val now = Instant.now().toEpochMilli()
                         val daysFree = (now - attempt.startEpochMillis) / (1000L * 60 * 60 * 24)
-                        val cravingsDefeated = attemptCravings.count { it.outcome == "DEFEATED" }
+                        val cravingsDefeated = attemptCravings.count { it.outcome == "DEFEATED" || it.outcome == "SURVIVED" }
 
                         listOf(
                             AchievementUiModel("24h", "24 Hours Free", "Survive the first day", Icons.Rounded.LooksOne, daysFree >= 1),
@@ -69,17 +69,5 @@ class AchievementsViewModel @Inject constructor(
         }
     }
 
-    fun shareAchievement(context: Context, achievement: AchievementUiModel, currency: String) {
-        val uri = ShareEngine.generateShareImage(context, achievement.title, achievement.description)
-        if (uri != null) {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "image/jpeg"
-                putExtra(Intent.EXTRA_STREAM, uri)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            val chooser = Intent.createChooser(intent, "Share Achievement")
-            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            ContextCompat.startActivity(context, chooser, null)
-        }
-    }
+
 }
