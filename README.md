@@ -38,6 +38,8 @@ Version 3.2.1 resolves financial and metrics calculation anomalies, delivers aut
 > Detailed technical documentation and line-by-line verification diffs are available in [ai_artifacts/BUG_FIX_ANALYSIS.md](ai_artifacts/BUG_FIX_ANALYSIS.md) and [ai_artifacts/BUG_FIX_PROGRESS.md](ai_artifacts/BUG_FIX_PROGRESS.md).
 
 ---
+[![Architecture diagram of aarush1137/unsmoke](https://gitdiagram.com/aarush1137/unsmoke/diagram.png)](https://gitdiagram.com/aarush1137/unsmoke?utm_source=readme&utm_medium=picture)
+---
 
 ## 🌟 Core Features
 
